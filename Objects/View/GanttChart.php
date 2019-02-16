@@ -14,7 +14,7 @@ class GanttChart
     private $project;
     private $firstDayTimestamp = false;
     private $lastDayTimestamp = false;
-    private $html = array();
+    private $html;
 
     // Constructor will have a default set of graphical options that could be overwritten if required (e.g. themes)
     public function __construct($project = null)
@@ -45,8 +45,8 @@ class GanttChart
 
         // Set initial number of days in month and year (for colspan)
         list($currentYear, $currentMonth) = explode("-",date('Y-F', $this->firstDayTimestamp));
-        $numYearDays = 1;
-        $numMonthDays = 1;
+        $numYearDays = 0;
+        $numMonthDays = 0;
 
         // Create Year / Month / Day / Date headers
         $headerYear = '<tr><td colspan = "';
@@ -65,8 +65,8 @@ class GanttChart
             // Check Year and Month creating required <td></td> elements
             if ($i == $numDays-1) {
                 // End of project reached - close month and year table elements
-                $headerYear = $headerYear . $numYearDays.'">'. $currentYear .'</td>';
-                $headerMonth = $headerMonth . $numMonthDays.'">'. $currentMonth .'</td>';
+                $headerYear = $headerYear . ($numYearDays + 1).'">'. $currentYear .'</td>';
+                $headerMonth = $headerMonth . ($numMonthDays + 1) .'">'. $currentMonth .'</td>';
             } else {
                 // Not end of project
                 if ($currentYear != $tabYear) {
@@ -75,7 +75,7 @@ class GanttChart
                     $currentYear = $tabYear;
                     $numYearDays = 1;
                 } else {
-                    // Not end of year so increment number od days in year
+                    // Not end of year so increment number of days in year
                     $numYearDays = $numYearDays + 1;
                 }
 
@@ -94,6 +94,7 @@ class GanttChart
         $headerDay = $headerDay . "</tr>";
         $headerDate = $headerDate . "</tr>";
 
+        $this->html[] = "<table>";
         $this->html[] = $headerYear;
         $this->html[] = $headerMonth;
         $this->html[] = $headerDay;
@@ -101,17 +102,41 @@ class GanttChart
     }
 
     // Plot tasks
+    private function drawTasks() {
+        $dayInSeconds = 60*60*24;
+        foreach ($this->project->tasks as $task) {
+            $taskStartTimestamp = strtotime($task->start);
+            $taskEndTimestamp = strtotime($task->end);
+            $daysToTaskStart = ($taskStartTimestamp - $this->firstDayTimestamp) / $dayInSeconds;
+            $daysAfterTaskEnd = ($this->lastDayTimestamp - $taskEndTimestamp) / $dayInSeconds;
+            $taskLength = ($taskEndTimestamp - $taskStartTimestamp) / $dayInSeconds + 1;
+
+            $taskRow = '<tr>';
+            // Test for front end padding
+            if ($daysToTaskStart > 0) {
+                $taskRow = $taskRow . '<td colspan ="' . $daysToTaskStart . '"></td>';
+            }
+            // Add task
+            $taskRow = $taskRow . '<td colspan ="' . $taskLength . '">TASK</td>';
+
+            // Test for padding after task
+            if ($daysAfterTaskEnd > 0) {
+                $taskRow = $taskRow . '<td colspan ="' . $daysAfterTaskEnd . '"></td>';
+            }
+            $taskRow = $taskRow . '</tr>';
+            $this->html[] = $taskRow;
+        }
+        $this->html[] = "</table>";
+    }
 
     // Create chart header
     private function createChartHeader() {
         $this->html[] = "<figure>";
-        $this->html[] = "<h2>{$this->project->title}</h2>";
-        $this->html[] = "<table>";
+        $this->html[] = "<figcaption>". $this->project->title . "</figcaption>";
     }
 
     // Create chart footer
     private function createChartFooter() {
-        $this->html[] = "</table>";
         $this->html[] = "</figure>";
     }
 
@@ -119,15 +144,18 @@ class GanttChart
     private function drawChart() {
         $this->html = array();
         $this->createChartHeader();
+        // Create Side label
+
+        // Creats Gantt bars
         $this->createDateBanner();
-        // Draw tasks
+        $this->drawTasks();
         $this->createChartFooter();
     }
 
     public function __toString()
     {
         $this->drawChart();
-        return implode('',$this->html);
+        return implode("",$this->html);
     }
 
 }
