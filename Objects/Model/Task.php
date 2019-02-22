@@ -16,7 +16,7 @@ class Task
     private $name;
     private $description;
     private $comments;
-    private $taskID;
+    private $taskNo;
 
     public function __construct($start, $end, $name)
     {

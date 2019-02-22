@@ -6,6 +6,8 @@
 
 .chart table {
     table-layout: fixed;
+    border-collapse: collapse;
+    border: 3px solid #aaa;
 }
 
 .chart figcaption {
@@ -14,9 +16,7 @@
 }
 
 .chart .chart-year {
-    border-top: 1px solid #aaa;
-    border-right: 1px solid #aaa;
-    border-bottom: 1px solid #aaa;
+    border: 3px solid #aaa;
     text-align: center;
     height: 40px;
     font-size: 20px;
@@ -24,26 +24,27 @@
 }
 
 .chart .chart-month {
-    border-right: 1px solid #aaa;
-    border-bottom: 1px solid #aaa;
+    border: 3px solid #aaa;
     text-align: center;
     height: 40px;
     font-weight: bold;
 }
 
 .chart .chart-day {
-    border-right: 1px solid #aaa;
-    border-bottom: 1px solid #aaa;
+    border: 1px solid #aaa;
     text-align: center;
     height: 40px;
     width: 40px;
 }
 
-.chart .chart-day .today {
+.chart .chart-day.today {
     color: white;
 }
 
-.chart .chart-day .weekend {
-    background-color: #777;
-    color: white;
+.chart .chart-day.weekend {
+    background-color: #444;
+}
+
+.chart .chart-day.start {
+    border-left: 3px solid #aaa;
 }
