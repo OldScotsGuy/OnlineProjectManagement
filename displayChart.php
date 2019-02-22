@@ -24,10 +24,12 @@ $chart = new \View\GanttChart($project);
 <head>
     <meta charset="UTF-8">
     <title>Project Prototyping</title>
+    <link rel="stylesheet" href="CSS/chart-style.css" />
+    <link rel="stylesheet" href="CSS/page.css" />
 </head>
 <body>
 <header>
-    <h1>Plant It! Project Tool</h1>
+    <h1>Plan It! Project Tool</h1>
 </header>
 <main>
 <?php echo $chart ?>

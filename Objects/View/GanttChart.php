@@ -49,20 +49,31 @@ class GanttChart
         $numMonthDays = 0;
 
         // Create Year / Month / Day / Date headers
-        $headerYear = '<tr><td colspan = "';
-        $headerMonth = '<tr><td colspan = "';
-        $headerDay = "<tr>";
-        $headerDate = "<tr>";
+        $headerYear = '<tr><td class="chart-year" colspan = "';
+        $headerMonth = '<tr><td class="chart-month" colspan = "';
+        $headerDay = '<tr>';
+        $headerDate = '<tr>';
 
         for($i=0; $i < $numDays; $i++) {
             $timestamp = $this->firstDayTimestamp + $i*$dayInSeconds;
             list($tabYear, $tabMonth, $tabDay, $tabDate) = explode("-", date('Y-F-D-d', $timestamp));
 
             // Create day headers
-            $headerDay = $headerDay . "<td>{$tabDay}</td>";
-            $headerDate = $headerDate . "<td>{$tabDate}</td>";
+            // ==================
+            $headerDay .= '<td class="chart-day';
+            $headerDate .= '<td class="chart-day';
+
+            // Test for a weekend
+            if (($tabDay == 'Sat') || ($tabDay == 'Sun')) {
+                $headerDay .= ' weekend';
+                $headerDate .= ' weekend';
+            }
+
+            $headerDay .= '">' . $tabDay .'</td>';
+            $headerDate .= '">'. $tabDate . '</td>';
 
             // Check Year and Month creating required <td></td> elements
+            // =========================================================
             if ($i == $numDays-1) {
                 // End of project reached - close month and year table elements
                 $headerYear = $headerYear . ($numYearDays + 1).'">'. $currentYear .'</td>';
@@ -71,7 +82,7 @@ class GanttChart
                 // Not end of project
                 if ($currentYear != $tabYear) {
                     // End of year reached
-                    $headerYear = $headerYear . $numYearDays . '">' . $currentYear . '</td><td colspan = "';
+                    $headerYear = $headerYear . $numYearDays . '">' . $currentYear . '</td><td class="chart-year" colspan = "';
                     $currentYear = $tabYear;
                     $numYearDays = 1;
                 } else {
@@ -81,7 +92,7 @@ class GanttChart
 
                 if ($currentMonth != $tabMonth) {
                     // End of Month reached
-                    $headerMonth = $headerMonth . $numMonthDays . '">' . $currentMonth . '</td><td colspan = "';
+                    $headerMonth = $headerMonth . $numMonthDays . '">' . $currentMonth . '</td><td class="chart-month" colspan = "';
                     $currentMonth = $tabMonth;
                     $numMonthDays = 1;
                 } else {
@@ -94,6 +105,7 @@ class GanttChart
         $headerDay = $headerDay . "</tr>";
         $headerDate = $headerDate . "</tr>";
 
+        $this->html[] = "<style>table { width: ". ($numDays * 40) . "px; }</style>";
         $this->html[] = "<table>";
         $this->html[] = $headerYear;
         $this->html[] = $headerMonth;
@@ -101,7 +113,7 @@ class GanttChart
         $this->html[] = $headerDate;
     }
 
-    // Plot tasks
+     // Plot tasks
     private function drawTasks() {
         $dayInSeconds = 60*60*24;
         foreach ($this->project->tasks as $task) {
@@ -131,8 +143,8 @@ class GanttChart
 
     // Create chart header
     private function createChartHeader() {
-        $this->html[] = "<figure>";
-        $this->html[] = "<figcaption>". $this->project->title . "</figcaption>";
+        $this->html[] = "<figure class='chart'>";
+        $this->html[] = "<figcaption>Project Title: ". $this->project->title . "</figcaption>";
     }
 
     // Create chart footer
