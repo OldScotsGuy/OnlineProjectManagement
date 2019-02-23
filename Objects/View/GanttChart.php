@@ -11,34 +11,44 @@ namespace View;
 
 class GanttChart
 {
-    // Project data assembled during constructor call
+    // Constant
     private $dayInSeconds = 60 * 60 * 24;   //TODO make this a constant
+
+    // Project data assembled during constructor call
+    // ==============================================
     private $project = null;
+
+    // Task data
     private $firstDayTimestamp = false;
     private $lastDayTimestamp = false;
     private $numDays = null;
+    private $taskData = array();
+    private $taskRows = array();
+
+    // Date header data
     private $yearStartData = array();
     private $monthStartData = array();
-
-    // HTML Strings
     private $dayHeader = null;
     private $dateHeader = null;
     private $dayStartTags = array();
+
+    // HTML assembled during draw call
+    // ===========================
     private $html = array();
 
     // Constructor will have a default set of graphical options that could be overwritten if required (e.g. themes)
     public function __construct($project = null)
     {
         $this->project = $project;
-
-        $this->findDayRange();          // find earliest and latest days
+        $this->parseTaskData();          // find earliest and latest days
         $this->parseProjectTimeData();      // create array of day classes
-        // order tasks
     }
 
-    private function findDayRange()
+    private function parseTaskData()
     {
         $tasks = $this->project->tasks;
+
+        // Find the start and finish project dates
         foreach ($tasks as $task)
         {
             $startTimestamp = strtotime($task->start);
@@ -47,6 +57,15 @@ class GanttChart
             if (!$this->lastDayTimestamp || $this->lastDayTimestamp < $endTimestamp) $this->lastDayTimestamp = $endTimestamp;
         }
         $this->numDays = ($this->lastDayTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds + 1;  // Get total number of days in project
+
+        // Now reference each task from the project start date
+        foreach ($tasks as $task) {
+            $startTimestamp = strtotime($task->start);
+            $startIndex = ($startTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
+            $endTimestamp = strtotime($task->end);
+            $endIndex = ($endTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
+            $this->taskData[] = array("start" => $startIndex, "end" => $endIndex, "name" => $task->name , "num" => $task->taskNo);
+        }
     }
 
     private function parseProjectTimeData()
@@ -68,11 +87,12 @@ class GanttChart
             }
 
             $this->dayStartTags[] = $startTag . '">';               // Store day start tag for task display use
-            $this->dayHeader .= $this->dayStartTags[$i] . $tabDay . '</td>';
-            $this->dateHeader .= $this->dayStartTags[$i] . $tabDate . '</td>';
+            $this->dayHeader .= $this->dayStartTags[$i] . $tabDay . '</td>';    // Construct Gantt table day header
+            $this->dateHeader .= $this->dayStartTags[$i] . $tabDate . '</td>';  // Construct Gantt table date header
         }
     }
 
+    // Used to test if a month or year has changed when iterating through days
     private function isStart($index, $current, $format) {
         if ($index == 0) {
             return true;
@@ -82,6 +102,7 @@ class GanttChart
         }
     }
 
+    // Used to create the Gantt chart month and year headers via the stored parsed data
     private function createHeaderTags($periodStartData, $class) {
         $periodHeader = null;
         $numPeriods = sizeof($periodStartData);
@@ -95,77 +116,46 @@ class GanttChart
         return $periodHeader;
     }
 
-    // Create year, month and day banner
-    private function createDateBanner() {
-        $this->html[] = "<style>table { width: ". ($this->numDays * 40) . "px; }</style>";
-        $this->html[] = "<table>";
-        $this->html[] = '<tr>' . $this->createHeaderTags($this->yearStartData, 'chart-year') . '</tr>';
-        $this->html[] = '<tr>' . $this->createHeaderTags($this->monthStartData, 'chart-month') . '</tr>';
-        $this->html[] = '<tr>' . $this->dayHeader . '</tr>';
-        $this->html[] = '<tr>' . $this->dateHeader . '</tr>';
-    }
-
      // Plot tasks
-    private function drawTasks() {
-        $dayInSeconds = 60*60*24;   //TODO make this a constant
-        foreach ($this->project->tasks as $task) {
-            $taskStartTimestamp = strtotime($task->start);
-            $taskEndTimestamp = strtotime($task->end);
-            $daysToTaskStart = ($taskStartTimestamp - $this->firstDayTimestamp) / $dayInSeconds;
-            $daysAfterTaskEnd = ($this->lastDayTimestamp - $taskEndTimestamp) / $dayInSeconds;
-            $taskLength = ($taskEndTimestamp - $taskStartTimestamp) / $dayInSeconds + 1;
+    private function createTaskRows() {
+        // TODO order $this->taskData according to task number
 
-            $taskRow = '<tr>';
-            // Test for front end padding
-            if ($daysToTaskStart > 0) {
-                $taskRow .= $this->addPaddingdays($this->firstDayTimestamp, $daysToTaskStart);
-            }
-            // Add task
-            $taskRow .= '<td colspan ="' . $taskLength . '">TASK</td>';
-
-            // Test for padding after task
-            if ($daysAfterTaskEnd > 0) {
-                $taskRow .= $this->addPaddingdays($taskEndTimestamp + $dayInSeconds, $daysAfterTaskEnd);
-            }
-            $taskRow = $taskRow . '</tr>';
-            $this->html[] = $taskRow;
+        // Create task row data
+        foreach ($this->taskData as $task) {
+            $row = null;
+            $row = $this->addPaddingDays(0, $task['start']);                                // Add before task padding days
+            $row .= '<td colspan ="' . ($task['end'] - $task['start'] + 1) . '">TASK</td>'; // Add task colspan element
+            $row .= $this->addPaddingDays($task['end']+1, $this->numDays);                  // Add after task padding days
+            $this->taskRows[] = $row;
         }
-        $this->html[] = "</table>";
     }
 
-    private function addPaddingdays($startTimeStamp, $numDays) {
-
-        $dayInSeconds = 60*60*24;   //TODO make this a constant
-        list($currentMonth, $currentDay) = explode("-", date('F-D', $startTimeStamp));
-        //$currentMonth = date('F', $startTimeStamp);
-        $tableRow = null;
-        for ($i=0; $i < $numDays; $i++) {
-            $timestamp = $startTimeStamp + $i*$dayInSeconds;
-            list($paddingMonth, $paddingDay) = explode("-", date('F-D', $timestamp));
-
-            $tableRow .= '<td class="chart-day';
-
-            // Test for month start
-            if ($currentMonth != $paddingMonth) {
-                $tableRow .= ' start';
-                $currentMonth = $paddingMonth;
-            }
-
-            // Test for weekend
-            if (($paddingDay == 'Sat') || ($paddingDay == 'Sun')) {
-                $tableRow .= ' weekend';
-                $tableRow .= ' weekend';
-            }
-
-            $tableRow .= '"></td>';
+    private function addPaddingDays($start, $end) {
+        $padding = null;
+        for ($i = $start; $i < $end ; $i++ ) {
+            $padding .= $this->dayStartTags[$i] . '</td>';
         }
-        return $tableRow;
+        return $padding;
     }
 
     // Create chart header
     private function createChartHeader() {
         $this->html[] = "<figure class='chart'>";
         $this->html[] = "<figcaption>Project Title: ". $this->project->title . "</figcaption>";
+    }
+
+    // Create year, month and day banner
+    private function createGanttTable() {
+        $this->html[] = "<style>table { width: ". ($this->numDays * 40) . "px; }</style>";
+        $this->html[] = "<table>";
+        $this->html[] = '<tr>' . $this->createHeaderTags($this->yearStartData, 'chart-year') . '</tr>';
+        $this->html[] = '<tr>' . $this->createHeaderTags($this->monthStartData, 'chart-month') . '</tr>';
+        $this->html[] = '<tr>' . $this->dayHeader . '</tr>';
+        $this->html[] = '<tr>' . $this->dateHeader . '</tr>';
+        foreach ($this->taskRows as $row) {
+            $this->html[] = '<tr>' . $row . '</tr>';
+        }
+        $this->html[] = "</table>";
     }
 
     // Create chart footer
@@ -176,16 +166,10 @@ class GanttChart
     // Draw chart function
     private function drawChart() {
         $this->html = array();
-        
-        // Create Header
+
         $this->createChartHeader();
-        // Create Side label
-
-        // Create Gantt chart
-        $this->createDateBanner();
-        $this->drawTasks();
-
-        // Create Footer
+        $this->createTaskRows();
+        $this->createGanttTable();
         $this->createChartFooter();
     }
 

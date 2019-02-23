@@ -18,11 +18,12 @@ class Task
     private $comments;
     private $taskNo;
 
-    public function __construct($start, $end, $name)
+    public function __construct($start, $end, $name, $taskNo)
     {
         $this->start = $start;
         $this->end = $end;
         $this->name = $name;
+        $this->taskNo = $taskNo;
     }
 
     public function __set($var, $value)
