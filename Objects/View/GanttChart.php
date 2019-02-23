@@ -11,20 +11,29 @@ namespace View;
 
 class GanttChart
 {
-    private $project;
+    private $dayInSeconds = 60 * 60 * 24;   //TODO make this a constant
+    private $project = null;
     private $firstDayTimestamp = false;
     private $lastDayTimestamp = false;
-    private $html;
+    private $numDays = null;
+    private $yearHeader = null;
+    private $monthHeader = null;
+    private $dayHeader = null;
+    private $dateHeader = null;
+    private $dayStartTags = array();
+    private $html = array();
 
     // Constructor will have a default set of graphical options that could be overwritten if required (e.g. themes)
     public function __construct($project = null)
     {
         $this->project = $project;
-        // find earliest and latest days
-        $this->findDayRange();
+
+        $this->findDayRange();          // find earliest and latest days
+        $this->createDayTagData();    // create array of day classes
+        $this->createMonthYearTags();   // create date banner year and month tags
+        // order tasks
     }
 
-    // Find first and last days in teh project and store in timestamp form
     private function findDayRange()
     {
         $tasks = $this->project->tasks;
@@ -35,58 +44,48 @@ class GanttChart
             if (!$this->firstDayTimestamp || $this->firstDayTimestamp > $startTimestamp) $this->firstDayTimestamp = $startTimestamp;
             if (!$this->lastDayTimestamp || $this->lastDayTimestamp < $endTimestamp) $this->lastDayTimestamp = $endTimestamp;
         }
+        $this->numDays = ($this->lastDayTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds + 1;  // Get total number of days in project
     }
 
-    // Create year, month and day banner
-    private function createDateBanner() {
-        // Get total number of days in project
-        $dayInSeconds = 60*60*24;   //TODO make this a constant
-        $numDays = ($this->lastDayTimestamp - $this->firstDayTimestamp)/$dayInSeconds + 1;
+    private function createDayTagData()
+    {
 
+        for ($i = 0; $i < $this->numDays; $i++) {
+            $timestamp = $this->firstDayTimestamp + $i * $this->dayInSeconds;
+            list($tabYear, $tabMonth, $tabDay, $tabDate) = explode("-", date('Y-F-D-d', $timestamp));
+
+            $startTag = '<td class="chart-day';
+            $startTag .= (($tabDay == 'Sat') || ($tabDay == 'Sun')) ? ' weekend' : '';                             // Test for a weekend
+            $startTag .= ($tabYear . "-" . $tabMonth . "-" . $tabDate == date('Y-F-d')) ? ' today' : '';    // Test for today
+            $startTag .= $this->isMonthStart($i,$tabMonth) ? ' start' : '';                                        // Test for month start
+            $this->dayStartTags[] = $startTag . '">';
+
+            $this->dayHeader .= $this->dayStartTags[$i] . $tabDay . '</td>';
+            $this->dateHeader .= $this->dayStartTags[$i] . $tabDate . '</td>';
+        }
+    }
+
+    private function createMonthYearTags() {
+        $this->yearHeader = '<td class="chart-year" colspan = "';
+        $this->monthHeader = '<td class="chart-month" colspan = "';
         // Set initial number of days in month and year (for colspan)
         list($currentYear, $currentMonth) = explode("-",date('Y-F', $this->firstDayTimestamp));
         $numYearDays = 0;
         $numMonthDays = 0;
 
-        // Create Year / Month / Day / Date headers
-        $headerYear = '<tr><td class="chart-year" colspan = "';
-        $headerMonth = '<tr><td class="chart-month" colspan = "';
-        $headerDay = '<tr>';
-        $headerDate = '<tr>';
-
-        for($i=0; $i < $numDays; $i++) {
-            $timestamp = $this->firstDayTimestamp + $i*$dayInSeconds;
+        for ($i = 0; $i < $this->numDays; $i++) {
+            $timestamp = $this->firstDayTimestamp + $i*$this->dayInSeconds;
             list($tabYear, $tabMonth, $tabDay, $tabDate) = explode("-", date('Y-F-D-d', $timestamp));
 
-            // Create day headers
-            // ==================
-            $headerDay .= '<td class="chart-day';
-            $headerDate .= '<td class="chart-day';
-
-            // Test for a weekend
-            if (($tabDay == 'Sat') || ($tabDay == 'Sun')) {
-                $headerDay .= ' weekend';
-                $headerDate .= ' weekend';
-            }
-
-            // Test for today
-            if ($tabYear . "-" . $tabMonth . "-". $tabDate == date('Y-F-d')) {
-                $headerDay .= ' today';
-                $headerDate .= ' today';
-            }
-
-
-            // Check Year and Month creating required <td></td> elements
-            // =========================================================
-            if ($i == $numDays-1) {
+            if ($i == $this->numDays-1) {
                 // End of project reached - close month and year table elements
-                $headerYear = $headerYear . ($numYearDays + 1).'">'. $currentYear .'</td>';
-                $headerMonth = $headerMonth . ($numMonthDays + 1) .'">'. $currentMonth .'</td>';
+                $this->yearHeader .= ($numYearDays + 1).'">'. $currentYear .'</td>';
+                $this->monthHeader .= ($numMonthDays + 1) .'">'. $currentMonth .'</td>';
             } else {
                 // Not end of project
                 if ($currentYear != $tabYear) {
                     // End of year reached
-                    $headerYear = $headerYear . $numYearDays . '">' . $currentYear . '</td><td class="chart-year" colspan = "';
+                    $this->yearHeader .= $numYearDays . '">' . $currentYear . '</td><td class="chart-year" colspan = "';
                     $currentYear = $tabYear;
                     $numYearDays = 1;
                 } else {
@@ -96,31 +95,33 @@ class GanttChart
 
                 if ($currentMonth != $tabMonth) {
                     // End of Month reached
-                    $headerMonth = $headerMonth . $numMonthDays . '">' . $currentMonth . '</td><td class="chart-month" colspan = "';
+                    $this->monthHeader .= $numMonthDays . '">' . $currentMonth . '</td><td class="chart-month" colspan = "';
                     $currentMonth = $tabMonth;
                     $numMonthDays = 1;
-                    $headerDay .= ' start';
-                    $headerDate .= ' start';
                 } else {
                     $numMonthDays = $numMonthDays + 1;
                 }
             }
-
-            $headerDay .= '">' . $tabDay .'</td>';
-            $headerDate .= '">'. $tabDate . '</td>';
-
         }
-        $headerYear = $headerYear . "</tr>";
-        $headerMonth = $headerMonth . "</tr>";
-        $headerDay = $headerDay . "</tr>";
-        $headerDate = $headerDate . "</tr>";
+    }
 
-        $this->html[] = "<style>table { width: ". ($numDays * 40) . "px; }</style>";
+    private function isMonthStart($index, $month) {
+        if ($index == 0) {
+            return true;
+        } else {
+            $yesterdayMonth = date('F', ($this->firstDayTimestamp + ($index - 1) * $this->dayInSeconds));
+            return !($month == $yesterdayMonth);
+        }
+    }
+
+    // Create year, month and day banner
+    private function createDateBanner() {
+        $this->html[] = "<style>table { width: ". ($this->numDays * 40) . "px; }</style>";
         $this->html[] = "<table>";
-        $this->html[] = $headerYear;
-        $this->html[] = $headerMonth;
-        $this->html[] = $headerDay;
-        $this->html[] = $headerDate;
+        $this->html[] = '<tr>' . $this->yearHeader . '</tr>';
+        $this->html[] = '<tr>' . $this->monthHeader . '</tr>';
+        $this->html[] = '<tr>' . $this->dayHeader . '</tr>';
+        $this->html[] = '<tr>' . $this->dateHeader . '</tr>';
     }
 
      // Plot tasks
@@ -152,6 +153,7 @@ class GanttChart
     }
 
     private function addPaddingdays($startTimeStamp, $numDays) {
+
         $dayInSeconds = 60*60*24;   //TODO make this a constant
         list($currentMonth, $currentDay) = explode("-", date('F-D', $startTimeStamp));
         //$currentMonth = date('F', $startTimeStamp);
