@@ -153,18 +153,28 @@ class GanttChart
 
     private function addPaddingdays($startTimeStamp, $numDays) {
         $dayInSeconds = 60*60*24;   //TODO make this a constant
-        $currentMonth = date('F', $startTimeStamp);
+        list($currentMonth, $currentDay) = explode("-", date('F-D', $startTimeStamp));
+        //$currentMonth = date('F', $startTimeStamp);
         $tableRow = null;
         for ($i=0; $i < $numDays; $i++) {
             $timestamp = $startTimeStamp + $i*$dayInSeconds;
-            $paddingMonth = date('F', $timestamp);
+            list($paddingMonth, $paddingDay) = explode("-", date('F-D', $timestamp));
+
+            $tableRow .= '<td class="chart-day';
+
+            // Test for month start
             if ($currentMonth != $paddingMonth) {
-                $tableRow .= '<td class="chart-day start"></td>';
+                $tableRow .= ' start';
                 $currentMonth = $paddingMonth;
-            } else {
-                $tableRow .= '<td class="chart-day"></td>';
             }
-            //$tableRow .= '<td class="chart-day"></td>';
+
+            // Test for weekend
+            if (($paddingDay == 'Sat') || ($paddingDay == 'Sun')) {
+                $tableRow .= ' weekend';
+                $tableRow .= ' weekend';
+            }
+
+            $tableRow .= '"></td>';
         }
         return $tableRow;
     }
