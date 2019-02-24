@@ -17,8 +17,9 @@ class Task
     private $notes;
     private $owner;
     private $taskNo;
+    private $percentComplete;
 
-    public function __construct($start, $end, $name, $taskNo, $owner, $notes)
+    public function __construct($start, $end, $name, $taskNo, $owner, $notes, $percentComplete)
     {
         $this->start = $start;
         $this->end = $end;
@@ -26,6 +27,7 @@ class Task
         $this->taskNo = $taskNo;
         $this->owner = $owner;
         $this->notes = $notes;
+        $this->percentComplete = $percentComplete;
     }
 
     public function __set($var, $value)

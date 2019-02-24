@@ -60,7 +60,7 @@ class GanttData
             $startIndex = ($startTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
             $endTimestamp = strtotime($task->end);
             $endIndex = ($endTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
-            $this->taskData[] = array("start" => $startIndex, "end" => $endIndex, "name" => $task->name , "num" => $task->taskNo, "owner" => $task->owner, "notes" => $task->notes);
+            $this->taskData[] = array("start" => $startIndex, "end" => $endIndex, "name" => $task->name , "num" => $task->taskNo, "owner" => $task->owner, "notes" => $task->notes, "percent" => $task->percentComplete);
         }
 
         // Order tasks by task number

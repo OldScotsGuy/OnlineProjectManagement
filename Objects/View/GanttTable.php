@@ -53,7 +53,11 @@ class GanttTable extends GanttData
         foreach ($this->taskData as $task) {
             $row = null;
             $row = $this->addPaddingDays(0, $task['start']);                                // Add before task padding days
-            $row .= '<td colspan ="' . ($task['end'] - $task['start'] + 1) . '">TASK</td>'; // Add task colspan element
+
+            $row .= '<td colspan ="' . ($task['end'] - $task['start'] + 1) . '">';
+            $row .= '<div class ="chart-task"><div class="chart-fill" style="width: ' . $task['percent'] .'%">';
+            $row .= '</div></div></td>'; // Add task colspan element
+
             $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays);                // Add after task padding days
             $this->taskRows[] = $row;
         }
@@ -74,8 +78,8 @@ class GanttTable extends GanttData
     {
         $this->html[] = "<figure class='chart'>";
         $this->html[] = "<figcaption>Project Title: " . $this->project->title . "</figcaption>";
-        $this->html[] = "<style>table { width: " . ($this->numDays * 40) . "px; }</style>";
-        $this->html[] = "<table>";
+        //$this->html[] = "<style>table { width: " . ($this->numDays * 40) . "px; }</style>";
+        $this->html[] = '<table style ="width: ' . ($this->numDays * 40) . 'px;">';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->yearStartData, 'chart-year') . '</tr>';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->monthStartData, 'chart-month') . '</tr>';
         $this->html[] = '<tr>' . $this->dayHeader . '</tr>';
