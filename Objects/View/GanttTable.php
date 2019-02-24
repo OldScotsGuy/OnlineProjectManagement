@@ -25,8 +25,6 @@ class GanttTable extends GanttData
 
     private function createTaskSideBarRows() {
 
-        $this->taskSideBarRows[] = '<tr><td colspan="2" class="side-top"></td></tr><tr><td colspan="2" class="side-top"></td></tr>';
-        $this->taskSideBarRows[] = '<tr><td colspan="2" class="side-top"></td></tr>';
         $row = '<tr><td class="side-heading">Task Name</td>';
         $row .= '<td class="side-heading">Owner</td></tr>';
         $this->taskSideBarRows[] = $row;
