@@ -14,16 +14,18 @@ class Task
     private $start;
     private $end;
     private $name;
-    private $description;
-    private $comments;
+    private $notes;
+    private $owner;
     private $taskNo;
 
-    public function __construct($start, $end, $name, $taskNo)
+    public function __construct($start, $end, $name, $taskNo, $owner, $notes)
     {
         $this->start = $start;
         $this->end = $end;
         $this->name = $name;
         $this->taskNo = $taskNo;
+        $this->owner = $owner;
+        $this->notes = $notes;
     }
 
     public function __set($var, $value)

@@ -39,7 +39,7 @@ class GanttData
 
     // Finds first and last task dates storing these as timestamps
     // Calculates number of days in project
-    // Places task data into array - TODO sort tasks according to task number
+    // Places task data into array
     private function parseTaskData()
     {
         $tasks = $this->project->tasks;
@@ -60,8 +60,11 @@ class GanttData
             $startIndex = ($startTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
             $endTimestamp = strtotime($task->end);
             $endIndex = ($endTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
-            $this->taskData[] = array("start" => $startIndex, "end" => $endIndex, "name" => $task->name , "num" => $task->taskNo);
+            $this->taskData[] = array("start" => $startIndex, "end" => $endIndex, "name" => $task->name , "num" => $task->taskNo, "owner" => $task->owner, "notes" => $task->notes);
         }
+
+        // Order tasks by task number
+        usort($this->taskData, function ($a,$b) {return $a['num'] - $b['num']; });
     }
 
     // Classifies days according to weekend / today / month start

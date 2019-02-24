@@ -8,15 +8,13 @@
 
 require_once ("Objects/Model/Project.php");
 require_once ("Objects/Model/Task.php");
-//require("Objects/View/GanttChart.php");
 require_once ("Objects/View/GanttTable.php");
 
 // Creat objects to begin with
-$task1 = new \Model\Task("2019-01-28", "2019-02-03", "Specification",1);
-$task2 = new \Model\Task("2019-02-07","2019-02-14","panic",2);
-$task3 = new \Model\Task("2019-02-15", "2019-03-7", "Coding",3);
+$task1 = new \Model\Task("2019-01-28", "2019-02-03", "Specification",2,"NH", "Need to understand the user requirements");
+$task2 = new \Model\Task("2019-02-07","2019-02-14","Panic",3, "NH", "Realising the amount of work required in the time given produced panic");
+$task3 = new \Model\Task("2019-02-15", "2019-03-7", "Coding",1, "NH", "The most fun bit");
 $project = new Model\Project("Coding", "CMM007 Assignment", array($task1, $task2, $task3));
-//$chart = new \View\GanttChart($project);
 $chart = new \View\GanttTable($project);
 
 // Boiler plate front end
