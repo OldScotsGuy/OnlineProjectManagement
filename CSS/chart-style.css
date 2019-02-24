@@ -1,6 +1,20 @@
+figcaption {
+    color: white;
+    font-size: 25px;
+}
+
 .chart {
     background: #002b36;
     color: #93a1a1;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row;
+}
+
+.chart section {
+    margin: 0;
+    padding: 0;
+    flex: 1;
     overflow-x: auto;
 }
 
@@ -10,9 +24,37 @@
     border: 3px solid #aaa;
 }
 
-.chart figcaption {
-    color: white;
-    font-size: 25px;
+.chart .side-top {
+    height: 42px;
+    margin: 0;
+    padding-top: 1px;
+    padding-bottom: 0px;
+}
+
+.chart .side-heading {
+    height: 40px;
+    border-top: 3px solid #aaa;
+    border-bottom: 3px solid #aaa;
+    font-weight: bold;
+    border-right: 1px solid #aaa;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.chart .side-name {
+    height: 40px;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.chart .side-owner {
+    height: 40px;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    text-align: center;
 }
 
 .chart .chart-year {
