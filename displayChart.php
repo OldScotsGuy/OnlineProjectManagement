@@ -34,4 +34,6 @@ $chart = new \View\GanttTable($project);
 <main>
 <?php echo $chart ?>
 </main>
+<script type="text/javascript" src="Javascript/chart-task-notes.js"></script>
 </body>
+</html>

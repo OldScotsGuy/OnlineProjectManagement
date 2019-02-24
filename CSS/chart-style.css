@@ -61,3 +61,9 @@
     height: 20px;
     background: darkblue;
 }
+
+.chart .task-notes {
+    background: white;
+    color: black;
+    display: none;
+}

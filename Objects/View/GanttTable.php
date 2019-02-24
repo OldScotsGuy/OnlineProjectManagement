@@ -51,14 +51,19 @@ class GanttTable extends GanttData
     private function createTaskRows()
     {
         foreach ($this->taskData as $task) {
-            $row = null;
-            $row = $this->addPaddingDays(0, $task['start']);                                // Add before task padding days
 
+            // Add before task padding days
+            $row = '<tr>' . $this->addPaddingDays(0, $task['start']);
+            // Add task details
             $row .= '<td colspan ="' . ($task['end'] - $task['start'] + 1) . '">';
             $row .= '<div class ="chart-task"><div class="chart-fill" style="width: ' . $task['percent'] .'%">';
             $row .= '</div></div></td>'; // Add task colspan element
+            // Add after task padding days
+            $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays)  . '</tr>';
 
-            $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays);                // Add after task padding days
+            // Add notes row under task detail
+            $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">' . $task['notes'] . '</td></tr>';
+
             $this->taskRows[] = $row;
         }
     }
@@ -78,14 +83,13 @@ class GanttTable extends GanttData
     {
         $this->html[] = "<figure class='chart'>";
         $this->html[] = "<figcaption>Project Title: " . $this->project->title . "</figcaption>";
-        //$this->html[] = "<style>table { width: " . ($this->numDays * 40) . "px; }</style>";
         $this->html[] = '<table style ="width: ' . ($this->numDays * 40) . 'px;">';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->yearStartData, 'chart-year') . '</tr>';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->monthStartData, 'chart-month') . '</tr>';
         $this->html[] = '<tr>' . $this->dayHeader . '</tr>';
         $this->html[] = '<tr>' . $this->dateHeader . '</tr>';
         foreach ($this->taskRows as $row) {
-            $this->html[] = '<tr>' . $row . '</tr>';
+            $this->html[] = $row;
         }
         $this->html[] = "</table>";
         $this->html[] = "</figure>";
