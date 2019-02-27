@@ -23,7 +23,7 @@ class GanttTable extends GanttData
     private $dateHeader = null;
     private $html = array();
 
-    private function createTaskSideBarRows() {
+/*    private function createTaskSideBarRows() {
 
         $row = '<tr><td class="side-heading">Task Name</td>';
         $row .= '<td class="side-heading">Owner</td></tr>';
@@ -34,12 +34,15 @@ class GanttTable extends GanttData
             $row .= '<td class="side-owner">' . $task['owner'] . '</td></tr>';
             $this->taskSideBarRows[] = $row;
         }
-    }
+    } */
 
 
     // Create the Gantt chart day and date headers via the stored parsed data
     private function createDayDateHeaders()
     {
+        $this->dayHeader = '<th></th>';
+        $this->dateHeader = '<th class="side-heading">Task : Owner</th>';
+        //$startTag = '';
         for ($i = 0; $i < $this->numDays; $i++) {
             $startTag = '<th class="' . $this->dayClassifications[$i][0] . '">';
             $this->dayHeader .= $startTag . $this->dayClassifications[$i][1] . '</th>';     // Construct Gantt table day header
@@ -50,7 +53,8 @@ class GanttTable extends GanttData
     // Create the Gantt chart month and year headers via the stored parsed data
     private function createHeaderTags($periodStartData, $class)
     {
-        $periodHeader = null;
+        $periodHeader = '<th></th>';
+        //$periodHeader = null;
         $numPeriods = sizeof($periodStartData);
         $periodStartData[] = array('End', $this->numDays);
         for ($period = 0; $period < $numPeriods; $period++) {
@@ -67,14 +71,20 @@ class GanttTable extends GanttData
     {
         foreach ($this->taskData as $task) {
 
-            $row = '<tr>' . $this->addPaddingDays(0, $task['start']);   // Add before task padding days
+            // Add task details
+            $row = '<tr><td class="side-name">' . $task['name'] . ' : ' . $task['owner'] . '</td>';
+            //$row = null;
+
+            // Add before task padding days
+            $row .= $this->addPaddingDays(0, $task['start']);
 
             // Add task details
             $row .= '<td colspan ="' . ($task['end'] - $task['start'] + 1) . '">';
             $row .= '<div class ="chart-task"><div class="chart-fill" style="width: ' . $task['percent'] .'%">';
             $row .= '</div></div></td>';
 
-            $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays)  . '</tr>'; // Add after task padding days
+            // Add after task padding days
+            $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays)  . '</tr>';
 
             // Add notes row under task detail
             $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">' . $task['notes'] . '</td></tr>';

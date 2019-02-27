@@ -6,50 +6,73 @@ figcaption {
 .chart {
     background: #002b36;
     color: #93a1a1;
-/*    align-items: flex-end;
-    display: flex;
-    display: -webkit-flex;
-    flex-direction: row; */
 }
 
 .chart section {
     margin: 0;
     padding: 0;
-    flex: 1;
+/*    display: flex;
+    display: -webkit-flex; */
     overflow-x: auto;
 }
 
 .chart table {
-    table-layout: fixed;
+/*    table-layout: fixed; */
     border-collapse: collapse;
     border: 3px solid #aaa;
+/*    flex: 1; */
+}
+
+/* Ensures the leftmost td elements are sticky on horizontal scroll */
+td:first-child {
+    background: #002b36;
+/*    border: 3px solid #aaa; */
+    position: -webkit-sticky;
+    position: sticky;
+    left: -2px;
+    z-index: 2;
+}
+
+/* Locks horizontal header elements during vertical and horizontal scroll */
+thead th:first-child {
+    background: #002b36;
+/*    border: 3px solid #aaa; */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: -3px;
+    z-index: 3;
 }
 
 .chart .side-heading {
+    width: 300px;
     height: 40px;
-    border-top: 3px solid #aaa;
-    border-bottom: 3px solid #aaa;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-left: 3px solid #aaa;
     font-weight: bold;
     border-right: 1px solid #aaa;
     padding-right: 10px;
     padding-left: 10px;
+    text-align: left;
 }
 
 .chart .side-name {
     height: 40px;
     border-top: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
-    border-right: 1px solid #aaa;
+    border-left: 3px solid #aaa;
+/*    border-right: 1px solid #aaa; */
     padding-right: 10px;
     padding-left: 10px;
 }
 
-.chart .side-owner {
+/*.chart .side-owner {
     height: 40px;
     border-top: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
     text-align: center;
-}
+} */
 
 .chart .chart-year {
     border: 3px solid #aaa;
@@ -99,7 +122,7 @@ figcaption {
 }
 
 .chart .task-notes {
-    background: white;
-    color: black;
+/*    background: white; */
+    color: white;
     display: none;
 }
