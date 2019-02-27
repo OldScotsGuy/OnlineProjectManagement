@@ -41,9 +41,9 @@ class GanttTable extends GanttData
     private function createDayDateHeaders()
     {
         for ($i = 0; $i < $this->numDays; $i++) {
-            $startTag = '<td class="' . $this->dayClassifications[$i][0] . '">';
-            $this->dayHeader .= $startTag . $this->dayClassifications[$i][1] . '</td>';     // Construct Gantt table day header
-            $this->dateHeader .= $startTag . $this->dayClassifications[$i][2] . '</td>';    // Construct Gantt table date header
+            $startTag = '<th class="' . $this->dayClassifications[$i][0] . '">';
+            $this->dayHeader .= $startTag . $this->dayClassifications[$i][1] . '</th>';     // Construct Gantt table day header
+            $this->dateHeader .= $startTag . $this->dayClassifications[$i][2] . '</th>';    // Construct Gantt table date header
         }
     }
 
@@ -56,8 +56,8 @@ class GanttTable extends GanttData
         for ($period = 0; $period < $numPeriods; $period++) {
             $periodStartDay = $periodStartData[$period][1];
             $periodEndDay = $periodStartData[$period + 1][1];
-            $periodHeader .= '<td class="' . $class . '" colspan = "' . ($periodEndDay - $periodStartDay) . '">';
-            $periodHeader .= $periodStartData[$period][0] . '</td>';
+            $periodHeader .= '<th class="' . $class . '" colspan = "' . ($periodEndDay - $periodStartDay) . '">';
+            $periodHeader .= $periodStartData[$period][0] . '</th>';
         }
         return $periodHeader;
     }
@@ -100,29 +100,32 @@ class GanttTable extends GanttData
 
         $this->html[] = "<figure class='chart'>";
         // Gantt Task Side Bar
-        $this->html[] = "<aside><table>";
-        foreach ($this->taskSideBarRows as $row) {
-            $this->html[] = $row;
-        }
-        $this->html[] = "</table></aside>";
+        //$this->html[] = "<aside><table>";
+        //foreach ($this->taskSideBarRows as $row) {
+        //    $this->html[] = $row;
+        //}
+        //$this->html[] = "</table></aside>";
 
         // Gantt Bars
         $this->html[] = '<section><table style ="width: ' . ($this->numDays * 40) . 'px;">';
+        $this->html[] = '<thead>';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->yearStartData, 'chart-year') . '</tr>';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->monthStartData, 'chart-month') . '</tr>';
         $this->html[] = '<tr>' . $this->dayHeader . '</tr>';
         $this->html[] = '<tr>' . $this->dateHeader . '</tr>';
+        $this->html[] = '</thead>';
+        $this->html[] = '<tbody>';
         foreach ($this->taskRows as $row) {
             $this->html[] = $row;
         }
-        $this->html[] = "</table></section>";
+        $this->html[] = "</tbody></table></section>";
         $this->html[] = "</figure>";
     }
 
     // Draw chart function
     private function createTable()
     {
-        $this->createTaskSideBarRows();
+        //$this->createTaskSideBarRows();
         $this->createTaskRows();
         $this->createDayDateHeaders();
         $this->createGanttTable();

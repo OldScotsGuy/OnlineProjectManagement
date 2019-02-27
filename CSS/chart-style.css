@@ -6,10 +6,10 @@ figcaption {
 .chart {
     background: #002b36;
     color: #93a1a1;
-    align-items: flex-end;
+/*    align-items: flex-end;
     display: flex;
     display: -webkit-flex;
-    flex-direction: row;
+    flex-direction: row; */
 }
 
 .chart section {
