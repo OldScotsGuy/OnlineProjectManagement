@@ -22,25 +22,59 @@ $phpFileUploadErrors = array(
 );
 
 if (isset($_FILES['userfile'])) {
-    pre_r($_FILES);
+    //pre_r($_FILES);
     //$ext_error = false;
 
     // Set file allowable extension error flag
     $file_ext = explode('.', $_FILES['userfile']['name']);
     $file_ext = end($file_ext);
     $ext_error = !in_array($file_ext, $extensions);
-    pre_r($file_ext);
-    pre_r($ext_error);
+    //pre_r($file_ext);
+    //pre_r($ext_error);
 
     if ($ext_error) {
-        echo "Invalid file extension, upload on pdf, doc, docx, ppt, pptx";
+        echo "<p>Invalid file extension, upload on pdf, doc, docx, ppt, pptx</p>";
     } else {
         // Check for file upload errors
         if ($_FILES['userfile']['error']) {
             echo $phpFileUploadErrors[$_FILES['userfile']['error']];
         } else {
-            echo "File uploaded";
-            move_uploaded_file($_FILES['userfile']['tmp_name'], 'documents/' . $_FILES['userfile']['name']);
+            // Can now move and then store file details
+            echo "File uploaded <br>";
+            require_once 'dbConnect.php';
+            $documentTitle = mysqli_real_escape_string($db, $_POST['title']);
+            $documentName = mysqli_real_escape_string($db, $_FILES['userfile']['name']);
+
+            // Prepend with time() to try an avoid filename conflicts
+            $documentName = time() . str_replace(' ', '_', $documentName);
+            echo "Document Title: " . $documentTitle . "<br>";
+            echo "Document Name: " . $documentName . "<br>";
+
+            // Move file to storage location
+            if (move_uploaded_file($_FILES['userfile']['tmp_name'], 'documents/' . $documentName)) {
+                echo "File successfully moved<br>";
+            } else {
+                echo "File move failed<br>";
+            }
+
+            // Store file details in database
+            $query = "CREATE TABLE IF NOT EXISTS `Documents` (
+                          `docID` int(4) not null auto_increment,
+                          `title` nvarchar(128),
+                          `name` nvarchar(256),
+                           PRIMARY KEY(`docID`));";
+            $result = $db->query($query);
+            $query = "INSERT INTO Documents (`title`, `name`) VALUES (?, ?)";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param('ss', $documentTitle, $documentName);
+            $stmt->execute();
+            if ($stmt->affected_rows > 0) {
+                echo  "<p>Document details inserted into the database.</p>";
+            } else {
+                echo "<p>An error has occurred.<br/>
+              The item was not added.</p>";
+            }
+            $db->close();
         }
     }
 }
@@ -59,6 +93,9 @@ function pre_r($array) {
 </head>
 <body>
     <form action="" method="post" enctype="multipart/form-data">
+        <label for="title">Document Title:</label>
+        <input type="text" name="title" id="title" size="100"  maxlength="1280" required />
+        <br><br>
         <input type="file" name="userfile" />
         <input type="submit" value="Upload" />
     </form>
