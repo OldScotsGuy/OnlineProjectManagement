@@ -74,6 +74,21 @@ if (isset($_FILES['userfile'])) {
                 echo "<p>An error has occurred.<br/>
               The item was not added.</p>";
             }
+
+            // Read value from database
+            $docID = 1;
+            $query = "SELECT title, name FROM Documents WHERE docID = ?";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param('i', $docID);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($documentTitle, $documentName);
+            $stmt->fetch();
+
+            // Display stored file
+            echo '<embed src="documents/' . $documentName . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
+            echo '<br><br><a href="documents/' . $documentName . '" target="_blank">Read More</a>';
+            $stmt->free_result();
             $db->close();
         }
     }
