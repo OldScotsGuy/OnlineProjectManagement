@@ -14,7 +14,7 @@ define('DB_USERNAME', '1813014');
 define('DB_PASSWORD', '1813014');
 define('DB_DATABASE', 'db1813014_cmm007');
 
-class databaseConnection extends \mysqli
+class DatabaseConnection extends \mysqli
 {
 
     function __construct()

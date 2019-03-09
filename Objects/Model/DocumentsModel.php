@@ -8,12 +8,7 @@
 
 namespace Model;
 
-require_once ("databaseConnection.php");
-//define('DB_SERVER', 'CSDM-WEBDEV');
-//define('DB_SERVER', 'localhost');
-//define('DB_USERNAME', '1813014');
-//define('DB_PASSWORD', '1813014');
-//define('DB_DATABASE', 'db1813014_cmm007');
+require_once("DatabaseConnection.php");
 
 class DocumentsModel
 {
@@ -21,9 +16,7 @@ class DocumentsModel
 
     function __construct()
     {
-        //$this->db = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
-        //$this->db = parent::__construct(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
-        $this->db = new databaseConnection();
+        $this->db = new DatabaseConnection();
     }
 
     function __destruct()
