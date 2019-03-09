@@ -21,16 +21,16 @@ $phpFileUploadErrors = array(
     8 => 'A PHP extension stopped teh file upload'
 );
 
+// Database Connection
+require_once ("../Objects/Model/DocumentsModel.php");
+$db = new \Model\DocumentsModel();
+
 if (isset($_FILES['userfile'])) {
-    //pre_r($_FILES);
-    //$ext_error = false;
 
     // Set file allowable extension error flag
     $file_ext = explode('.', $_FILES['userfile']['name']);
     $file_ext = end($file_ext);
     $ext_error = !in_array($file_ext, $extensions);
-    //pre_r($file_ext);
-    //pre_r($ext_error);
 
     if ($ext_error) {
         echo "<p>Invalid file extension, upload on pdf, doc, docx, ppt, pptx</p>";
@@ -41,9 +41,8 @@ if (isset($_FILES['userfile'])) {
         } else {
             // Can now move and then store file details
             echo "File uploaded <br>";
-            require_once 'dbConnect.php';
-            $documentTitle = mysqli_real_escape_string($db, $_POST['title']);
-            $documentName = mysqli_real_escape_string($db, $_FILES['userfile']['name']);
+            $documentTitle = $_POST['title'];
+            $documentName = $_FILES['userfile']['name'];
 
             // Prepend with time() to try an avoid filename conflicts
             $documentName = time() . str_replace(' ', '_', $documentName);
@@ -58,17 +57,7 @@ if (isset($_FILES['userfile'])) {
             }
 
             // Store file details in database
-            $query = "CREATE TABLE IF NOT EXISTS `Documents` (
-                          `docID` int(4) not null auto_increment,
-                          `title` nvarchar(128),
-                          `name` nvarchar(256),
-                           PRIMARY KEY(`docID`));";
-            $result = $db->query($query);
-            $query = "INSERT INTO Documents (`title`, `name`) VALUES (?, ?)";
-            $stmt = $db->prepare($query);
-            $stmt->bind_param('ss', $documentTitle, $documentName);
-            $stmt->execute();
-            if ($stmt->affected_rows > 0) {
+            if ($db->insertDocument($documentTitle, $documentName)) {
                 echo  "<p>Document details inserted into the database.</p>";
             } else {
                 echo "<p>An error has occurred.<br/>
@@ -76,20 +65,13 @@ if (isset($_FILES['userfile'])) {
             }
 
             // Read value from database
-            $docID = 1;
-            $query = "SELECT title, name FROM Documents WHERE docID = ?";
-            $stmt = $db->prepare($query);
-            $stmt->bind_param('i', $docID);
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($documentTitle, $documentName);
-            $stmt->fetch();
+            $results = $db->retrieveDocument(1);
 
             // Display stored file
-            echo '<embed src="documents/' . $documentName . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
-            echo '<br><br><a href="documents/' . $documentName . '" target="_blank">Read More</a>';
-            $stmt->free_result();
-            $db->close();
+            echo '<embed src="documents/' . $results['docName'] . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
+            echo '<br><br><a href="documents/' . $results['docName'] . '" target="_blank">Read More</a>';
+            //$stmt->free_result();
+            //$db->close();
         }
     }
 }
