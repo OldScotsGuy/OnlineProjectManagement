@@ -19,7 +19,6 @@ $HomePage = new Page();
 // Process user information
 $UserController = new UserController();
 $UserController->databaseOperations();
-$UserController->setViewParameters();
 $UserView = new UserView($UserController->users, $UserController->displayValues, $UserController->action1, $UserController->action2);
 
 // Place user content on page

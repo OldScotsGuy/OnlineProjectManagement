@@ -41,12 +41,12 @@ class UserModel
 
     function retrieveUser($email) {
         $result = array();
-        $query = "SELECT username, password, role FROM Users WHERE email = ?";
+        $query = "SELECT email, username, password, role FROM Users WHERE email = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($result['username'], $result['paswword'], $result['role']);
+        $stmt->bind_result( $result['email'], $result['username'], $result['password'], $result['role']);
         $stmt->fetch();
         $stmt->free_result();
         return $result;

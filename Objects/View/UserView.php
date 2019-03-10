@@ -28,7 +28,7 @@ class UserView
         $this->html[] = '<form action ="index.php?page=user" method="post">';
         if (count($this->users) == 0) {
             $this->addField("text", "username", "Username:", $this->displayValues['username']);
-            $this->addField("password", "password", "Password:", null);
+            $this->addField("password", "password", "Password:", $this->displayValues['password']);
             $this->addField("email", "email", "Email:", $this->displayValues['email']);
             $this->addRole($this->displayValues['role']);
             if ($action1 = "create") {
@@ -80,8 +80,8 @@ class UserView
     }
 
     function initialSelection() {
-        $this->html[] = '<label for="user">Select User to Modify: </label>';
-        $this->html[] = '<select name = "user" id="user">';
+        $this->html[] = '<label for="email">Select User to Modify: </label>';
+        $this->html[] = '<select name = "email" id="email">';
         foreach ($this->users as $user) {
             $this->html[] = '<option value = "'. $user['email'] .'">Username: ' . $user['username'] . '  Role: ' . $user['role'] . '  Email: ' . $user['email'] .'</option>';
         }
