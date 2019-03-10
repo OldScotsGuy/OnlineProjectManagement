@@ -23,6 +23,7 @@ $phpFileUploadErrors = array(
 
 // Database Connection
 require_once ("../Objects/Model/DocumentsModel.php");
+// TODO Handle exception when cannot open connection
 $db = new \Model\DocumentsModel();
 
 if (isset($_FILES['userfile'])) {

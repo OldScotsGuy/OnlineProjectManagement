@@ -17,6 +17,12 @@ class DocumentsModel
     function __construct()
     {
         $this->db = new DatabaseConnection();
+        $query = "CREATE TABLE IF NOT EXISTS `Documents` (
+                          `docID` int(4) not null auto_increment,
+                          `title` nvarchar(128),
+                          `name` nvarchar(256),
+                           PRIMARY KEY(`docID`));";
+        $result = $this->db->query($query);
     }
 
     function __destruct()
@@ -25,14 +31,6 @@ class DocumentsModel
     }
 
     function insertDocument($documentTitle, $documentName) {
-        // Store file details in database
-        $query = "CREATE TABLE IF NOT EXISTS `Documents` (
-                          `docID` int(4) not null auto_increment,
-                          `title` nvarchar(128),
-                          `name` nvarchar(256),
-                           PRIMARY KEY(`docID`));";
-        $result = $this->db->query($query);
-
         $query = "INSERT INTO Documents (`title`, `name`) VALUES (?, ?)";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ss', $documentTitle, $documentName);

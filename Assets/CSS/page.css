@@ -7,12 +7,105 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-
 header {
     background-color: orange;
-
 }
 
 main {
     background-color: crimson;
+}
+
+/* ==== */
+/* TEXT */
+/* ==== */
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 50px;
+}
+
+h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+p, ul, #radio {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
+a {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+
+/* ====== */
+/* HEADER */
+/* ====== */
+
+/* LOGO */
+#logo {
+    float:left;
+    padding-right: 20px;
+}
+
+/* NAVIGATION BAR CSS */
+
+nav div {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+nav span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+/* Get rid of bullet points */
+nav>ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid black;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+}
+
+/* Float each list item to the left */
+nav>ul>li {
+    float:left;
+    border-style: solid;
+    border-width: 2px;
+    border-bottom: none;
+    border-right: none;
+}
+
+nav>ul>li:last-child {
+    border-right: 2px solid black;
+}
+
+/* Remove underline, centre text, add padding */
+nav>ul>li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+}
+
+nav>li>a:hover {
+    color: #363636;
+}
+
+@media screen and (max-width: 800px) {
+    nav ul li {border-right: 2px solid black;}
+    /* nav ul li.right, */
+    nav ul li {float: none;}
 }
