@@ -6,12 +6,21 @@
  * Time: 11:42
  */
 require("objects/Page/Page.php");
+require("objects/View/UserView.php");
 
-$HomePage = new \Page\Page();
+use Page\Page;
+use View\UserView;
 
-$HomePage->content = '
-            <section class="grid-100">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            </section>';
+$HomePage = new Page();
+
+$users = array( array('username' => 'Tom', 'email' => 'tom@isp.net', 'role' => 'admin'),
+                array('username' => 'Dick', 'email' => 'dick@isp.net', 'role' => 'lead'),
+                array('username' => 'Harry', 'email' => 'harry@isp.net', 'role' => 'member'),
+                array('username' => 'John', 'email' => 'john@isp.net', 'role' => 'client')
+               );
+$displayValues = array('username' => 'Tom', 'email' => 'tom@isp.net', 'role' => 'admin');
+$UserView = new UserView($users, $displayValues);
+
+$HomePage->content = '<section class="grid-100">'. $UserView . '</section>';
 
 $HomePage->Display();
