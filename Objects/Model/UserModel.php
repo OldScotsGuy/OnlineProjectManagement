@@ -8,6 +8,7 @@
 
 namespace Model;
 
+require("DatabaseConnection.php");
 
 class UserModel
 {
@@ -31,7 +32,6 @@ class UserModel
     }
 
     function insertUser($username, $password, $email, $role) {
-        //$query = "INSERT INTO Users (`email`, `username`, `password`,`role`) VALUES (?, ?, ?, ?)";
         $query = "INSERT INTO Users (email, username, password, role) VALUES (?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ssss', $email, $username, $password, $role);

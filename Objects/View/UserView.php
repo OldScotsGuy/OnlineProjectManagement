@@ -8,37 +8,58 @@
 
 namespace View;
 
-
 class UserView
 {
     private $html = array();
     private $users = array();
     private $displayValues = array();
+    private $action1;
+    private $action2;
 
-    function __construct($users, $displayValues) {
+    function __construct($users, $displayValues, $action1, $action2) {
         $this->users = $users;
         $this->displayValues = $displayValues;
+        $this->action1 = $action1;
+        $this->action2 = $action2;
     }
 
     function display() {
-
+        $this->addTitle();
+        $this->html[] = '<form action ="index.php?page=user" method="post">';
         if (count($this->users) == 0) {
-            $this->html[] = '<form action ="index.php?page=user&action=update" method="post">';
             $this->addField("text", "username", "Username:", $this->displayValues['username']);
             $this->addField("password", "password", "Password:", null);
             $this->addField("email", "email", "Email:", $this->displayValues['email']);
             $this->addRole($this->displayValues['role']);
+            if ($action1 = "create") {
+                $this->html[] = '<br><br><input type="submit" value="Create User"/>';
+            } else {
+                $this->html[] = '<br><br><input type="submit" value="Update User"/>';
+            }
         } else {
-            $this->html[] = '<form action ="index.php?page=user&action=selected" method="post">';
             $this->initialSelection();
+            if ($action1 = "update") {
+                $this->html[] = '<br><br><input type="submit" value="Select User to Update"/>';
+            } else {
+                $this->html[] = '<br><br><input type="submit" value="Select User to Delete"/>';
+            }
         }
-        $this->html[] = '<br><br><input type="submit" value="Submit"/>';
         $this->html[] = '</form>';
+    }
+
+    function addTitle() {
+        if ($this->action1 == "create") {
+            if ($this->action2 == "form") {
+                $this->html[] = "<h2>Create User</h2>";
+            } else {
+                $this->html[] = "<h2>User Details Saved</h2>";
+                $this->html[] = "<h2>Create User</h2>";
+            }
+        }
     }
 
     function addField($type, $name, $text, $value) {
         $this->html[] = '<label for="' . $name . '">' . $text . '</label>';
-        //$this->html[] = '<input type="'. $type . '" name="' . $name . '" id="' . $name . '"/><br>';
         $input = '<input type="'. $type . '" name="' . $name . '" id="' . $name . '"';
         if ($value != null) {
             $input .= ' value="' . $value .'"/><br>';

@@ -8,7 +8,7 @@
 
 namespace Model;
 
-require_once("DatabaseConnection.php");
+require("DatabaseConnection.php");
 
 class DocumentsModel
 {
