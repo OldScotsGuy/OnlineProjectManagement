@@ -13,13 +13,18 @@ use Page\Page;
 use View\UserView;
 use Controller\UserController;
 
+// TODO Get Page and action variables from page url via $_GET
+$page = "user";
+$action = "create";
+
+
 // Instance page template
 $HomePage = new Page();
 
 // Process user information
-$UserController = new UserController();
+$UserController = new UserController($action);
 $UserController->databaseOperations();
-$UserView = new UserView($UserController->users, $UserController->displayValues, $UserController->action1, $UserController->action2);
+$UserView = new UserView($UserController->users, $UserController->displayValues, $UserController->action, $UserController->message);
 
 // Place user content on page
 $HomePage->content = '<section class="grid-100">'. $UserView . '</section>';

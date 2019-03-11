@@ -13,32 +13,32 @@ class UserView
     private $html = array();
     private $users = array();
     private $displayValues = array();
-    private $action1;
-    private $action2;
+    private $action;
+    private $message;
 
-    function __construct($users, $displayValues, $action1, $action2) {
+    function __construct($users, $displayValues, $action, $message) {
         $this->users = $users;
         $this->displayValues = $displayValues;
-        $this->action1 = $action1;
-        $this->action2 = $action2;
+        $this->action = $action;
+        $this->message = $message;
     }
 
     function display() {
         $this->addTitle();
         $this->html[] = '<form action ="index.php?page=user" method="post">';
-        if (count($this->users) == 0) {
+        if (($this->action == "create") || ($this->action == "update" &&  count($this->displayValues) > 0)) {
             $this->addField("text", "username", "Username:", $this->displayValues['username']);
             $this->addField("password", "password", "Password:", $this->displayValues['password']);
             $this->addField("email", "email", "Email:", $this->displayValues['email']);
             $this->addRole($this->displayValues['role']);
-            if ($action1 = "create") {
+            if ($this->action = "create") {
                 $this->html[] = '<br><br><input type="submit" value="Create User"/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Update User"/>';
             }
         } else {
             $this->initialSelection();
-            if ($action1 = "update") {
+            if ($this->action = "update") {
                 $this->html[] = '<br><br><input type="submit" value="Select User to Update"/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Select User to Delete"/>';
@@ -48,8 +48,8 @@ class UserView
     }
 
     function addTitle() {
-        if ($this->action1 == "create") {
-            if ($this->action2 == "form") {
+        if ($this->action == "create") {
+            if ($this->message == "form") {
                 $this->html[] = "<h2>Create User</h2>";
             } else {
                 $this->html[] = "<h2>User Details Saved</h2>";
@@ -81,7 +81,14 @@ class UserView
 
     function initialSelection() {
         $this->html[] = '<label for="email">Select User to Modify: </label>';
-        $this->html[] = '<select name = "email" id="email">';
+        $select = '<select name = "email" id="email"';
+        if (count($this->users) == 0) {
+            $select .= ' disabled>';
+        } else {
+            $select .= '>';
+        }
+        //$this->html[] = '<select name = "email" id="email">';
+        $this->html[] = $select;
         foreach ($this->users as $user) {
             $this->html[] = '<option value = "'. $user['email'] .'">Username: ' . $user['username'] . '  Role: ' . $user['role'] . '  Email: ' . $user['email'] .'</option>';
         }
