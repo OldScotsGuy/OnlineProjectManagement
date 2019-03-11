@@ -14,7 +14,7 @@ class Page
     public $title = "Online Project Management Tool";
     public $keywords = "Gantt";
     public $buttons = array("Project Status"   => "index.php?page=status",
-        "User Entry"  => "index.php?page=entry",
+        "User Entry"  => "index.php?page=user&action=create",
         "Project Entry" => "index.php?page=project",
         "Task Entry" => "index.php?page=task",
         "Upload Docs" => "index.php?page=documents"
@@ -40,7 +40,6 @@ class Page
         echo "<title>".$this->title."</title>";
         ?>
         <link href="assets/CSS/page.css" type="text/css" rel="stylesheet">
-        <link rel="stylesheet" href="assets/CSS/unsemantic-grid-responsive-tablet.css">
         <?php
         echo "</head>\n";
     }
@@ -57,12 +56,12 @@ class Page
     {
         ?>
         <!-- page header -->
-        <header class="grid-container">
-            <section class="grid-100">
-                <img src="assets/images/cheese.png" alt="The Big Cheese" id="logo"/>
-                <h1>The Magical World of Cheese!</h1>
+        <header>
+            <section>
+                <img src="assets/images/#" alt="Logo Here" id="logo"/>
+                <h1>Project Name Here</h1>
             </section>
-            <nav class="grid-100">
+            <nav>
                 <ul>
                     <?php
                     reset($this->buttons);
@@ -77,7 +76,7 @@ class Page
     }
 
     public function DisplayMain() {
-        echo "<main class=\"grid-container\">";
+        echo "<main>";
         echo $this->content;
         echo "</main>";
     }
@@ -88,7 +87,7 @@ class Page
         <!-- page footer -->
         <footer>
             <hr>
-            <p><strong>(c)2016 The Mice People</strong></p>
+            <p><strong>(c)2016 Lex & Associates</strong></p>
         </footer>
         <?php
     }

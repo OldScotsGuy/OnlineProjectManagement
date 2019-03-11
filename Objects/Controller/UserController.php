@@ -23,6 +23,8 @@ class UserController
         $this->userModel = new UserModel();
         $this->action = $action;
         $this->message = "";
+        $this->users = array();
+        $this->displayValues = array();
     }
 
     // Generalised getter
@@ -34,26 +36,45 @@ class UserController
     function databaseOperations() {
         switch ($this->action) {
             case "create":
-                $this->users = array(); // Ensures pre-selection box does not appear
-                $this->displayValues = array('username' => null, 'email' => null, 'role' => null); // ensures no presets in user form
+                // Check to see if we have user data to save in the database
                 if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
-                    // Save user details in the database
                     if ($this->userModel->insertUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
                         $this->message = "User information saved";
                     }
                 }
                 break;
             case "update":
+                // No information at all, so need to present initial selection of all users
                 if (!isset($_POST['email'])) {
                     $this->users = $this->userModel->retrieveUsers();
-                } else {
+                }
+                // Email is the Users primary key, hence if no other data we only have initial user selection
+                if (isset($_POST['email']) && !isset($_POST['username'])) {
                     $this->users = array();
                     $this->displayValues = $this->userModel->retrieveUser($_POST['email']);
-                    $_SESSION['action2'] = "form";
-                    $this->message = "form";
                 }
-
-
+                // If we have all user data then these are the updated values that need to saved in the Users table
+                if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
+                    // Attempt to save user data
+                    if ($this->userModel->updateUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
+                        $this->message = "User information updated";
+                    }
+                    // Reset UserView users array to offer a second update
+                    $this->users = $this->userModel->retrieveUsers();
+                }
+                break;
+            case "delete" :
+                // No information at all, so need to present initial selection of all users
+                if (!isset($_POST['email'])) {
+                    $this->users = $this->userModel->retrieveUsers();
+                }
+                // Email is the Users primary key, hence if no other data we have the user for deletion
+                if (isset($_POST['email']) && !isset($_POST['username'])) {
+                    if ($this->displayValues = $this->userModel->deleteUser($_POST['email'])) {
+                        $this->message = "User deleted";
+                    }
+                    $this->users = $this->userModel->retrieveUsers();
+                }
                 break;
         }
     }

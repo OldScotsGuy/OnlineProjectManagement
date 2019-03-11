@@ -24,38 +24,31 @@ class UserView
     }
 
     function display() {
-        $this->addTitle();
-        $this->html[] = '<form action ="index.php?page=user" method="post">';
+        $this->html[] = "<h2>" . ucfirst($this->action) . " User</h2>";
+        $this->html[] = "<p>" . $this->message ."</p>";
+        $this->html[] = "<p><a href='index.php?page=user&action=create'>Create User</a></p>";
+        $this->html[] = "<p><a href='index.php?page=user&action=update'>Update User</a></p>";
+        $this->html[] = "<p><a href='index.php?page=user&action=delete'>Delete User</a></p>";
+        $this->html[] = '<form action ="index.php?page=user&action=' . $this->action .'" method="post">';
         if (($this->action == "create") || ($this->action == "update" &&  count($this->displayValues) > 0)) {
-            $this->addField("text", "username", "Username:", $this->displayValues['username']);
-            $this->addField("password", "password", "Password:", $this->displayValues['password']);
-            $this->addField("email", "email", "Email:", $this->displayValues['email']);
-            $this->addRole($this->displayValues['role']);
-            if ($this->action = "create") {
+            $this->addField("text", "username", "Username:", (isset($this->displayValues['username']) ? $this->displayValues['username'] : null ));
+            $this->addField("password", "password", "Password:", (isset($this->displayValues['password']) ? $this->displayValues['password'] : null));
+            $this->addField("email", "email", "Email:", (isset($this->displayValues['email']) ? $this->displayValues['email'] : null));
+            $this->addRole(isset($this->displayValues['role']) ? $this->displayValues['role'] : null);
+            if ($this->action == "create") {
                 $this->html[] = '<br><br><input type="submit" value="Create User"/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Update User"/>';
             }
         } else {
             $this->initialSelection();
-            if ($this->action = "update") {
+            if ($this->action == "update") {
                 $this->html[] = '<br><br><input type="submit" value="Select User to Update"/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Select User to Delete"/>';
             }
         }
         $this->html[] = '</form>';
-    }
-
-    function addTitle() {
-        if ($this->action == "create") {
-            if ($this->message == "form") {
-                $this->html[] = "<h2>Create User</h2>";
-            } else {
-                $this->html[] = "<h2>User Details Saved</h2>";
-                $this->html[] = "<h2>Create User</h2>";
-            }
-        }
     }
 
     function addField($type, $name, $text, $value) {
@@ -80,7 +73,7 @@ class UserView
     }
 
     function initialSelection() {
-        $this->html[] = '<label for="email">Select User to Modify: </label>';
+        $this->html[] = '<label for="email">Select User to ' . ucfirst($this->action) . ': </label>';
         $select = '<select name = "email" id="email"';
         if (count($this->users) == 0) {
             $select .= ' disabled>';
