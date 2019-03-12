@@ -17,12 +17,12 @@ class UserModel
     function __construct()
     {
         $this->db = new DatabaseConnection();
-        $query = "CREATE TABLE IF NOT EXISTS `Users` (
-                          `email` nvarchar(128) not null,
-                          `username` nvarchar(40),
-                          `password` nvarchar(60),
-                          `role` nvarchar(20),
-                           PRIMARY KEY(`email`));";
+        $query = "CREATE TABLE IF NOT EXISTS Users (
+                          email nvarchar(128) not null,
+                          username nvarchar(40),
+                          password nvarchar(60),
+                          role nvarchar(20),
+                          PRIMARY KEY(email));";
         $result = $this->db->query($query);
     }
 
@@ -47,6 +47,19 @@ class UserModel
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result( $result['email'], $result['username'], $result['password'], $result['role']);
+        $stmt->fetch();
+        $stmt->free_result();
+        return $result;
+    }
+
+    function retrieveUsersWithRole($role) {
+        $result = array();
+        $query = "SELECT email, username, role FROM Users WHERE role = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('s', $role);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result( $result['email'], $result['username'], $result['role']);
         $stmt->fetch();
         $stmt->free_result();
         return $result;

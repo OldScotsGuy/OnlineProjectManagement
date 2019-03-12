@@ -93,5 +93,4 @@ class UserView
         $this->display();
         return implode("\n", $this->html);
     }
-
 }
