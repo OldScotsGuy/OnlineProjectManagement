@@ -46,7 +46,28 @@ class ProjectModel
         return ($stmt->affected_rows > 0);
     }
 
-    function retrieveProject($projectID) {
+    function insertProjectWithClient($title, $description, $leadEmail, $clientEmail) {
+        $query = "INSERT INTO Projects (title, description, email) VALUES (?, ?, ?); INSERT INTO UndertakenFor (projectID, email) VALUES (projectID = LAST_INSERT_ID(), ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ssss', $title, $description, $leadEmail, $clientEmail);
+        $stmt->execute();
+        return ($stmt->affected_rows > 0);
+    }
+
+    function retrieveProject($email) {
+        $result = array();
+        $query = "SELECT projectID, title, description, email FROM Projects WHERE email = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['email']);
+        $stmt->fetch();
+        $stmt->free_result();
+        return $result;
+    }
+
+    function retrieveProjectWithLead($projectID) {
         $result = array();
 
         $query = "SELECT P.projectID, P.title, P.description, U.username as 'lead', U.email FROM Projects as P, Users as U WHERE P.email = U.email AND P.projectID = ?";
