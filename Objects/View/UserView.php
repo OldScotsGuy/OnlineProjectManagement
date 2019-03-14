@@ -8,11 +8,15 @@
 
 namespace View;
 
-class UserView
+require("Objects/Controller/UserController.php");
+
+use Controller\UserController;
+
+class UserView extends UserController
 {
     private $html = array();
 
-    private $users = array();
+/*    private $users = array();
     private $displayValues = array();
     private $action;
     private $message;
@@ -22,7 +26,7 @@ class UserView
         $this->displayValues = $displayValues;
         $this->action = $action;
         $this->message = $message;
-    }
+    } */
 
     function display() {
         // Title and message

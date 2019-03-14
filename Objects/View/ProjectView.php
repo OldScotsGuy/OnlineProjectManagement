@@ -8,6 +8,8 @@
 
 namespace View;
 
+require("Objects/Controller/ProjectController.php");
+
 use Controller\ProjectController;
 
 class ProjectView extends ProjectController

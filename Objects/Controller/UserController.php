@@ -15,17 +15,15 @@ class UserController
 {
     private $userModel = null;
 
-    private $users = array();
-    private $displayValues = array();
-    private $action = null;
-    private $message = "";
+    protected $users = array();
+    protected $displayValues = array();
+    protected $action = null;
+    protected $message = "";
 
     function __construct($action) {
         $this->userModel = new UserModel();
         $this->action = $action;
-        //$this->message = "";
-        //$this->users = array();
-        //$this->displayValues = array();
+        $this->databaseOperations();
     }
 
     // Generalised getter

@@ -8,6 +8,8 @@
 
 namespace Controller;
 
+require ("Objects/Model/ProjectModel.php");
+require("Objects/Model/UserModel.php");
 
 use Model\ProjectModel;
 use Model\UserModel;

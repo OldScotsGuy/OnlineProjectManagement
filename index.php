@@ -11,10 +11,9 @@ require("Objects/Controller/UserController.php");
 
 use Page\Page;
 use View\UserView;
-use Controller\UserController;
+use View\ProjectView;
 
 // Get page and action variables
-// =============================
 if (empty($_GET['page'])) {
     $page = "user";
 } else {
@@ -26,24 +25,21 @@ if (empty($_GET['action'])) {
     $action = $_GET['action'];
 }
 
-
 // Instance page template
-// ======================
 $HomePage = new Page();
 
-
 // Generate Page Content
-// =====================
 switch ($page) {
     case "user":    // Process user information
-        $UserController = new UserController($action);
-        $UserController->databaseOperations();
-        $UserView = new UserView($UserController->users, $UserController->displayValues, $UserController->action, $UserController->message);
+        $UserView = new UserView($action);
         $HomePage->content = '<section>'. $UserView . '</section>';
+        break;
+
+    case "project":
+        $ProjectView = new ProjectView($action);
+        $HomePage->content = '<section>'. $ProjectView . '</section>';
         break;
 }
 
-
 // Display Page
-// ============
 $HomePage->Display();
