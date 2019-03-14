@@ -29,7 +29,7 @@ class ProjectModel
                           email nvarchar(128) not null,
                           PRIMARY KEY(projectID),
                           FOREIGN KEY(projectID) REFERENCES Projects(projectID),
-                          FOREIGN KEY(email) REFERENCES Users(email));";
+                          FOREIGN KEY(email) REFERENCES Users(email))";
         $result = $this->db->query($query);
     }
 
@@ -54,11 +54,11 @@ class ProjectModel
         return ($stmt->affected_rows > 0);
     }
 
-    function retrieveProject($email) {
+    function retrieveProject($projectID) {
         $result = array();
-        $query = "SELECT projectID, title, description, email FROM Projects WHERE email = ?";
+        $query = "SELECT projectID, title, description, email FROM Projects WHERE projectID = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $email);
+        $stmt->bind_param('s', $projectID);
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['email']);
@@ -75,7 +75,7 @@ class ProjectModel
         $stmt->bind_param('i', $projectID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['lead'], $result['email']);
+        $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['lead'], $result['leadEmail']);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
@@ -138,7 +138,7 @@ class ProjectModel
         $stmt->bind_param('i', $projectID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['projectID'], $result['client'], $result['email']);
+        $stmt->bind_result( $result['projectID'], $result['client'], $result['clientEmail']);
         $stmt->fetch();
         $stmt->free_result();
         return $result;

@@ -13,18 +13,19 @@ use Model\UserModel;
 
 class UserController
 {
+    private $userModel = null;
+
     private $users = array();
     private $displayValues = array();
-    private $userModel = null;
-    private $action;
-    private $message;
+    private $action = null;
+    private $message = "";
 
     function __construct($action) {
         $this->userModel = new UserModel();
         $this->action = $action;
-        $this->message = "";
-        $this->users = array();
-        $this->displayValues = array();
+        //$this->message = "";
+        //$this->users = array();
+        //$this->displayValues = array();
     }
 
     // Generalised getter
@@ -44,16 +45,17 @@ class UserController
                 }
                 break;
             case "update":
-                // No information at all, so need to present initial selection of all users
+                // Step 1: No information at all, so need to present initial selection of all users
                 if (!isset($_POST['email'])) {
                     $this->users = $this->userModel->retrieveUsers();
+                    if (count($this->users) == 0) $this->message = "No users to update";
                 }
-                // Email is the Users primary key, hence if no other data we only have initial user selection
+                // Step 2: Email is the Users primary key, hence if no other data we only have initial user selection
                 if (isset($_POST['email']) && !isset($_POST['username'])) {
                     $this->users = array();
                     $this->displayValues = $this->userModel->retrieveUser($_POST['email']);
                 }
-                // If we have all user data then these are the updated values that need to saved in the Users table
+                // Step 3: If we have all user data then these are the updated values that need to saved in the Users table
                 if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
                     // Attempt to save user data
                     if ($this->userModel->updateUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {

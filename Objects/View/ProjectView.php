@@ -8,24 +8,11 @@
 
 namespace View;
 
-class ProjectView
+use Controller\ProjectController;
+
+class ProjectView extends ProjectController
 {
     private $html = array();
-    private $projects = array();
-    private $usersLead = array();
-    private $usersClient = null;
-    private $displayValues = array();
-    private $action;
-    private $message;
-
-    function __construct($projects, $usersLead, $usersClient, $displayValues, $action, $message) {
-        $this->projects = $projects;
-        $this->usersLead = $usersLead;
-        $this->usersClient = $usersClient;
-        $this->displayValues = $displayValues;
-        $this->action = $action;
-        $this->message = $message;
-    }
 
     function display() {
 
@@ -54,17 +41,20 @@ class ProjectView
 
             // Submit button
             if ($this->action == "create") {
-                $this->html[] = '<br><br><input type="submit" value="Create Project"/>';
+                // Submit button disabled if no Project Lead users
+                $this->html[] = '<br><br><input type="submit" value="Create Project"' . (count($this->usersLead) > 0 ? '' : 'disabled') . '/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Update Project"/>';
             }
         } else {
-            // Project selection drop down selection
+
+            // Project selection drop down box
             $this->initialSelection();
 
             // Submit button
             if ($this->action == "update") {
-                $this->html[] = '<br><br><input type="submit" value="Select User to Update"/>';
+                // Disable the submit button if no projects present
+                $this->html[] = '<br><br><input type="submit" value="Select User to Update"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Select User to Delete"/>';
             }
@@ -124,5 +114,4 @@ class ProjectView
         $this->display();
         return implode("\n", $this->html);
     }
-
 }

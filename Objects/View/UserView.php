@@ -11,6 +11,7 @@ namespace View;
 class UserView
 {
     private $html = array();
+
     private $users = array();
     private $displayValues = array();
     private $action;
@@ -24,26 +25,39 @@ class UserView
     }
 
     function display() {
+        // Title and message
         $this->html[] = "<h2>" . ucfirst($this->action) . " User</h2>";
         $this->html[] = "<p>" . $this->message ."</p>";
+
+        // Navigation links
         $this->html[] = "<p><a href='index.php?page=user&action=create'>Create User</a></p>";
         $this->html[] = "<p><a href='index.php?page=user&action=update'>Update User</a></p>";
         $this->html[] = "<p><a href='index.php?page=user&action=delete'>Delete User</a></p>";
+
+        // User Form
         $this->html[] = '<form action ="index.php?page=user&action=' . $this->action .'" method="post">';
         if (($this->action == "create") || ($this->action == "update" &&  count($this->displayValues) > 0)) {
+
+            // User data: username, password, email, role
             $this->addField("text", "username", "Username:", (isset($this->displayValues['username']) ? $this->displayValues['username'] : null ));
             $this->addField("password", "password", "Password:", (isset($this->displayValues['password']) ? $this->displayValues['password'] : null));
             $this->addField("email", "email", "Email:", (isset($this->displayValues['email']) ? $this->displayValues['email'] : null));
             $this->addRole(isset($this->displayValues['role']) ? $this->displayValues['role'] : null);
+
+            // Submit button
             if ($this->action == "create") {
                 $this->html[] = '<br><br><input type="submit" value="Create User"/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Update User"/>';
             }
         } else {
+            // User selection drop down box
             $this->initialSelection();
+
+            // Submit button
             if ($this->action == "update") {
-                $this->html[] = '<br><br><input type="submit" value="Select User to Update"/>';
+                // Disable submit button if no users to update
+                $this->html[] = '<br><br><input type="submit" value="Select User to Update"' . (count($this->users) > 0 ? '' : 'disabled') . '/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" value="Select User to Delete"/>';
             }

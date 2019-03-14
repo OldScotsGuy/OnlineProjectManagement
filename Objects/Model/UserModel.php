@@ -52,19 +52,6 @@ class UserModel
         return $result;
     }
 
-    function retrieveUsersWithRole($role) {
-        $result = array();
-        $query = "SELECT email, username, role FROM Users WHERE role = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $role);
-        $stmt->execute();
-        $stmt->store_result();
-        $stmt->bind_result( $result['email'], $result['username'], $result['role']);
-        $stmt->fetch();
-        $stmt->free_result();
-        return $result;
-    }
-
     function updateUser($username, $password, $email, $role) {
         $query = "UPDATE Users SET email = ?, username = ?, password = ?, role = ? WHERE email = ?";
         $stmt = $this->db->prepare($query);
@@ -106,4 +93,31 @@ class UserModel
         $stmt->free_result();
         return $results;
     }
+
+    function retrieveUsersWithRole($role) {
+        // Variable declarations
+        $email = null;
+        $username = null;
+        $password = null;
+        $results = array();
+        $index = 0;
+
+        // Read users from the database
+        $query = "SELECT email, username, password, role FROM Users WHERE role = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('s', $role);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($email,$username, $paswword, $role);
+        while ($stmt->fetch()) {
+            $results[$index]['email'] = $email;
+            $results[$index]['username'] = $username;
+            $results[$index]['paswword'] = $password;
+            $results[$index]['role'] = $role;
+            $index += 1;
+        }
+        $stmt->free_result();
+        return $results;
+    }
+
 }
