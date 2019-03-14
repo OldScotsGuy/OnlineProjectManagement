@@ -7,7 +7,7 @@ namespace Controller;
  * Time: 14:55
  */
 
-require("Objects/Model/UserModel.php");
+require_once("Objects/Model/UserModel.php");
 
 use Model\UserModel;
 

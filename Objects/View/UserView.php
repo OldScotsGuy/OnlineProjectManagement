@@ -8,7 +8,7 @@
 
 namespace View;
 
-require("Objects/Controller/UserController.php");
+require_once("Objects/Controller/UserController.php");
 
 use Controller\UserController;
 

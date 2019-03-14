@@ -6,8 +6,8 @@
  * Time: 11:42
  */
 require("Objects/Page/Page.php");
-require("Objects/View/UserView.php");
-require("Objects/Controller/UserController.php");
+require_once("Objects/View/UserView.php");
+require_once("Objects/Controller/UserController.php");
 
 use Page\Page;
 use View\UserView;
