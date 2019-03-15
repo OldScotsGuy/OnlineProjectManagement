@@ -32,7 +32,7 @@ class UserModel
     }
 
     function insertUser($username, $password, $email, $role) {
-        $query = "INSERT INTO Users (email, username, password, role) VALUES (?, ?, SHA('?'), ?)";
+        $query = "INSERT INTO Users (email, username, password, role) VALUES (?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ssss', $email, $username, $password, $role);
         $stmt->execute();
@@ -53,7 +53,7 @@ class UserModel
     }
 
     function updateUser($username, $password, $email, $role) {
-        $query = "UPDATE Users SET email = ?, username = ?, password = SHA('?'), role = ? WHERE email = ?";
+        $query = "UPDATE Users SET email = ?, username = ?, password = ?, role = ? WHERE email = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('sssss', $email, $username, $password, $role, $email);
         $stmt->execute();

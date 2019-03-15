@@ -17,20 +17,21 @@ class ProjectModel
     function __construct()
     {
         $this->db = new DatabaseConnection();
-        $query = "CREATE TABLE IF NOT EXISTS Projects (
+        $query1 = "CREATE TABLE IF NOT EXISTS Projects (
                           projectID integer(4) not null auto_increment,
                           title nvarchar(40),
                           description text,
                           email nvarchar(128),
                           PRIMARY KEY(projectID),
-                          FOREIGN KEY(email) REFERENCES Users(email));
-                  CREATE TABLE IF NOT EXISTS UndertakenFor (
+                          FOREIGN KEY(email) REFERENCES Users(email))";
+        $query2 = "CREATE TABLE IF NOT EXISTS UndertakenFor (
                           projectID integer(4) not null,
                           email nvarchar(128) not null,
                           PRIMARY KEY(projectID),
                           FOREIGN KEY(projectID) REFERENCES Projects(projectID),
                           FOREIGN KEY(email) REFERENCES Users(email))";
-        $result = $this->db->query($query);
+        $result = $this->db->query($query1);
+        $result = $this->db->query($query2);
     }
 
     function __destruct()

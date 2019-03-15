@@ -35,10 +35,13 @@ class UserController
     function databaseOperations() {
         switch ($this->action) {
             case "create":
-                // Check to see if we have user data to save in the database
-                if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
-                    if ($this->userModel->insertUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
-                        $this->message = "User information saved";
+                if (isset($_POST['submit'])) {
+                    // Check to see if we have user data to save in the database
+                    $this->checkFormData();
+                    if ($this->message == "") {
+                        if ($this->userModel->insertUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
+                            $this->message = "User information saved";
+                        }
                     }
                 }
                 break;
@@ -78,6 +81,30 @@ class UserController
                     $this->users = $this->userModel->retrieveUsers();
                 }
                 break;
+        }
+    }
+
+    function checkFormData() {
+        $this->message = "";
+        if ($_POST['username'] != '') {
+            $this->displayValues['username'] = $_POST['username'];
+        } else {
+            $this->message .= "<p> Please enter username </p>";
+        }
+        if ($_POST['password'] != '') {
+            $this->displayValues['password'] = $_POST['password'];
+        } else {
+            $this->message .= "<p> Please enter password </p>";
+        }
+        if ($_POST['email'] != '') {
+            $this->displayValues['email'] = $_POST['email'];
+        } else {
+            $this->message .= "<p> Please enter user email </p>";
+        }
+        if ($_POST['role'] != '') {
+            $this->displayValues['role'] = $_POST['role'];
+        } else {
+            $this->message .= "<p> Please enter user email </p>";
         }
     }
 }

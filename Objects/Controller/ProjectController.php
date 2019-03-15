@@ -48,9 +48,12 @@ class ProjectController
                 $this->usersClient = $this->userModel->retrieveUsersWithRole('client');
 
                 // Check to see if we have project data to save in the database
-                $this->checkFormData();
-                if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['userLead'])) {
-                    $this->saveProjectData();
+                if (isset($_POST['submit'])) {
+                    $this->checkFormData();
+                    //if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['userLead'])) {
+                    if ($this->message == '') {
+                        $this->saveProjectData();
+                    }
                 }
                 break;
 
@@ -126,17 +129,17 @@ class ProjectController
 
     function checkFormData() {
         $this->message = "";
-        if (isset($_POST['title'])) {
+        if ($_POST['title'] != '') {
             $this->displayValues['title'] = $_POST['title'];
         } else {
             $this->message .= "<p> Please enter project title </p>";
         }
-        if (isset($_POST['description'])) {
+        if ($_POST['description'] != '') {
             $this->displayValues['description'] = $_POST['description'];
         } else {
             $this->message .= "<p> Please enter project description </p>";
         }
-        if (isset($_POST['userLead'])) {
+        if ($_POST['userLead'] != '') {
             $this->displayValues['leadEmail'] = $_POST['userLead'];
         } else {
             $this->message .= "<p> Please enter project lead </p>";
@@ -144,7 +147,7 @@ class ProjectController
     }
 
     function saveProjectData() {
-        if (isset($_POST['userClient'])) {
+        if ($_POST['userClient'] != '') {
             // Save Projects and UndertakenFor table data
             if ($this->projectModel->insertProjectWithClient($_POST['title'], $_POST['description'], $_POST['userLead'], $_POST['userClient'])) {
                 $this->message = "Project information saved";

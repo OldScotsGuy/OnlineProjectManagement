@@ -16,18 +16,6 @@ class UserView extends UserController
 {
     private $html = array();
 
-/*    private $users = array();
-    private $displayValues = array();
-    private $action;
-    private $message;
-
-    function __construct($users, $displayValues, $action, $message) {
-        $this->users = $users;
-        $this->displayValues = $displayValues;
-        $this->action = $action;
-        $this->message = $message;
-    } */
-
     function display() {
         // Title and message
         $this->html[] = "<h2>" . ucfirst($this->action) . " User</h2>";
@@ -50,9 +38,9 @@ class UserView extends UserController
 
             // Submit button
             if ($this->action == "create") {
-                $this->html[] = '<br><br><input type="submit" value="Create User"/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Create User"/>';
             } else {
-                $this->html[] = '<br><br><input type="submit" value="Update User"/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Update User"/>';
             }
         } else {
             // User selection drop down box
@@ -61,9 +49,9 @@ class UserView extends UserController
             // Submit button
             if ($this->action == "update") {
                 // Disable submit button if no users to update
-                $this->html[] = '<br><br><input type="submit" value="Select User to Update"' . (count($this->users) > 0 ? '' : 'disabled') . '/>';
+                $this->html[] = '<br><br><input type="submit" name = "submit" value="Select User to Update"' . (count($this->users) > 0 ? '' : 'disabled') . '/>';
             } else {
-                $this->html[] = '<br><br><input type="submit" value="Select User to Delete"/>';
+                $this->html[] = '<br><br><input type="submit" name = "submit" value="Select User to Delete"/>';
             }
         }
         $this->html[] = '</form>';

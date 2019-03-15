@@ -36,20 +36,20 @@ class ProjectView extends ProjectController
             $this->addTextArea( "description", "Description:", (isset($this->displayValues['description']) ? $this->displayValues['description'] : null));
 
             // Display project lead Options
-            $this->addUserInput("Lead", $this->usersLead, (isset($this->displayValues['leadEmail']) ? $this->displayValues['leadEmail'] : null), $this->usersLead);
+            $this->addUserInput("Lead", (isset($this->displayValues['leadEmail']) ? $this->displayValues['leadEmail'] : null), $this->usersLead);
 
             // Display project client options
-            $this->addUserInput("Client", $this->usersClient, (isset($this->displayValues['clientEmail']) ? $this->displayValues['clientEmail'] : null), $this->usersClient);
+            $this->addUserInput("Client", (isset($this->displayValues['clientEmail']) ? $this->displayValues['clientEmail'] : null), $this->usersClient);
 
             // Carry ProjectID across
-            $this->html{} = '<input type="hidden" name="projectID" value="' . $this->projectID . '"/>';
+            $this->html[] = '<input type="hidden" name="projectID" value="' . $this->projectID . '"/>';
 
             // Submit button
             if ($this->action == "create") {
                 // Submit button disabled if no Project Lead users
-                $this->html[] = '<br><br><input type="submit" value="Create Project"' . (count($this->usersLead) > 0 ? '' : 'disabled') . '/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Create Project"' . (count($this->usersLead) > 0 ? '' : 'disabled') . '/>';
             } else {
-                $this->html[] = '<br><br><input type="submit" value="Update Project"/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Update Project"/>';
             }
         } else {
 
@@ -59,9 +59,9 @@ class ProjectView extends ProjectController
             // Submit button
             if ($this->action == "update") {
                 // Disable the submit button if no projects present
-                $this->html[] = '<br><br><input type="submit" value="Select User to Update"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Select User to Update"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
             } else {
-                $this->html[] = '<br><br><input type="submit" value="Select User to Delete"/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Select User to Delete"/>';
             }
         }
         $this->html[] = '</form>';
@@ -90,13 +90,13 @@ class ProjectView extends ProjectController
     }
 
     function addUserInput($roleDescription, $value, $userList) {
-        $this->html[] = '<label for="user' . $roleDescription .'">Project Lead: </label>';
+        $this->html[] = '<label for="user' . $roleDescription .'">Project ' . ucfirst($roleDescription) . ': </label>';
         $this->html[] = '<select name = "user' . $roleDescription .'" id="user' . $roleDescription .'">';
 
         for ($i=0; $i<count($userList); $i++) {
             $this->html[] = '<option value = "' . $userList[$i]['email'] . '"' . ($value == $userList[$i]['email'] ? " selected " : "") . '>' . $userList[$i]['username'] . '</option>';
         }
-        $this->html[] = '</select>';
+        $this->html[] = '</select><br>';
     }
 
     function initialSelection() {
@@ -114,8 +114,7 @@ class ProjectView extends ProjectController
         $this->html[] = '</select>';
     }
 
-    public function __toString()
-    {
+    public function __toString() {
         $this->display();
         return implode("\n", $this->html);
     }

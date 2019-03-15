@@ -7,7 +7,7 @@
  */
 require("Objects/Page/Page.php");
 require_once("Objects/View/UserView.php");
-require_once("Objects/Controller/UserController.php");
+require_once("Objects/View/ProjectVIew.php");
 
 use Page\Page;
 use View\UserView;
