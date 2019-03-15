@@ -48,7 +48,8 @@ class ProjectController
                 $this->usersClient = $this->userModel->retrieveUsersWithRole('client');
 
                 // Check to see if we have project data to save in the database
-                if (isset($_POST['projectID']) && isset($_POST['title']) && isset($_POST['description']) && isset($_POST['email'])) {
+                $this->checkFormData();
+                if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['userLead'])) {
                     $this->saveProjectData();
                 }
                 break;
@@ -61,7 +62,7 @@ class ProjectController
                 }
 
                 // Step 2: ProjectID is the Projects primary key, hence if no other data we only have initial project selection
-                if (isset($_POST['projectID']) && !isset($_POST['title']) && !isset($_POST['description']) && !isset($_POST['email'])) {
+                if (isset($_POST['projectID']) && (!isset($_POST['title']) || !isset($_POST['description']) || !isset($_POST['email']))) {
 
                     // Form arrays of Project Leads and Project Clients
                     $this->usersLead = $this->userModel->retrieveUsersWithRole('lead');
@@ -81,10 +82,12 @@ class ProjectController
                     } else {
                         $this->displayValues['clientEmail'] = null;
                     }
+                    // If any values were previously set by the user add these in now
+                    $this->checkFormData();
                 }
 
                 // Step 3: If we have all project data then these are the updated values that need to saved in the Projects table
-                if (isset($_POST['projectID']) && isset($_POST['title']) && isset($_POST['description']) && isset($_POST['email'])) {
+                if (isset($_POST['projectID']) && isset($_POST['title']) && isset($_POST['description']) && isset($_POST['userLead'])) {
                     // First delete the client data if it exists
                     $this->projectModel->deleteProjectClient($_POST['projectID']);
 
@@ -121,15 +124,34 @@ class ProjectController
         }
     }
 
+    function checkFormData() {
+        $this->message = "";
+        if (isset($_POST['title'])) {
+            $this->displayValues['title'] = $_POST['title'];
+        } else {
+            $this->message .= "<p> Please enter project title </p>";
+        }
+        if (isset($_POST['description'])) {
+            $this->displayValues['description'] = $_POST['description'];
+        } else {
+            $this->message .= "<p> Please enter project description </p>";
+        }
+        if (isset($_POST['userLead'])) {
+            $this->displayValues['leadEmail'] = $_POST['userLead'];
+        } else {
+            $this->message .= "<p> Please enter project lead </p>";
+        }
+    }
+
     function saveProjectData() {
-        if (isset($_POST['client'])) {
+        if (isset($_POST['userClient'])) {
             // Save Projects and UndertakenFor table data
-            if ($this->projectModel->insertProjectWithClient($_POST['title'], $_POST['description'], $_POST['email'], $_POST['client'])) {
+            if ($this->projectModel->insertProjectWithClient($_POST['title'], $_POST['description'], $_POST['userLead'], $_POST['userClient'])) {
                 $this->message = "Project information saved";
             }
         } else {
             // Save Projects table data only
-            if ($this->projectModel->insertProject($_POST['title'], $_POST['description'], $_POST['email'])) {
+            if ($this->projectModel->insertProject($_POST['title'], $_POST['description'], $_POST['userLead'])) {
                 $this->message = "Project information saved";
             }
         }

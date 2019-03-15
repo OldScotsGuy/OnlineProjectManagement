@@ -36,10 +36,10 @@ class ProjectView extends ProjectController
             $this->addTextArea( "description", "Description:", (isset($this->displayValues['description']) ? $this->displayValues['description'] : null));
 
             // Display project lead Options
-            $this->addUserInput("Lead", $this->usersLead, isset($this->displayValues['leadEmail']) ? $this->displayValues['leadEmail'] : null );
+            $this->addUserInput("Lead", $this->usersLead, (isset($this->displayValues['leadEmail']) ? $this->displayValues['leadEmail'] : null), $this->usersLead);
 
             // Display project client options
-            $this->addUserInput("Client", $this->usersClient, isset($this->displayValues['clientEmail']) ? $this->displayValues['clientEmail'] : null );
+            $this->addUserInput("Client", $this->usersClient, (isset($this->displayValues['clientEmail']) ? $this->displayValues['clientEmail'] : null), $this->usersClient);
 
             // Carry ProjectID across
             $this->html{} = '<input type="hidden" name="projectID" value="' . $this->projectID . '"/>';
