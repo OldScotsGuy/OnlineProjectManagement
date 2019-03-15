@@ -52,6 +52,8 @@ class UserController
                 if (isset($_POST['email']) && !isset($_POST['username'])) {
                     $this->users = array();
                     $this->displayValues = $this->userModel->retrieveUser($_POST['email']);
+                    // Force entry of a new password - otherwise we would hash the hash of teh old password
+                    $this->displayValues['password'] = null;
                 }
                 // Step 3: If we have all user data then these are the updated values that need to saved in the Users table
                 if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
