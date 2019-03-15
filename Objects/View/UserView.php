@@ -44,7 +44,7 @@ class UserView extends UserController
 
             // User data: username, password, email, role
             $this->addField("text", "username", "Username:", (isset($this->displayValues['username']) ? $this->displayValues['username'] : null ));
-            $this->addField("password", "password", "Password:", (isset($this->displayValues['password']) ? $this->displayValues['password'] : null));
+            $this->addField("password", "password", "New Password:", (isset($this->displayValues['password']) ? $this->displayValues['password'] : null));
             $this->addField("email", "email", "Email:", (isset($this->displayValues['email']) ? $this->displayValues['email'] : null));
             $this->addRole(isset($this->displayValues['role']) ? $this->displayValues['role'] : null);
 

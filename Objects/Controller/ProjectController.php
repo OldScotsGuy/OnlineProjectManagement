@@ -61,7 +61,13 @@ class ProjectController
                 }
 
                 // Step 2: ProjectID is the Projects primary key, hence if no other data we only have initial project selection
-                if (isset($_POST['projectID']) && !isset($_POST['title'])) {
+                if (isset($_POST['projectID']) && !isset($_POST['title']) && !isset($_POST['description']) && !isset($_POST['email'])) {
+
+                    // Form arrays of Project Leads and Project Clients
+                    $this->usersLead = $this->userModel->retrieveUsersWithRole('lead');
+                    $this->usersClient = $this->userModel->retrieveUsersWithRole('client');
+
+                    // Set projectID (hidden form field value) and clear $projects array
                     $this->projects = array();
                     $this->projectID = $_POST['projectID'];
 
@@ -75,7 +81,6 @@ class ProjectController
                     } else {
                         $this->displayValues['clientEmail'] = null;
                     }
-
                 }
 
                 // Step 3: If we have all project data then these are the updated values that need to saved in the Projects table
@@ -100,7 +105,7 @@ class ProjectController
                 }
 
                 // Step 2: ProjectID is the Projects primary key, hence we have the project for deletion
-                if (isset($_POST['projectID']) && !isset($_POST['username'])) {
+                if (isset($_POST['projectID'])) {
                     // First delete the client data if it exists
                     $this->projectModel->deleteProjectClient($_POST['projectID']);
 

@@ -41,6 +41,9 @@ class ProjectView extends ProjectController
             // Display project client options
             $this->addUserInput("Client", $this->usersClient, isset($this->displayValues['clientEmail']) ? $this->displayValues['clientEmail'] : null );
 
+            // Carry ProjectID across
+            $this->html{} = '<input type="hidden" name="projectID" value="' . $this->projectID . '"/>';
+
             // Submit button
             if ($this->action == "create") {
                 // Submit button disabled if no Project Lead users
