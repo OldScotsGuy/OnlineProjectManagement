@@ -59,9 +59,9 @@ class ProjectView extends ProjectController
             // Submit button
             if ($this->action == "update") {
                 // Disable the submit button if no projects present
-                $this->html[] = '<br><br><input type="submit" name="submit" value="Select User to Update"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Select Project to Update"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
             } else {
-                $this->html[] = '<br><br><input type="submit" name="submit" value="Select User to Delete"/>';
+                $this->html[] = '<br><br><input type="submit" name="submit" value="Select Project to Delete"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
             }
         }
         $this->html[] = '</form>';

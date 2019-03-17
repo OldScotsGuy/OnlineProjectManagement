@@ -109,6 +109,10 @@ class UserModel
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($email,$username, $paswword, $role);
+        if ($role == 'client') {
+            $results[$index] = array('email' => 'none', 'username' => 'none', 'password' => 'none', 'role' => 'none');
+            $index += 1;
+        }
         while ($stmt->fetch()) {
             $results[$index]['email'] = $email;
             $results[$index]['username'] = $username;

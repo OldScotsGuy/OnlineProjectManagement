@@ -48,11 +48,15 @@ class ProjectModel
     }
 
     function insertProjectWithClient($title, $description, $leadEmail, $clientEmail) {
-        $query = "INSERT INTO Projects (title, description, email) VALUES (?, ?, ?); INSERT INTO UndertakenFor (projectID, email) VALUES (projectID = LAST_INSERT_ID(), ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssss', $title, $description, $leadEmail, $clientEmail);
-        $stmt->execute();
-        return ($stmt->affected_rows > 0);
+        $query1 = "INSERT INTO Projects (title, description, email) VALUES (?, ?, ?)";
+        $stmt1 = $this->db->prepare($query1);
+        $stmt1->bind_param('sss', $title, $description, $leadEmail);
+        $stmt1->execute();
+        $query2 = "INSERT INTO UndertakenFor (projectID, email) VALUES (LAST_INSERT_ID(), ?)";
+        $stmt2 = $this->db->prepare($query2);
+        $stmt2->bind_param('s', $clientEmail);
+        $stmt2->execute();
+        return ($stmt1->affected_rows > 0) && ($stmt1->affected_rows > 0);
     }
 
     function retrieveProject($projectID) {
@@ -62,7 +66,7 @@ class ProjectModel
         $stmt->bind_param('s', $projectID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['email']);
+        $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['leadEmail']);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
@@ -108,16 +112,17 @@ class ProjectModel
         $index = 0;
 
         // Read users from the database
-        $query = "SELECT projectID, title, description, email FROM Projects";
+        $query = "SELECT P.projectID, P.title, U.username as 'lead', U.email FROM Projects as P, Users as U WHERE P.email = U.email";
+        //$query = "SELECT projectID, title, description, email FROM Projects";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($projectID,$title, $description, $email);
+        $stmt->bind_result($projectID,$title, $lead, $email);
         while ($stmt->fetch()) {
             $results[$index]['projectID'] = $projectID;
             $results[$index]['title'] = $title;
-            $results[$index]['description'] = $description;
-            $results[$index]['email'] = $email;
+            $results[$index]['lead'] = $lead;
+            $results[$index]['leadEmail'] = $email;
             $index += 1;
         }
         $stmt->free_result();
