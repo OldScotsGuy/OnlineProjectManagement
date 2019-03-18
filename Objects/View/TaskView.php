@@ -20,6 +20,7 @@ class TaskView
     private $message;
     private $taskID;
     private $projects;
+    private $projectID; //Project task belongs too
 
     function display() {
         // Title and message
@@ -36,6 +37,7 @@ class TaskView
         if (($this->action == "create") || ($this->action == "update" &&  count($this->displayValues) > 0)) {
 
             // Task data: taskID, taskName, startDate, endDate, percent, taskNo, notes, projectID, email
+            $this->projectSelection();
             $this->addField("text", "taskName", "Task Name:", (isset($this->displayValues['taskName']) ? $this->displayValues['taskName'] : null ));
             $this->addField("date", "startDate", "Start Date:", (isset($this->displayValues['startDate']) ? $this->displayValues['startDate'] : null ));
             $this->addField("date", "endDate", "End Date:", (isset($this->displayValues['endDate']) ? $this->displayValues['endDate'] : null ));
@@ -43,26 +45,13 @@ class TaskView
             $this->addField("number", "taskNo", "Task no:", (isset($this->displayValues['taskNo']) ? $this->displayValues['taskNo'] : null));
             $this->addTextArea( "notes", "Task Notes:", (isset($this->displayValues['notes']) ? $this->displayValues['notes'] : null));
             $this->addUserInput("Owner", (isset($this->displayValues['taskOwner']) ? $this->displayValues['taskOwner'] : null), $this->nonClientUsers);
-
-            // Carry TaskID across
-            $this->html[] = '<input type="hidden" name="taskID" value="' . $this->taskID . '"/>';
+            $this->html[] = '<input type="hidden" name="taskID" value="' . $this->taskID . '"/>';                   // Carry TaskID across
 
             // Submit button
             if ($this->action == "create") {
                 $this->html[] = '<br><br><input type="submit" name="submit" value="Create Task"/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" name="submit" value="Update Task"/>';
-            }
-        } else {
-            // Task selection drop down box
-            $this->initialSelection();
-
-            // Submit button
-            if ($this->action == "update") {
-                // Disable submit button if no users to update
-                $this->html[] = '<br><br><input type="submit" name = "submit" value="Select Task to Update"' . (count($this->users) > 0 ? '' : 'disabled') . '/>';
-            } else {
-                $this->html[] = '<br><br><input type="submit" name = "submit" value="Select Task to Delete"/>';
             }
         }
         $this->html[] = '</form>';
@@ -100,20 +89,19 @@ class TaskView
         $this->html[] = '</select><br>';
     }
 
-    function initialSelection() {
-        $this->html[] = '<label for="projectID">Select Project to ' . ucfirst($this->action) . ': </label>';
-        $select = '<select name = "email" id="email"';
-        if (count($this->users) == 0) {
+    function projectSelection() {
+        $this->html[] = '<label for="projectID">Select Project Task Belongs to: </label>';
+        $select = '<select name = "projectID" id="projectID"';
+        if (count($this->projects) == 0) {
             $select .= ' disabled>';
         } else {
             $select .= '>';
         }
-        //$this->html[] = '<select name = "email" id="email">';
         $this->html[] = $select;
-        foreach ($this->users as $user) {
-            $this->html[] = '<option value = "'. $user['email'] .'">Username: ' . $user['username'] . '  Role: ' . $user['role'] . '  Email: ' . $user['email'] .'</option>';
+        foreach ($this->projects as $project) {
+            $this->html[] = '<option value = "'. $project['projectID'] .'"' . ($project['projectID'] == $this->projectID ? " selected " : "") . '>Project Title: ' . $project['title'] . '  Lead: ' . $project['lead'] . '  Email: ' . $project['leadEmail'] .'</option>';
         }
-        $this->html[] = '</select>';
+        $this->html[] = '</select><br>';
     }
 
     public function __toString()
