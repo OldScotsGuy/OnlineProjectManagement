@@ -22,7 +22,7 @@ class UserModel
                           username nvarchar(40),
                           password nvarchar(60),
                           role nvarchar(20),
-                          PRIMARY KEY(email));";
+                          PRIMARY KEY(email))";
         $result = $this->db->query($query);
     }
 

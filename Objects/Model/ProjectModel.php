@@ -63,7 +63,7 @@ class ProjectModel
         $result = array();
         $query = "SELECT projectID, title, description, email FROM Projects WHERE projectID = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $projectID);
+        $stmt->bind_param('i', $projectID);
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['leadEmail']);
