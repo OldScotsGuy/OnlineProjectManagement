@@ -8,6 +8,7 @@
 
 namespace Model;
 
+require_once("DatabaseConnection.php");
 
 class TaskModel
 {
@@ -21,13 +22,13 @@ class TaskModel
                           task_name nvarchar(80) not null,
                           start_date date not null,
                           end_date date not null,
-                          percent integer(2),
-                          task_no integer(2),
+                          percent integer(3),
+                          task_no integer(3),
                           notes text,
                           projectID integer(4) not null,
                           email nvarchar(128) not null,
                           PRIMARY KEY(taskID),
-                          FOREIGN KEY(projectID) REFERENCES Projects(projectID),
+                          FOREIGN KEY(projectID) REFERENCES Projects(projectID) ON DELETE CASCADE,
                           FOREIGN KEY(email) REFERENCES Users(email))";
         $result = $this->db->query($query);
     }

@@ -22,6 +22,17 @@ class TaskView
     private $projects;
     private $projectID; //Project task belongs too
 
+    // Temporary Constructor
+    function __construct($nonClientUsers, $displayValues, $action, $message, $taskID, $projects, $projectID) {
+        $this->nonClientUsers = $nonClientUsers;
+        $this->displayValues = $displayValues;
+        $this->action = $action;
+        $this->message = $message;
+        $this->taskID = $taskID;
+        $this->projects = $projects;
+        $this->projectID = $projectID;
+    }
+
     function display() {
         // Title and message
         $this->html[] = "<h2>" . ucfirst($this->action) . " User</h2>";
@@ -34,6 +45,7 @@ class TaskView
 
         // Task Entry Form
         $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
+        //$this->html[] = '<form action ="testpage.php" method="post">';
         if (($this->action == "create") || ($this->action == "update" &&  count($this->displayValues) > 0)) {
 
             // Task data: taskID, taskName, startDate, endDate, percent, taskNo, notes, projectID, email
