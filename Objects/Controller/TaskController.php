@@ -63,12 +63,10 @@ class TaskController
                 }
                 break;
             case "update":
-                // Read taskID and projectID from URL
-                $this->taskID = $_GET['taskID'];
-                $this->projectID = $_GET['projectID'];
-
                 if (isset($_POST['submit'])) {
                     // Form submitted so check and save data if appropriate
+                    $this->taskID = $_POST['taskID'];
+                    $this->projectID = $_POST['projectID'];
                     $this->checkFormData();
                     if ($this->message == "") {
                         if ($this->taskModel->updateTask($this->taskID, $_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['userOwner'])) {
@@ -76,21 +74,26 @@ class TaskController
                         }
                     }
                 } else {
+                    // Read taskID and projectID from URL
+                    $this->taskID = $_GET['taskID'];
+                    $this->projectID = $_GET['projectID'];
+
                     // Read task data and set displayValues for task update
-                    $this->displayValues = $this->taskModel->retrieveTask($this->taskID);
+                    if (isset($this->taskID)) {
+                        $this->displayValues = $this->taskModel->retrieveTask($this->taskID);
+                    }
                 }
                 break;
             case "delete" :
-                // No information at all, so need to present initial selection of all users
-                if (!isset($_POST['email'])) {
-                    $this->nonClientUsers = $this->taskModel->retrieveUsers();
-                }
+                // Read taskID from URL
+                $this->taskID = $_GET['taskID'];
+
                 // Email is the Users primary key, hence if no other data we have the user for deletion
-                if (isset($_POST['email']) && !isset($_POST['username'])) {
-                    if ($this->displayValues = $this->taskModel->deleteUser($_POST['email'])) {
-                        $this->message = "User deleted";
+                if (isset($this->taskID)) {
+                    if ($this->taskModel->deleteTask($this->taskID)) {
+                        $this->message = "Task deleted";
                     }
-                    $this->nonClientUsers = $this->taskModel->retrieveUsers();
+                    $this->action = "create";
                 }
                 break;
         }

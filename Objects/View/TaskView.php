@@ -8,30 +8,13 @@
 
 namespace View;
 
+require_once("Objects/Controller/TaskController.php");
 
-class TaskView
+use Controller\TaskController;
+
+class TaskView extends TaskController
 {
     private $html = array();
-
-    // Values to be defined in the controller
-    private $nonClientUsers = array();
-    private $displayValues = array();
-    private $action = null;
-    private $message;
-    private $taskID;
-    private $projects;
-    private $projectID; //Project task belongs too
-
-    // Temporary Constructor
-    function __construct($nonClientUsers, $displayValues, $action, $message, $taskID, $projects, $projectID) {
-        $this->nonClientUsers = $nonClientUsers;
-        $this->displayValues = $displayValues;
-        $this->action = $action;
-        $this->message = $message;
-        $this->taskID = $taskID;
-        $this->projects = $projects;
-        $this->projectID = $projectID;
-    }
 
     function display() {
         // Title and message
@@ -41,7 +24,6 @@ class TaskView
         // Navigation links
         $this->html[] = "<p><a href='index.php?page=task&action=create'>Create Task</a></p>";
         $this->html[] = "<p><a href='index.php?page=task&action=update'>Update Task</a></p>";
-        $this->html[] = "<p><a href='index.php?page=task&action=delete'>Delete Task</a></p>";
 
         // Task Entry Form
         $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
@@ -64,6 +46,7 @@ class TaskView
                 $this->html[] = '<br><br><input type="submit" name="submit" value="Create Task"/>';
             } else {
                 $this->html[] = '<br><br><input type="submit" name="submit" value="Update Task"/>';
+                $this->html[] = '<br><br><a href = "index.php?page=task&action=delete&taskID=' . $this->taskID . '">Delete Task</a>';
             }
         }
         $this->html[] = '</form>';
