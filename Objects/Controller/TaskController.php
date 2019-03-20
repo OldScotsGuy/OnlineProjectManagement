@@ -9,22 +9,30 @@
 namespace Controller;
 
 use Model\TaskModel;
+use Model\ProjectModel;
+use Model\UserModel;
 
 require_once("Objects/Model/TaskModel.php");
+require_once("Objects/Model/ProjectModel.php");
+require_once("Objects/Model/UserModel.php");
 
 class TaskController
 {
     private $taskModel = null;
+    private $projectModel = null;
+    private $userModel = null;
 
-    protected $taskID;
-    protected $projects;
-    protected $projectID;   //Project task belongs too
-    protected $nonClientUsers = array();
-    protected $displayValues = array();
-    protected $action = null;
-    protected $message = "";
+    protected $taskID;                      // Obtained by $_GET when arriving from project status page
+    protected $projectID;                   // Obtained by $_GET when arriving from project status page
+    protected $projects;                    // List of available projects to assign task to
+    protected $nonClientUsers = array();    // List users the task can be assigned to
+    protected $displayValues = array();     // Used for task update when arriving from project status page
+    protected $action = null;               // create: when arriving from navigation bar, update: when arriving from project status page
+    protected $message = "";                // Set by controller
 
     function __construct($action) {
+        $this->projectModel = new ProjectModel();
+        $this->userModel = new UserModel();
         $this->taskModel = new TaskModel();
         $this->action = $action;
         $this->databaseOperations();
@@ -37,39 +45,39 @@ class TaskController
     }
 
     function databaseOperations() {
+        // Read project list and non-client users for task data entry
+        $this->nonClientUsers = $this->userModel->retrieveUsersWithRole('lead') + $this->userModel->retrieveUsersWithRole('member');
+        $this->projects = $this->projectModel->retrieveProjects();
+        if (count($this->projects) == 0) $this->message = "No projects to assign task to";
+
         switch ($this->action) {
             case "create":
                 if (isset($_POST['submit'])) {
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->insertUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
-                            $this->message = "User information saved";
+                        if ($this->taskModel->insertTask($_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['userOwner'])) {
+                            $this->message = "Task information saved";
                         }
                     }
                 }
                 break;
             case "update":
-                // Step 1: No information at all, so need to present initial selection of all users
-                if (!isset($_POST['email'])) {
-                    $this->nonClientUsers = $this->taskModel->retrieveUsers();
-                    if (count($this->nonClientUsers) == 0) $this->message = "No users to update";
-                }
-                // Step 2: Email is the Users primary key, hence if no other data we only have initial user selection
-                if (isset($_POST['email']) && !isset($_POST['username'])) {
-                    $this->nonClientUsers = array();
-                    $this->displayValues = $this->taskModel->retrieveUser($_POST['email']);
-                    // Force entry of a new password - otherwise we would hash the hash of teh old password
-                    $this->displayValues['password'] = null;
-                }
-                // Step 3: If we have all user data then these are the updated values that need to saved in the Users table
-                if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
-                    // Attempt to save user data
-                    if ($this->taskModel->updateUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
-                        $this->message = "User information updated";
+                // Read taskID and projectID from URL
+                $this->taskID = $_GET['taskID'];
+                $this->projectID = $_GET['projectID'];
+
+                if (isset($_POST['submit'])) {
+                    // Form submitted so check and save data if appropriate
+                    $this->checkFormData();
+                    if ($this->message == "") {
+                        if ($this->taskModel->updateTask($this->taskID, $_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['userOwner'])) {
+                            $this->message = "Task information updated";
+                        }
                     }
-                    // Reset UserView users array to offer a second update
-                    $this->nonClientUsers = $this->taskModel->retrieveUsers();
+                } else {
+                    // Read task data and set displayValues for task update
+                    $this->displayValues = $this->taskModel->retrieveTask($this->taskID);
                 }
                 break;
             case "delete" :
@@ -120,21 +128,21 @@ class TaskController
 
         // Validate percent complete value
         if ($_POST['percent'] != '') {
-            $percent = (int) $_POST['percent'];
-            $percent = max(0, min($percent,100));
+            //$percent = (int) $_POST['percent'];
+            $_POST['percent'] = max(0, min((int) $_POST['percent'],100));
         } else {
-            $percent = 0;
+            $_POST['percent'] = 0;
         }
-        $this->displayValues['percent'] = $percent;
+        $this->displayValues['percent'] = $_POST['percent'];
 
         // Validate taskNo value
         if ($_POST['taskNo'] != '') {
-            $taskNo = (int) $_POST['taskNo'];
-            $taskNo = max(-999, min($taskNo,999));
+            //$taskNo = (int) $_POST['taskNo'];
+            $_POST['taskNo'] = max(-999, min((int) $_POST['taskNo'],999));
         } else {
-            $taskNo = 0;
+            $_POST['taskNo'] = 0;
         }
-        $this->displayValues['taskNo'] = $taskNo;
+        $this->displayValues['taskNo'] = $_POST['taskNo'];
 
     }
 }

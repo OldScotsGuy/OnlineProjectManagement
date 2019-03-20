@@ -53,7 +53,7 @@ class TaskModel
         $stmt->bind_param('i', $taskID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['taskID'],$result['taskName'], $result['startDate'], $result['endDate'], $result['percent'], $result['taskNo'], $result['notes'], $result['projectID'],$result['email']);
+        $stmt->bind_result( $result['taskID'],$result['taskName'], $result['startDate'], $result['endDate'], $result['percent'], $result['taskNo'], $result['notes'], $result['projectID'],$result['taskOwner']);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
