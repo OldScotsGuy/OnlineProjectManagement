@@ -10,7 +10,7 @@ namespace Model;
 
 require("DatabaseConnection.php");
 
-class DocumentsModel
+class DocumentModel
 {
     private $db = null;
 
@@ -50,4 +50,14 @@ class DocumentsModel
         $stmt->free_result();
         return $result;
     }
+
+    function deleteDocument($docID) {
+        $query = "DELETE FROM Documents WHERE docID = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $docID);
+        $stmt->execute();
+        return ($stmt->affected_rows > 0);
+    }
+
+
 }
