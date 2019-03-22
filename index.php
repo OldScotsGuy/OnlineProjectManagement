@@ -8,10 +8,14 @@
 require("Objects/Page/Page.php");
 require_once("Objects/View/UserView.php");
 require_once("Objects/View/ProjectVIew.php");
+require_once("Objects/View/TaskView.php");
+require_once("Objects/View/GanttView.php");
 
 use Page\Page;
 use View\UserView;
 use View\ProjectView;
+use View\TaskView;
+use View\GanttView;
 
 // Get page and action variables
 if (empty($_GET['page'])) {
@@ -38,6 +42,20 @@ switch ($page) {
     case "project":
         $ProjectView = new ProjectView($action);
         $HomePage->content = '<section>'. $ProjectView . '</section>';
+        break;
+
+    case "task":
+        $TaskView = new TaskView($action);
+        $HomePage->content = '<section>' . $TaskView . '</section>';
+        break;
+
+    case "document":
+
+        break;
+
+    case "status":
+        $GanttView = new GanttView(2);
+        $HomePage->content = '<section>' . $GanttView . '</section>';
         break;
 }
 

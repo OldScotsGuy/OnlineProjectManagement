@@ -46,7 +46,7 @@ class TaskController
 
     function databaseOperations() {
         // Read project list and non-client users for task data entry
-        $this->nonClientUsers = $this->userModel->retrieveUsersWithRole('lead') + $this->userModel->retrieveUsersWithRole('member');
+        $this->nonClientUsers = array_merge($this->userModel->retrieveUsersWithRole('lead'), $this->userModel->retrieveUsersWithRole('member'));
         $this->projects = $this->projectModel->retrieveProjects();
         if (count($this->projects) == 0) $this->message = "No projects to assign task to";
 
@@ -56,7 +56,7 @@ class TaskController
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->insertTask($_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['userOwner'])) {
+                        if ($this->taskModel->insertTask($_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['taskOwner'])) {
                             $this->message = "Task information saved";
                         }
                     }
@@ -69,7 +69,7 @@ class TaskController
                     $this->projectID = $_POST['projectID'];
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->updateTask($this->taskID, $_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['userOwner'])) {
+                        if ($this->taskModel->updateTask($this->taskID, $_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['taskOwner'])) {
                             $this->message = "Task information updated";
                         }
                     }
@@ -102,7 +102,7 @@ class TaskController
     function checkFormData() {
         $this->message = "";
         // Check task name entered
-        if ($_POST['taskName '] != '') {
+        if ($_POST['taskName'] != '') {
             $this->displayValues['taskName'] = $_POST['taskName'];
         } else {
             $this->message .= "<p> Please enter task name </p>";

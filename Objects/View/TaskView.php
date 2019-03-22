@@ -18,16 +18,11 @@ class TaskView extends TaskController
 
     function display() {
         // Title and message
-        $this->html[] = "<h2>" . ucfirst($this->action) . " User</h2>";
+        $this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
         $this->html[] = "<p>" . $this->message ."</p>";
-
-        // Navigation links
-        $this->html[] = "<p><a href='index.php?page=task&action=create'>Create Task</a></p>";
-        $this->html[] = "<p><a href='index.php?page=task&action=update'>Update Task</a></p>";
 
         // Task Entry Form
         $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
-        //$this->html[] = '<form action ="testpage.php" method="post">';
         if (($this->action == "create") || ($this->action == "update" &&  count($this->displayValues) > 0)) {
 
             // Task data: taskID, taskName, startDate, endDate, percent, taskNo, notes, projectID, email
@@ -75,8 +70,8 @@ class TaskView extends TaskController
     }
 
     function addUserInput($roleDescription, $value, $userList) {
-        $this->html[] = '<label for="user' . $roleDescription .'">Task ' . ucfirst($roleDescription) . ': </label>';
-        $this->html[] = '<select name = "user' . $roleDescription .'" id="user' . $roleDescription .'">';
+        $this->html[] = '<label for="task' . $roleDescription .'">Task ' . ucfirst($roleDescription) . ': </label>';
+        $this->html[] = '<select name = "task' . $roleDescription .'" id="user' . $roleDescription .'">';
 
         for ($i=0; $i<count($userList); $i++) {
             $this->html[] = '<option value = "' . $userList[$i]['email'] . '"' . ($value == $userList[$i]['email'] ? " selected " : "") . '>' . $userList[$i]['username'] . '</option>';

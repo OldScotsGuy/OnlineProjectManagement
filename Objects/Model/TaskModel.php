@@ -84,18 +84,18 @@ class TaskModel
         $percent = null;
         $taskNo = null;
         $notes = null;
-        $projectID = null;
         $email = null;
+        $username = null;
         $results = array();
         $index = 0;
 
         // Read users from the database
-        $query = "SELECT taskID, task_name, start_date, end_date, percent, task_no, notes, projectID, email FROM Tasks WHERE projectID = ?";
+        $query = "SELECT T.taskID, T.task_name, T.start_date, T.end_date, T.percent, T.task_no, T.notes, T.projectID, T.email, U.username FROM Tasks As T, Users As U WHERE T.email = U.email AND projectID = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $projectID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($taskID,$taskName, $startDate, $endDate, $percent, $taskNo, $notes, $projectID, $email);
+        $stmt->bind_result($taskID,$taskName, $startDate, $endDate, $percent, $taskNo, $notes, $projectID, $email, $username);
         while ($stmt->fetch()) {
             $results[$index]['taskID'] = $taskID;
             $results[$index]['taskName'] = $taskName;
@@ -106,6 +106,7 @@ class TaskModel
             $results[$index]['notes'] = $notes;
             $results[$index]['projectID'] = $projectID;
             $results[$index]['email'] = $email;
+            $results[$index]['owner'] = $username;
             $index += 1;
         }
         $stmt->free_result();

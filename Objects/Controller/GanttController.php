@@ -6,7 +6,15 @@
  * Time: 21:10
  */
 
-namespace View;
+namespace Controller;
+
+use Model\TaskModel;
+use Model\ProjectModel;
+use Model\UserModel;
+
+require_once("Objects/Model/TaskModel.php");
+require_once("Objects/Model/ProjectModel.php");
+require_once("Objects/Model/UserModel.php");
 
 // This object parses the project object extracting the data from which the HTML will be derived
 // The parsed data is stored in the member variables which are inherited
@@ -14,10 +22,18 @@ namespace View;
 // Author: Nick Harle
 // Date:   23/02/2019
 
-class GanttData
+class GanttController
 {
     private $dayInSeconds = 60 * 60 * 24;   //TODO make this a constant
-    protected $project = null;
+
+    // Required Model Objects
+    private $taskModel = null;
+    private $projectModel = null;
+    private $userModel = null;
+
+    // Project Data
+    protected $projectID = null;
+    protected $project;
 
     // Task data
     private $firstDayTimestamp = false;
@@ -30,11 +46,16 @@ class GanttData
     protected $monthStartData = array();
     protected $dayClassifications = array();
 
-    public function __construct($project = null)
+    public function __construct($projectID = 2)     // TODO change this for project selection
     {
-        $this->project = $project;
-        $this->parseTaskData();          // find earliest and latest days
-        $this->parseProjectTimeData();      // create array of day classes
+        $this->projectModel = new ProjectModel();
+        $this->userModel = new UserModel();
+        $this->taskModel = new TaskModel();
+
+        $this->projectID = $projectID;
+        $this->project = $this->projectModel->retrieveProject($this->projectID);    // Retrieve project data
+        $this->parseTaskData();             // Find earliest and latest days
+        $this->parseProjectTimeData();      // Create array of day classes
     }
 
     // Finds first and last task dates storing these as timestamps
@@ -42,13 +63,14 @@ class GanttData
     // Places task data into array
     private function parseTaskData()
     {
-        $tasks = $this->project->tasks;
+        //$tasks = $this->project->tasks;
+        $tasks = $this->taskModel->retrieveProjectTasks($this->projectID);
 
         // Find the start and finish project dates
         foreach ($tasks as $task)
         {
-            $startTimestamp = strtotime($task->start);
-            $endTimestamp = strtotime($task->end);
+            $startTimestamp = strtotime($task['startDate']);
+            $endTimestamp = strtotime($task['endDate']);
             if (!$this->firstDayTimestamp || $this->firstDayTimestamp > $startTimestamp) $this->firstDayTimestamp = $startTimestamp;
             if (!$this->lastDayTimestamp || $this->lastDayTimestamp < $endTimestamp) $this->lastDayTimestamp = $endTimestamp;
         }
@@ -56,11 +78,11 @@ class GanttData
 
         // Now reference each task from the project start date
         foreach ($tasks as $task) {
-            $startTimestamp = strtotime($task->start);
+            $startTimestamp = strtotime($task['startDate']);
             $startIndex = ($startTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
-            $endTimestamp = strtotime($task->end);
+            $endTimestamp = strtotime($task['endDate']);
             $endIndex = ($endTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;
-            $this->taskData[] = array("start" => $startIndex, "end" => $endIndex, "name" => $task->name , "num" => $task->taskNo, "owner" => $task->owner, "notes" => $task->notes, "percent" => $task->percentComplete);
+            $this->taskData[] = array("start" => $startIndex, "end" => $endIndex, "name" => $task['taskName'], "num" => $task['taskNo'], "owner" => $task['owner'], "notes" => $task['notes'], "percent" => $task['percent']);
         }
 
         // Order tasks by task number

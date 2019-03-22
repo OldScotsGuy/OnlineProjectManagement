@@ -8,14 +8,16 @@
 
 namespace View;
 
-require_once ("GanttData.php");
+require_once("Objects/Controller/GanttController.php");
+
+use Controller\GanttController;
 
 // Creates the HTML to display the Gantt chart as a table
-// Uses the data parsed from the project object by the GanttData object
+// Uses the data parsed from the project object by the GanttController object
 // Author: Nick Harle
 // Date:   23/02/2019
 
-class GanttTable extends GanttData
+class GanttView extends GanttController
 {
     private $taskSideBarRows = array();
     private $taskRows = array();
@@ -106,7 +108,7 @@ class GanttTable extends GanttData
     // Create year, month and day banner
     private function createGanttTable()
     {
-        $this->html[] = "<figcaption>Project Title: " . $this->project->title . "</figcaption>";
+        $this->html[] = "<figcaption>Project Title: " . $this->project['title'] . "</figcaption>";
 
         $this->html[] = "<figure class='chart'>";
         // Gantt Task Side Bar
