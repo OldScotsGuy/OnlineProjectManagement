@@ -6,8 +6,8 @@
  * Time: 18:46
  */
 
-require ("Objects/View/TaskView.php");
-require ("Objects/Model/TaskModel.php");
+require("Objects/View/TaskView.php");
+require("Objects/Model/TaskModel.php");
 
 if (isset($_POST['submit'])) {
     // Echo back form data
@@ -62,8 +62,8 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <title>Project Prototyping</title>
-    <link rel="stylesheet" href="Assets/CSS/chart-style.css" />
-    <link rel="stylesheet" href="Assets/CSS/page.css" />
+    <link rel="stylesheet" href="../Assets/CSS/chart-style.css" />
+    <link rel="stylesheet" href="../Assets/CSS/page.css" />
 </head>
 <body>
 <header>
@@ -72,6 +72,6 @@ if (isset($_POST['submit'])) {
 <main>
     <?php echo $content ?>
 </main>
-<script type="text/javascript" src="Assets/Javascript/chart-task-notes.js"></script>
+<script type="text/javascript" src="../Assets/Javascript/chart-task-notes.js"></script>
 </body>
 </html>

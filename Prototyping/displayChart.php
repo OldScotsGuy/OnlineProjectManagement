@@ -6,8 +6,8 @@
  * Time: 10:17
  */
 
-require_once ("Objects/Model/Project.php");
-require_once ("Objects/Model/Task.php");
+require_once("Objects/Model/Project.php");
+require_once("Objects/Model/Task.php");
 require_once("Objects/View/GanttView.php");
 
 // Create objects to begin with
@@ -24,8 +24,8 @@ $chart = new \View\GanttView($project);
 <head>
     <meta charset="UTF-8">
     <title>Project Prototyping</title>
-    <link rel="stylesheet" href="Assets/CSS/chart-style.css" />
-    <link rel="stylesheet" href="Assets/CSS/page.css" />
+    <link rel="stylesheet" href="../Assets/CSS/chart-style.css" />
+    <link rel="stylesheet" href="../Assets/CSS/page.css" />
 </head>
 <body>
 <header>
@@ -34,6 +34,6 @@ $chart = new \View\GanttView($project);
 <main>
 <?php echo $chart ?>
 </main>
-<script type="text/javascript" src="Assets/Javascript/chart-task-notes.js"></script>
+<script type="text/javascript" src="../Assets/Javascript/chart-task-notes.js"></script>
 </body>
 </html>

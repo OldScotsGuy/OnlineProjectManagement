@@ -74,7 +74,7 @@ class GanttView extends GanttController
         foreach ($this->taskData as $task) {
 
             // Add task details
-            $row = '<tr><td class="side-name">' . $task['name'] . ' : ' . $task['owner'] . '</td>';
+            $row = '<tr><td class="side-name">' . $task['taskName'] . ' : ' . $task['owner'] . '</td>';
             //$row = null;
 
             // Add before task padding days
@@ -89,7 +89,7 @@ class GanttView extends GanttController
             $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays)  . '</tr>';
 
             // Add notes row under task detail
-            $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">' . $task['notes'] . '</td></tr>';
+            $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '"><a href="index.php?page=task&action=update&taskID=' . $task['taskID'] . '&projectID=' . $this->projectID . '">Edit Task</a>' . $task['notes'] . '</td></tr>';
 
             $this->taskRows[] = $row;
         }

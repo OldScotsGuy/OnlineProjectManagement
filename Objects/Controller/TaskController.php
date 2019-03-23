@@ -71,6 +71,7 @@ class TaskController
                     if ($this->message == "") {
                         if ($this->taskModel->updateTask($this->taskID, $_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['taskOwner'])) {
                             $this->message = "Task information updated";
+                            header('Location: index.php?page=status');
                         }
                     }
                 } else {

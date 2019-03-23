@@ -17,13 +17,13 @@ class TaskView extends TaskController
     private $html = array();
 
     function display() {
-        // Title and message
-        $this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
-        $this->html[] = "<p>" . $this->message ."</p>";
-
-        // Task Entry Form
-        $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
         if (($this->action == "create") || ($this->action == "update" &&  count($this->displayValues) > 0)) {
+            // Title and message
+            $this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
+            $this->html[] = "<p>" . $this->message ."</p>";
+
+            // Task Entry Form
+            $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
 
             // Task data: taskID, taskName, startDate, endDate, percent, taskNo, notes, projectID, email
             $this->projectSelection();
@@ -43,8 +43,11 @@ class TaskView extends TaskController
                 $this->html[] = '<br><br><input type="submit" name="submit" value="Update Task"/>';
                 $this->html[] = '<br><br><a href = "index.php?page=task&action=delete&taskID=' . $this->taskID . '">Delete Task</a>';
             }
-        }
         $this->html[] = '</form>';
+        } else {
+            // Handle task delete
+
+        }
     }
 
     function addField($type, $name, $text, $value) {
