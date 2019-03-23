@@ -11,6 +11,8 @@ namespace View;
 require_once("Objects/Controller/GanttController.php");
 
 use Controller\GanttController;
+use Utils\Project;
+use Utils\Task;
 
 // Creates the HTML to display the Gantt chart as a table
 // Uses the data parsed from the project object by the GanttController object
@@ -74,24 +76,24 @@ class GanttView extends GanttController
         foreach ($this->taskData as $task) {
 
             // Add task details
-            $row = '<tr><td class="side-name">' . $task['taskName'] . ' : ' . $task['owner'] . '</td>';
+            $row = '<tr><td class="side-name">' . $task[Task::Name] . ' : ' . $task[Task::Owner] . '</td>';
 
             // Add before task padding days
-            $row .= $this->addPaddingDays(0, $task['start']);
+            $row .= $this->addPaddingDays(0, $task[Task::Start]);
 
             // Add task details
-            $row .= '<td colspan ="' . ($task['end'] - $task['start'] + 1) . '">';
-            $row .= '<div class ="chart-task"><div class="chart-fill" style="width: ' . $task['percent'] .'%">';
+            $row .= '<td colspan ="' . ($task[Task::End] - $task[Task::Start] + 1) . '">';
+            $row .= '<div class ="chart-task"><div class="chart-fill" style="width: ' . $task[Task::Percent] .'%">';
             $row .= '</div></div></td>';
 
             // Add after task padding days
-            $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays)  . '</tr>';
+            $row .= $this->addPaddingDays($task[Task::End] + 1, $this->numDays)  . '</tr>';
 
             // Add Task update / delete / notes in row under task detail
             $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">';
-            $row .= '<a href="index.php?page=task&action=update&taskID=' . $task['taskID'] . '&projectID=' . $this->projectID . '">Edit Task</a>';
-            $row .= '<a href="index.php?page=task&action=delete&taskID=' . $task['taskID'] . '&projectID=' . $this->projectID . '">Delete Task</a>';
-            $row .= 'Task Notes: ' . $task['notes'];
+            $row .= '<a href="index.php?page=task&action=update&taskID=' . $task[Task::ID] . '&projectID=' . $this->projectID . '">Edit Task</a>';
+            $row .= '<a href="index.php?page=task&action=delete&taskID=' . $task[Task::ID] . '&projectID=' . $this->projectID . '">Delete Task</a>';
+            $row .= 'Task Notes: ' . $task[Task::Notes];
             $row .= '</td></tr>';
 
             $this->taskRows[] = $row;
@@ -111,7 +113,7 @@ class GanttView extends GanttController
     // Create year, month and day banner
     private function createGanttTable()
     {
-        $this->html[] = "<figcaption>Project Title: " . $this->project['title'] . "</figcaption>";
+        $this->html[] = "<figcaption>Project Title: " . $this->project[Project::Title] . "</figcaption>";
 
         $this->html[] = "<figure class='chart'>";
         // Gantt Task Side Bar
@@ -158,7 +160,7 @@ class GanttView extends GanttController
         }
         $this->html[] = $select;
         foreach ($this->projects as $project) {
-            $this->html[] = '<option value = "'. $project['projectID'] .'">Title: ' . $project['title'] . ' Project Lead: ' . $project['lead'] . '  Project Lead Email: ' . $project['leadEmail'] .'</option>';
+            $this->html[] = '<option value = "'. $project[Project::ID] .'">Title: ' . $project[Project::Title] . ' Project Lead: ' . $project[Project::Lead] . '  Project Lead Email: ' . $project[Project::LeadEmail] .'</option>';
         }
         $this->html[] = '</select>';
         // Disable the submit button if no projects present

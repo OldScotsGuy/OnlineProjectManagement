@@ -10,6 +10,7 @@ namespace Controller;
 
 use Model\TaskModel;
 use Model\ProjectModel;
+use Utils\Task;
 
 require_once("Objects/Model/TaskModel.php");
 require_once("Objects/Model/ProjectModel.php");
@@ -76,8 +77,8 @@ class GanttController
         // Find the start and finish project dates
         foreach ($this->taskData as $task)
         {
-            $startTimestamp = strtotime($task['startDate']);
-            $endTimestamp = strtotime($task['endDate']);
+            $startTimestamp = strtotime($task[Task::StartDate]);
+            $endTimestamp = strtotime($task[Task::EndDate]);
             if (!$this->firstDayTimestamp || $this->firstDayTimestamp > $startTimestamp) $this->firstDayTimestamp = $startTimestamp;
             if (!$this->lastDayTimestamp || $this->lastDayTimestamp < $endTimestamp) $this->lastDayTimestamp = $endTimestamp;
         }
@@ -85,16 +86,16 @@ class GanttController
 
         // Now reference each task from the project start date
         for ($index = 0; $index < count($this->taskData); $index++) {
-            $startTimestamp = strtotime($this->taskData[$index]['startDate']);
+            $startTimestamp = strtotime($this->taskData[$index][Task::StartDate]);
             $startIndex = ($startTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;   // Start day index (Project day 1 has zero)
-            $endTimestamp = strtotime($this->taskData[$index]['endDate']);
+            $endTimestamp = strtotime($this->taskData[$index][Task::EndDate]);
             $endIndex = ($endTimestamp - $this->firstDayTimestamp) / $this->dayInSeconds;       // End day index
-            $this->taskData[$index]["start"] = $startIndex;
-            $this->taskData[$index]["end"] = $endIndex;
+            $this->taskData[$index][Task::Start] = $startIndex;
+            $this->taskData[$index][Task::End] = $endIndex;
         }
 
         // Order tasks by task number
-        usort($this->taskData, function ($a,$b) {return $a['taskNo'] - $b['taskNo']; });
+        usort($this->taskData, function ($a,$b) {return $a[Task::No] - $b[Task::No]; });
     }
 
     // Classifies days according to weekend / today / month start

@@ -6,6 +6,14 @@
  * Time: 11:42
  */
 require("Objects/Page/Page.php");
+
+// Load Enumerations
+require("Objects/Utils/Action.php");
+require("Objects/Utils/Document.php");
+require("Objects/Utils/Project.php");
+require("Objects/Utils/Task.php");
+
+// Load View Objects
 require_once("Objects/View/UserView.php");
 require_once("Objects/View/ProjectVIew.php");
 require_once("Objects/View/TaskView.php");
@@ -19,7 +27,7 @@ use View\GanttView;
 
 // Get page and action variables
 if (empty($_GET['page'])) {
-    $page = "user";
+    $page = "status";
 } else {
     $page = $_GET['page'];
 }
