@@ -11,6 +11,7 @@ namespace View;
 require_once("Objects/Controller/TaskController.php");
 
 use Controller\TaskController;
+use Utils\Project;
 
 class TaskView extends TaskController
 {
@@ -84,7 +85,7 @@ class TaskView extends TaskController
 
     function projectSelection() {
         $this->html[] = '<label for="projectID">Select Project Task Belongs to: </label>';
-        $select = '<select name = "projectID" id="projectID"';
+        $select = '<select name = "' . Project::ID .'" id="' . Project::ID .'"';
         if (count($this->projects) == 0) {
             $select .= ' disabled>';
         } else {

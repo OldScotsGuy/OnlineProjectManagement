@@ -10,6 +10,7 @@ namespace Controller;
 
 use Model\TaskModel;
 use Model\ProjectModel;
+use Utils\Project;
 use Utils\Task;
 
 require_once("Objects/Model/TaskModel.php");
@@ -52,11 +53,11 @@ class GanttController
         $this->projectModel = new ProjectModel();
         $this->taskModel = new TaskModel();
 
-        if (!isset($_POST['projectID'])) {
+        if (!isset($_POST[Project::ID])) {
             $this->projects = $this->projectModel->retrieveProjects();
             if (count($this->projects) == 0) $this->message = "No projects to view status of";
         } else {
-            $this->projectID = $_POST['projectID'];
+            $this->projectID = $_POST[Project::ID];
             $this->project = $this->projectModel->retrieveProject($this->projectID);    // Retrieve project data
             $this->parseTaskData();             // Find earliest and latest days
             $this->parseProjectTimeData();      // Create array of day classes

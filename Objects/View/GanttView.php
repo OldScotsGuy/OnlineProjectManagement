@@ -152,7 +152,7 @@ class GanttView extends GanttController
         $this->html[] = '<form action ="index.php?page=status" method="post">';
         $this->html[] = '<p>' . $this->message . '</p>';
         $this->html[] = '<label for="projectID">Select Project to View Status of: </label>';
-        $select = '<select name = "projectID" id="projectID"';
+        $select = '<select name = "' . Project::ID .'" id="' . Project::ID .'"';
         if (count($this->projects) == 0) {
             $select .= ' disabled>';
         } else {

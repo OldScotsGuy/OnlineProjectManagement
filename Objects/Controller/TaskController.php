@@ -11,6 +11,8 @@ namespace Controller;
 use Model\TaskModel;
 use Model\ProjectModel;
 use Model\UserModel;
+use Utils\Project;
+use Utils\Task;
 
 require_once("Objects/Model/TaskModel.php");
 require_once("Objects/Model/ProjectModel.php");
@@ -56,7 +58,7 @@ class TaskController
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->insertTask($_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['taskOwner'])) {
+                        if ($this->taskModel->insertTask($_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Task::ProjectID], $_POST['taskOwner'])) {
                             $this->message = "Task information saved";
                         }
                     }
@@ -65,19 +67,19 @@ class TaskController
             case "update":
                 if (isset($_POST['submit'])) {
                     // Form submitted so check and save data if appropriate
-                    $this->taskID = $_POST['taskID'];
-                    $this->projectID = $_POST['projectID'];
+                    $this->taskID = $_POST[Task::ID];
+                    $this->projectID = $_POST[Project::ID];
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->updateTask($this->taskID, $_POST['taskName'], $_POST['startDate'], $_POST['endDate'], $_POST['percent'], $_POST['taskNo'], $_POST['notes'], $_POST['projectID'], $_POST['taskOwner'])) {
+                        if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Task::ProjectID], $_POST['taskOwner'])) {
                             $this->message = "Task information updated";
                             header('Location: index.php?page=status&projectID=' . $this->projectID);
                         }
                     }
                 } else {
                     // Read taskID and projectID from URL
-                    $this->taskID = $_GET['taskID'];
-                    $this->projectID = $_GET['projectID'];
+                    $this->taskID = $_GET[Task::ID];
+                    $this->projectID = $_GET[Project::ID];
 
                     // Read task data and set displayValues for task update
                     if (isset($this->taskID)) {
@@ -87,7 +89,7 @@ class TaskController
                 break;
             case "delete" :
                 // Read taskID from URL
-                $this->taskID = $_GET['taskID'];
+                $this->taskID = $_GET[Task::ID];
 
                 // Email is the Users primary key, hence if no other data we have the user for deletion
                 if (isset($this->taskID)) {
@@ -104,22 +106,22 @@ class TaskController
     function checkFormData() {
         $this->message = "";
         // Check task name entered
-        if ($_POST['taskName'] != '') {
-            $this->displayValues['taskName'] = $_POST['taskName'];
+        if ($_POST[Task::Name] != '') {
+            $this->displayValues[Task::Name] = $_POST[Task::Name];
         } else {
             $this->message .= "<p> Please enter task name </p>";
         }
 
         // TODO Need to ensure date is in YYYY-MM-DD format
-        if ($_POST['startDate'] != '') {
-            $this->displayValues['startDate'] = $_POST['startDate'];
+        if ($_POST[Task::StartDate] != '') {
+            $this->displayValues[Task::StartDate] = $_POST[Task::StartDate];
         } else {
             $this->message .= "<p> Please enter task start date </p>";
         }
 
         // TODO Need to ensure date is in YYYY-MM-DD format
-        if ($_POST['endDate'] != '') {
-            $this->displayValues['endDate'] = $_POST['endDate'];
+        if ($_POST[Task::EndDate] != '') {
+            $this->displayValues[Task::EndDate] = $_POST[Task::EndDate];
         } else {
             $this->message .= "<p> Please enter task end date </p>";
         }
@@ -132,22 +134,22 @@ class TaskController
         }
 
         // Validate percent complete value
-        if ($_POST['percent'] != '') {
+        if ($_POST[Task::Percent] != '') {
             //$percent = (int) $_POST['percent'];
-            $_POST['percent'] = max(0, min((int) $_POST['percent'],100));
+            $_POST[Task::Percent] = max(0, min((int) $_POST[Task::Percent],100));
         } else {
-            $_POST['percent'] = 0;
+            $_POST[Task::Percent] = 0;
         }
-        $this->displayValues['percent'] = $_POST['percent'];
+        $this->displayValues[Task::Percent] = $_POST[Task::Percent];
 
         // Validate taskNo value
-        if ($_POST['taskNo'] != '') {
+        if ($_POST[Task::No] != '') {
             //$taskNo = (int) $_POST['taskNo'];
-            $_POST['taskNo'] = max(-999, min((int) $_POST['taskNo'],999));
+            $_POST[Task::No] = max(-999, min((int) $_POST[Task::No],999));
         } else {
-            $_POST['taskNo'] = 0;
+            $_POST[Task::No] = 0;
         }
-        $this->displayValues['taskNo'] = $_POST['taskNo'];
+        $this->displayValues[Task::No] = $_POST[Task::No];
 
     }
 }
