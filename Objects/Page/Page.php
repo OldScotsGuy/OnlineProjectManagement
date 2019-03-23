@@ -40,6 +40,7 @@ class Page
         echo "<title>".$this->title."</title>";
         ?>
         <link href="assets/CSS/page.css" type="text/css" rel="stylesheet">
+        <link href="assets/CSS/chart-style.css" type="text/css" rel="stylesheet">
         <?php
         echo "</head>\n";
     }
@@ -88,6 +89,7 @@ class Page
         <footer>
             <hr>
             <p><strong>(c)2016 Lex & Associates</strong></p>
+            <script type="text/javascript" src="Assets/Javascript/chart-task-notes.js"></script>
         </footer>
         <?php
     }

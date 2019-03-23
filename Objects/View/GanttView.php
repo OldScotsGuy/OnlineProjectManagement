@@ -146,7 +146,7 @@ class GanttView extends GanttController
     public function __toString()
     {
         $this->createTable();
-        return implode("", $this->html);
+        return implode("\n", $this->html);
     }
 
 }

@@ -10,11 +10,9 @@ namespace Controller;
 
 use Model\TaskModel;
 use Model\ProjectModel;
-use Model\UserModel;
 
 require_once("Objects/Model/TaskModel.php");
 require_once("Objects/Model/ProjectModel.php");
-require_once("Objects/Model/UserModel.php");
 
 // This object parses the project object extracting the data from which the HTML will be derived
 // The parsed data is stored in the member variables which are inherited
@@ -29,7 +27,6 @@ class GanttController
     // Required Model Objects
     private $taskModel = null;
     private $projectModel = null;
-    private $userModel = null;
 
     // Project Data
     protected $projectID = null;
@@ -49,7 +46,6 @@ class GanttController
     public function __construct($projectID = 2)     // TODO change this for project selection
     {
         $this->projectModel = new ProjectModel();
-        $this->userModel = new UserModel();
         $this->taskModel = new TaskModel();
 
         $this->projectID = $projectID;
@@ -65,6 +61,10 @@ class GanttController
     {
         //$tasks = $this->project->tasks;
         $tasks = $this->taskModel->retrieveProjectTasks($this->projectID);
+        /*$tasks = array( array('taskID' => 1, 'taskName' => 'Specification', 'startDate' => '2019-01-28', 'endDate' => '2019-02-03', 'percent' => 100, 'taskNo' => 1, 'notes' => 'Understand user requirements', 'projectID' => 2, 'email' => 'asde@asde', 'owner' => 'John'),
+                        array('taskID' => 2, 'taskName' => 'panic', 'startDate' => '2019-02-07', 'endDate' => '2019-02-14', 'percent' => 100, 'taskNo' => 2, 'notes' => 'Realised the amount of work required', 'projectID' => 2, 'email' => 'asde@asde', 'owner' => 'John'),
+                        array('taskID' => 3, 'taskName' => 'Coding', 'startDate' => '2019-02-15', 'endDate' => '2019-03-07', 'percent' => 50, 'taskNo' => 3, 'notes' => 'The fun bit .. when everything works', 'projectID' => 2, 'email' => 'asde@asde', 'owner' => 'John')
+                      ); */
 
         // Find the start and finish project dates
         foreach ($tasks as $task)
