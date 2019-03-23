@@ -11,6 +11,7 @@ namespace Controller;
 use Model\TaskModel;
 use Model\ProjectModel;
 use Model\UserModel;
+use Utils\Action;
 use Utils\Project;
 use Utils\Task;
 
@@ -53,7 +54,7 @@ class TaskController
         if (count($this->projects) == 0) $this->message = "No projects to assign task to";
 
         switch ($this->action) {
-            case "create":
+            case Action::Create:
                 if (isset($_POST['submit'])) {
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
@@ -64,16 +65,17 @@ class TaskController
                     }
                 }
                 break;
-            case "update":
+            case Action::Update:
                 if (isset($_POST['submit'])) {
                     // Form submitted so check and save data if appropriate
                     $this->taskID = $_POST[Task::ID];
                     $this->projectID = $_POST[Project::ID];
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Task::ProjectID], $_POST['taskOwner'])) {
+                        if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Project::ID], $_POST['taskOwner'])) {
                             $this->message = "Task information updated";
                             header('Location: index.php?page=status&projectID=' . $this->projectID);
+                            //header('Location: index.php?page=status&projectID=' . $_POST[Project::ID]);
                         }
                     }
                 } else {
@@ -87,7 +89,7 @@ class TaskController
                     }
                 }
                 break;
-            case "delete" :
+            case Action::Delete :
                 // Read taskID from URL
                 $this->taskID = $_GET[Task::ID];
 

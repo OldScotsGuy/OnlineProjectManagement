@@ -53,11 +53,11 @@ class GanttController
         $this->projectModel = new ProjectModel();
         $this->taskModel = new TaskModel();
 
-        if (!isset($_POST[Project::ID])) {
+        if (!isset($_GET[Project::ID])) {
             $this->projects = $this->projectModel->retrieveProjects();
             if (count($this->projects) == 0) $this->message = "No projects to view status of";
         } else {
-            $this->projectID = $_POST[Project::ID];
+            $this->projectID = $_GET[Project::ID];
             $this->project = $this->projectModel->retrieveProject($this->projectID);    // Retrieve project data
             $this->parseTaskData();             // Find earliest and latest days
             $this->parseProjectTimeData();      // Create array of day classes
