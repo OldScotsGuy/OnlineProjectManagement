@@ -75,7 +75,6 @@ class GanttView extends GanttController
 
             // Add task details
             $row = '<tr><td class="side-name">' . $task['taskName'] . ' : ' . $task['owner'] . '</td>';
-            //$row = null;
 
             // Add before task padding days
             $row .= $this->addPaddingDays(0, $task['start']);
@@ -88,8 +87,12 @@ class GanttView extends GanttController
             // Add after task padding days
             $row .= $this->addPaddingDays($task['end'] + 1, $this->numDays)  . '</tr>';
 
-            // Add notes row under task detail
-            $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '"><a href="index.php?page=task&action=update&taskID=' . $task['taskID'] . '&projectID=' . $this->projectID . '">Edit Task</a>' . $task['notes'] . '</td></tr>';
+            // Add Task update / delete / notes in row under task detail
+            $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">';
+            $row .= '<a href="index.php?page=task&action=update&taskID=' . $task['taskID'] . '&projectID=' . $this->projectID . '">Edit Task</a>';
+            $row .= '<a href="index.php?page=task&action=delete&taskID=' . $task['taskID'] . '&projectID=' . $this->projectID . '">Delete Task</a>';
+            $row .= 'Task Notes: ' . $task['notes'];
+            $row .= '</td></tr>';
 
             $this->taskRows[] = $row;
         }
@@ -143,9 +146,35 @@ class GanttView extends GanttController
         $this->createGanttTable();
     }
 
+    private function selectProject() {
+        $this->html[] = '<form action ="index.php?page=status" method="post">';
+        $this->html[] = '<p>' . $this->message . '</p>';
+        $this->html[] = '<label for="projectID">Select Project to View Status of: </label>';
+        $select = '<select name = "projectID" id="projectID"';
+        if (count($this->projects) == 0) {
+            $select .= ' disabled>';
+        } else {
+            $select .= '>';
+        }
+        $this->html[] = $select;
+        foreach ($this->projects as $project) {
+            $this->html[] = '<option value = "'. $project['projectID'] .'">Title: ' . $project['title'] . ' Project Lead: ' . $project['lead'] . '  Project Lead Email: ' . $project['leadEmail'] .'</option>';
+        }
+        $this->html[] = '</select>';
+        // Disable the submit button if no projects present
+        $this->html[] = '<br><br><input type="submit" name="submit" value="Select Project to View"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
+
+        $this->html[] = '</form>';
+    }
+
     public function __toString()
     {
-        $this->createTable();
+        if (isset($this->projectID)) {
+            $this->createTable();
+        } else {
+            $this->selectProject();
+        }
+
         return implode("\n", $this->html);
     }
 

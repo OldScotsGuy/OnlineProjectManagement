@@ -29,6 +29,7 @@ class GanttController
     private $projectModel = null;
 
     // Project Data
+    protected $projects = null;
     protected $projectID = null;
     protected $project;
 
@@ -43,15 +44,22 @@ class GanttController
     protected $monthStartData = array();
     protected $dayClassifications = array();
 
-    public function __construct($projectID = 2)     // TODO change this for project selection
+    protected $message = null;
+
+    public function __construct()
     {
         $this->projectModel = new ProjectModel();
         $this->taskModel = new TaskModel();
 
-        $this->projectID = $projectID;
-        $this->project = $this->projectModel->retrieveProject($this->projectID);    // Retrieve project data
-        $this->parseTaskData();             // Find earliest and latest days
-        $this->parseProjectTimeData();      // Create array of day classes
+        if (!isset($_POST['projectID'])) {
+            $this->projects = $this->projectModel->retrieveProjects();
+            if (count($this->projects) == 0) $this->message = "No projects to view status of";
+        } else {
+            $this->projectID = $_POST['projectID'];
+            $this->project = $this->projectModel->retrieveProject($this->projectID);    // Retrieve project data
+            $this->parseTaskData();             // Find earliest and latest days
+            $this->parseProjectTimeData();      // Create array of day classes
+        }
     }
 
     // Finds first and last task dates storing these as timestamps

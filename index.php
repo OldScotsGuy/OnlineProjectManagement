@@ -54,7 +54,7 @@ switch ($page) {
         break;
 
     case "status":
-        $GanttView = new GanttView(2);
+        $GanttView = new GanttView();
         $HomePage->content = '<section>' . $GanttView . '</section>';
         break;
 }
