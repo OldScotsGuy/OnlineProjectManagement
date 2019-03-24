@@ -18,4 +18,5 @@ abstract class User
     const RoleLead = 'lead';
     const RoleClient = 'client';
     const RoleMember = 'member';
+    const RoleAdmin = 'admin';
 }

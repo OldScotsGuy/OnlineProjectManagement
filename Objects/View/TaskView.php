@@ -20,38 +20,39 @@ class TaskView extends TaskController
 {
     private $html = array();
 
-    function display() {
-        if (($this->action == Action::Create) || ($this->action == Action::Update &&  count($this->displayValues) > 0)) {
-            // Title and message
-            $this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
-            $this->html[] = "<p>" . $this->message ."</p>";
+    public function __toString()
+    {
+        $this->displayTaskForm();
+        return implode("\n", $this->html);
+    }
 
-            // Task Entry Form
-            $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
+    function displayTaskForm() {
+        // Title and message
+        $this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
+        $this->html[] = "<p>" . $this->message ."</p>";
 
-            // Task data: taskID, taskName, startDate, endDate, percent, taskNo, notes, projectID, email
-            $this->projectSelection();
-            $this->addField("text", Task::Name, "Task Name:", (isset($this->displayValues[Task::Name]) ? $this->displayValues[Task::Name] : null ));
-            $this->addField("date", Task::StartDate, "Start Date:", (isset($this->displayValues[Task::StartDate]) ? $this->displayValues[Task::StartDate] : null ));
-            $this->addField("date", Task::EndDate, "End Date:", (isset($this->displayValues[Task::EndDate]) ? $this->displayValues[Task::EndDate] : null ));
-            $this->addField("number", Task::Percent, "Percent Complete:", (isset($this->displayValues[Task::Percent]) ? $this->displayValues[Task::Percent] : null));
-            $this->addField("number", "taskNo", "Task no:", (isset($this->displayValues[Task::No]) ? $this->displayValues[Task::No] : null));
-            $this->addTextArea( "notes", "Task Notes:", (isset($this->displayValues[Task::Notes]) ? $this->displayValues[Task::Notes] : null));
-            $this->addUserInput("Owner", (isset($this->displayValues['taskOwner']) ? $this->displayValues['taskOwner'] : null), $this->nonClientUsers);
-            $this->html[] = '<input type="hidden" name="taskID" value="' . $this->taskID . '"/>';                   // Carry TaskID across
+        // Task Entry Form
+        $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
 
-            // Submit button
-            if ($this->action == Action::Create) {
-                $this->html[] = '<br><br><input type="submit" name="submit" value="Create Task"/>';
-            } else {
-                $this->html[] = '<br><br><input type="submit" name="submit" value="Update Task"/>';
-                //$this->html[] = '<br><br><a href = "index.php?page=task&action=delete&taskID=' . $this->taskID . '">Delete Task</a>';
-            }
-        $this->html[] = '</form>';
+        // Task data: taskID, taskName, startDate, endDate, percent, taskNo, notes, projectID, email
+        $this->projectSelection();
+        $this->addField("text", Task::Name, "Task Name:", (isset($this->displayValues[Task::Name]) ? $this->displayValues[Task::Name] : null ));
+        $this->addField("date", Task::StartDate, "Start Date:", (isset($this->displayValues[Task::StartDate]) ? $this->displayValues[Task::StartDate] : null ));
+        $this->addField("date", Task::EndDate, "End Date:", (isset($this->displayValues[Task::EndDate]) ? $this->displayValues[Task::EndDate] : null ));
+        $this->addField("number", Task::Percent, "Percent Complete:", (isset($this->displayValues[Task::Percent]) ? $this->displayValues[Task::Percent] : null));
+        $this->addField("number", "taskNo", "Task no:", (isset($this->displayValues[Task::No]) ? $this->displayValues[Task::No] : null));
+        $this->addTextArea( "notes", "Task Notes:", (isset($this->displayValues[Task::Notes]) ? $this->displayValues[Task::Notes] : null));
+        $this->addUserInput(Task::Owner, (isset($this->displayValues[Task::Owner]) ? $this->displayValues[Task::Owner] : null), $this->nonClientUsers);
+        $this->html[] = '<input type="hidden" name="taskID" value="' . $this->taskID . '"/>';                   // Carry TaskID across
+
+        // Submit button
+        if ($this->action == Action::Create) {
+            $this->html[] = '<br><br><input type="submit" name="submit" value="Create Task"/>';
         } else {
-            // Handle task delete
-
+            $this->html[] = '<br><br><input type="submit" name="submit" value="Update Task"/>';
+            //$this->html[] = '<br><br><a href = "index.php?page=task&action=delete&taskID=' . $this->taskID . '">Delete Task</a>';
         }
+        $this->html[] = '</form>';
     }
 
     function addField($type, $name, $text, $value) {
@@ -76,9 +77,9 @@ class TaskView extends TaskController
         $this->html[] = $input;
     }
 
-    function addUserInput($roleDescription, $value, $userList) {
-        $this->html[] = '<label for="task' . $roleDescription .'">Task ' . ucfirst($roleDescription) . ': </label>';
-        $this->html[] = '<select name = "task' . $roleDescription .'" id="task' . $roleDescription .'">';
+    function addUserInput($name, $value, $userList) {
+        $this->html[] = '<label for="' . $name .'">Task Owner: </label>';
+        $this->html[] = '<select name = "' . $name .'" id="' . $name .'">';
 
         for ($i=0; $i<count($userList); $i++) {
             $this->html[] = '<option value = "' . $userList[$i][User::Email] . '"' . ($value == $userList[$i][User::Email] ? " selected " : "") . '>' . $userList[$i][User::Username] . '</option>';
@@ -96,14 +97,8 @@ class TaskView extends TaskController
         }
         $this->html[] = $select;
         foreach ($this->projects as $project) {
-            $this->html[] = '<option value = "'. $project['projectID'] .'"' . ($project['projectID'] == $this->projectID ? " selected " : "") . '>Project Title: ' . $project['title'] . '  Lead: ' . $project['lead'] . '  Email: ' . $project['leadEmail'] .'</option>';
+            $this->html[] = '<option value = "'. $project[Project::ID] .'"' . ($project[Project::ID] == $this->projectID ? " selected " : "") . '>Project Title: ' . $project[Project::Title] . '  Lead: ' . $project[Project::Lead] . '  Email: ' . $project[Project::LeadEmail] .'</option>';
         }
         $this->html[] = '</select><br>';
-    }
-
-    public function __toString()
-    {
-        $this->display();
-        return implode("\n", $this->html);
     }
 }

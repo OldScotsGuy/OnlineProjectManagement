@@ -27,18 +27,37 @@ class GanttView extends GanttController
     private $dateHeader = null;
     private $html = array();
 
-/*    private function createTaskSideBarRows() {
-
-        $row = '<tr><td class="side-heading">Task Name</td>';
-        $row .= '<td class="side-heading">Owner</td></tr>';
-        $this->taskSideBarRows[] = $row;
-
-        foreach ($this->taskData as $task) {
-            $row = '<tr><td class="side-name">' . $task['name'] . '</td>';
-            $row .= '<td class="side-owner">' . $task['owner'] . '</td></tr>';
-            $this->taskSideBarRows[] = $row;
+    public function __toString()
+    {
+        if (isset($this->projectID)) {
+            $this->createGanttChart();
+        } else {
+            $this->selectProject();
         }
-    } */
+        return implode("\n", $this->html);
+    }
+
+    // Draw Gantt chart function
+    private function createGanttChart()
+    {
+        //$this->createTaskSideBarRows();
+        $this->createDayDateHeaders();
+        $this->createTaskRows();
+        $this->createGanttTable();
+    }
+
+    /*    private function createTaskSideBarRows() {
+
+            $row = '<tr><td class="side-heading">Task Name</td>';
+            $row .= '<td class="side-heading">Owner</td></tr>';
+            $this->taskSideBarRows[] = $row;
+
+            foreach ($this->taskData as $task) {
+                $row = '<tr><td class="side-name">' . $task['name'] . '</td>';
+                $row .= '<td class="side-owner">' . $task['owner'] . '</td></tr>';
+                $this->taskSideBarRows[] = $row;
+            }
+        } */
 
 
     // Create the Gantt chart day and date headers via the stored parsed data
@@ -52,22 +71,6 @@ class GanttView extends GanttController
             $this->dayHeader .= $startTag . $this->dayClassifications[$i][1] . '</th>';     // Construct Gantt table day header
             $this->dateHeader .= $startTag . $this->dayClassifications[$i][2] . '</th>';    // Construct Gantt table date header
         }
-    }
-
-    // Create the Gantt chart month and year headers via the stored parsed data
-    private function createHeaderTags($periodStartData, $class)
-    {
-        $periodHeader = '<th></th>';
-        //$periodHeader = null;
-        $numPeriods = sizeof($periodStartData);
-        $periodStartData[] = array('End', $this->numDays);
-        for ($period = 0; $period < $numPeriods; $period++) {
-            $periodStartDay = $periodStartData[$period][1];
-            $periodEndDay = $periodStartData[$period + 1][1];
-            $periodHeader .= '<th class="' . $class . '" colspan = "' . ($periodEndDay - $periodStartDay) . '">';
-            $periodHeader .= $periodStartData[$period][0] . '</th>';
-        }
-        return $periodHeader;
     }
 
     // Create task row data
@@ -139,13 +142,20 @@ class GanttView extends GanttController
         $this->html[] = "</figure>";
     }
 
-    // Draw chart function
-    private function createTable()
+    // Create the Gantt chart month and year headers via the stored parsed data
+    private function createHeaderTags($periodStartData, $class)
     {
-        //$this->createTaskSideBarRows();
-        $this->createTaskRows();
-        $this->createDayDateHeaders();
-        $this->createGanttTable();
+        $periodHeader = '<th></th>';
+        //$periodHeader = null;
+        $numPeriods = sizeof($periodStartData);
+        $periodStartData[] = array('End', $this->numDays);
+        for ($period = 0; $period < $numPeriods; $period++) {
+            $periodStartDay = $periodStartData[$period][1];
+            $periodEndDay = $periodStartData[$period + 1][1];
+            $periodHeader .= '<th class="' . $class . '" colspan = "' . ($periodEndDay - $periodStartDay) . '">';
+            $periodHeader .= $periodStartData[$period][0] . '</th>';
+        }
+        return $periodHeader;
     }
 
     private function selectProject() {
@@ -168,16 +178,4 @@ class GanttView extends GanttController
 
         $this->html[] = '</form>';
     }
-
-    public function __toString()
-    {
-        if (isset($this->projectID)) {
-            $this->createTable();
-        } else {
-            $this->selectProject();
-        }
-
-        return implode("\n", $this->html);
-    }
-
 }

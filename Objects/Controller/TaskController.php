@@ -60,7 +60,7 @@ class TaskController
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->insertTask($_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Task::ProjectID], $_POST['taskOwner'])) {
+                        if ($this->taskModel->insertTask($_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Task::ProjectID], $_POST[Task::Owner])) {
                             $this->message = "Task information saved";
                         }
                     }
@@ -73,10 +73,9 @@ class TaskController
                     $this->projectID = $_POST[Project::ID];
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Project::ID], $_POST['taskOwner'])) {
+                        if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Project::ID], $_POST[Task::Owner])) {
                             $this->message = "Task information updated";
                             header('Location: index.php?page=status&projectID=' . $this->projectID);
-                            //header('Location: index.php?page=status&projectID=' . $_POST[Project::ID]);
                         }
                     }
                 } else {
@@ -91,15 +90,15 @@ class TaskController
                 }
                 break;
             case Action::Delete :
-                // Read taskID from URL
+                // Read taskID and projectID from URL
                 $this->taskID = $_GET[Task::ID];
+                $this->projectID = $_GET[Project::ID];
 
                 // Email is the Users primary key, hence if no other data we have the user for deletion
                 if (isset($this->taskID)) {
                     if ($this->taskModel->deleteTask($this->taskID)) {
                         $this->message = "Task deleted";
                     }
-                    //$this->action = "create";
                     header('Location: index.php?page=status&projectID=' . $this->projectID);
                 }
                 break;
@@ -130,15 +129,14 @@ class TaskController
         }
 
         // Ensure task owner is entered
-        if ($_POST['taskOwner'] != '') {
-            $this->displayValues['taskOwner'] = $_POST['taskOwner'];
+        if ($_POST[Task::Owner] != '') {
+            $this->displayValues[Task::Owner] = $_POST[Task::Owner];
         } else {
             $this->message .= "<p> Please enter task owner </p>";
         }
 
         // Validate percent complete value
         if ($_POST[Task::Percent] != '') {
-            //$percent = (int) $_POST['percent'];
             $_POST[Task::Percent] = max(0, min((int) $_POST[Task::Percent],100));
         } else {
             $_POST[Task::Percent] = 0;
@@ -147,7 +145,6 @@ class TaskController
 
         // Validate taskNo value
         if ($_POST[Task::No] != '') {
-            //$taskNo = (int) $_POST['taskNo'];
             $_POST[Task::No] = max(-999, min((int) $_POST[Task::No],999));
         } else {
             $_POST[Task::No] = 0;

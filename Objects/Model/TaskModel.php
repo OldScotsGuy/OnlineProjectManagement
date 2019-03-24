@@ -10,6 +10,8 @@ namespace Model;
 
 require_once("DatabaseConnection.php");
 
+use Utils\Task;
+
 class TaskModel
 {
     private $db = null;
@@ -53,7 +55,7 @@ class TaskModel
         $stmt->bind_param('i', $taskID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['taskID'],$result['taskName'], $result['startDate'], $result['endDate'], $result['percent'], $result['taskNo'], $result['notes'], $result['projectID'],$result['taskOwner']);
+        $stmt->bind_result( $result[Task::ID],$result[Task::Name], $result[Task::StartDate], $result[Task::EndDate], $result[Task::Percent], $result[Task::No], $result[Task::Notes], $result[Task::ProjectID],$result[Task::Owner]);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
@@ -97,16 +99,16 @@ class TaskModel
         $stmt->store_result();
         $stmt->bind_result($taskID,$taskName, $startDate, $endDate, $percent, $taskNo, $notes, $projectID, $email, $username);
         while ($stmt->fetch()) {
-            $results[$index]['taskID'] = $taskID;
-            $results[$index]['taskName'] = $taskName;
-            $results[$index]['startDate'] = $startDate;
-            $results[$index]['endDate'] = $endDate;
-            $results[$index]['percent'] = $percent;
-            $results[$index]['taskNo'] = $taskNo;
-            $results[$index]['notes'] = $notes;
-            $results[$index]['projectID'] = $projectID;
-            $results[$index]['email'] = $email;
-            $results[$index]['owner'] = $username;
+            $results[$index][Task::ID] = $taskID;
+            $results[$index][Task::Name] = $taskName;
+            $results[$index][Task::StartDate] = $startDate;
+            $results[$index][Task::EndDate] = $endDate;
+            $results[$index][Task::Percent] = $percent;
+            $results[$index][Task::No] = $taskNo;
+            $results[$index][Task::Notes] = $notes;
+            $results[$index][Task::ProjectID] = $projectID;
+            $results[$index][Task::Email] = $email;
+            $results[$index][Task::Owner] = $username;
             $index += 1;
         }
         $stmt->free_result();
