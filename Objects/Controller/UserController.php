@@ -55,9 +55,8 @@ class UserController
                     $this->users = $this->userModel->retrieveUsers();
                     if (count($this->users) == 0) $this->message = "No users to update";
                 }
-                // Step 2: Email is the Users primary key, hence if no other data we only have initial user selection
+                // Step 2: User selection form has been submitted
                 if (isset($_POST[Form::SubmitSelection])) {
-                    $this->message = "Step 2";
                     $this->displayValues = $this->userModel->retrieveUser($_POST[User::Email]);
                     // Force entry of a new password - otherwise we would hash the hash of the old password
                     $this->displayValues[User::Password] = null;

@@ -61,44 +61,43 @@ class ProjectController
 
             case Action::Update:
                 // Step 1: No information at all, so need to present initial selection of all projects
-                if (!isset($_POST['projectID'])) {
+                if (!isset($_POST[Project::ID])) {
                     $this->projects = $this->projectModel->retrieveProjects();
                     if (count($this->projects) == 0) $this->message = "No projects to update";
                 }
 
                 // Step 2: ProjectID is the Projects primary key, hence if no other data we only have initial project selection
-                if (isset($_POST['projectID']) && (!isset($_POST['title']) || !isset($_POST['description']) || !isset($_POST['email']))) {
-
+                //if (isset($_POST['projectID']) && (!isset($_POST['title']) || !isset($_POST['description']) || !isset($_POST['email']))) {
+                if (isset($_POST[Form::SubmitSelection])) {
                     // Form arrays of Project Leads and Project Clients
-                    $this->usersLead = $this->userModel->retrieveUsersWithRole('lead');
-                    $this->usersClient = $this->userModel->retrieveUsersWithRole('client');
+                    $this->usersLead = $this->userModel->retrieveUsersWithRole(User::RoleLead);
+                    $this->usersClient = $this->userModel->retrieveUsersWithRole(User::RoleClient);
 
                     // Set projectID (hidden form field value) and clear $projects array
                     $this->projects = array();
-                    $this->projectID = $_POST['projectID'];
+                    $this->projectID = $_POST[Project::ID];
 
                     // Retrieve Projects table data
                     $this->displayValues = $this->projectModel->retrieveProjectWithLead($this->projectID);
 
                     // Retrieve UndertakenFor data if available
                     $temp = $this->projectModel->retrieveProjectClient($this->projectID);
-                    if (isset($temp['clientEmail'])) {
-                        $this->displayValues['clientEmail'] = $temp['clientEmail'];
-                        $this->displayValues['client'] = $temp['client'];
+                    if (isset($temp[Project::ClientEmail])) {
+                        $this->displayValues[Project::ClientEmail] = $temp[Project::ClientEmail];
+                        //$this->displayValues['client'] = $temp['client'];
                     } else {
-                        $this->displayValues['clientEmail'] = null;
+                        $this->displayValues[Project::ClientEmail] = null;
                     }
                     // If any values were previously set by the user add these in now
                 }
 
                 // Step 3: If we have all project data then these are the updated values that need to saved in the Projects table
-                if (isset($_POST['projectID']) && isset($_POST['title']) && isset($_POST['description']) && isset($_POST[Project::Lead])) {
-                    if (isset($_POST[Form::SubmitData])) {
-                        $this->checkFormData();
-                        // Attempt to save the new project data
-                        if ($this->message == '') {
-                            $this->updateProjectData();
-                        }
+                //if (isset($_POST['projectID']) && isset($_POST['title']) && isset($_POST['description']) && isset($_POST[Project::Lead])) {
+                if (isset($_POST[Form::SubmitData])) {
+                    $this->checkFormData();
+                    // Attempt to save the new project data
+                    if ($this->message == '') {
+                        $this->updateProjectData();
                     }
 
                     // Reset ProjectView projects array to offer a second update
@@ -109,17 +108,17 @@ class ProjectController
 
             case Action::Delete :
                 // Step 1: No information at all, so need to present initial selection of all users
-                if (!isset($_POST['projectID'])) {
+                if (!isset($_POST[Project::ID])) {
                     $this->projects = $this->projectModel->retrieveProjects();
                     if (count($this->projects) == 0) $this->message = "No projects to update";
                 }
 
                 // Step 2: ProjectID is the Projects primary key, hence we have the project for deletion
-                if (isset($_POST['projectID'])) {
+                if (isset($_POST[Project::ID])) {
                     // First delete the client data if it exists
-                    $this->projectModel->deleteProjectClient($_POST['projectID']);
+                    $this->projectModel->deleteProjectClient($_POST[Project::ID]);
 
-                    if ($this->displayValues = $this->projectModel->deleteProject($_POST['projectID'])) {
+                    if ($this->displayValues = $this->projectModel->deleteProject($_POST[Project::ID])) {
                         $this->message = "Project deleted";
                     }
                     // Reset ProjectView projects array to offer a second delete
@@ -148,12 +147,15 @@ class ProjectController
         } else {
             $this->message .= "<p> Please enter project lead </p>";
         }
+        if ($_POST[Project::ClientEmail] != '') {
+            $this->displayValues[Project::ClientEmail] = $_POST[Project::ClientEmail];
+        }
     }
 
     function saveProjectData() {
-        if ($_POST[Project::Client] != '' && $_POST[Project::Client] != 'none') {
+        if ($_POST[Project::ClientEmail] != '' && $_POST[Project::ClientEmail] != 'none') {
             // Save Projects and UndertakenFor table data
-            if ($this->projectModel->insertProjectWithClient($_POST[Project::Title], $_POST[Project::Description], $_POST[Project::LeadEmail], $_POST[Project::Client])) {
+            if ($this->projectModel->insertProjectWithClient($_POST[Project::Title], $_POST[Project::Description], $_POST[Project::LeadEmail], $_POST[Project::ClientEmail])) {
                 $this->message = "Project information saved";
             }
         } else {
@@ -169,7 +171,7 @@ class ProjectController
         $this->projectModel->deleteProjectClient($_POST[Project::ID]);
 
         // Save Projects table data
-        if ($this->projectModel->updateProject($_POST[Project::ID],$_POST[Project::Title], $_POST[Project::Description], $_POST[Project::Lead])) {
+        if ($this->projectModel->updateProject($_POST[Project::ID],$_POST[Project::Title], $_POST[Project::Description], $_POST[Project::LeadEmail])) {
             $this->message = "Project information saved";
         }
 
@@ -179,7 +181,7 @@ class ProjectController
                 // Try to update client information
                 $this->message .= "Client Information Saved";
             } else {
-                // Assume client is a new addition to teh project
+                // Assume client is a new addition to the project
                 if($this->projectModel->insertProjectClient($_POST[Project::ID], $_POST[Project::ClientEmail])) {
                     $this->message .= "Client Information Saved";
                 }

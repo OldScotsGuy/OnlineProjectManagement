@@ -25,7 +25,8 @@ class ProjectView extends ProjectController
         $this->displayHeader();
 
         // Select form to Display
-        if (($this->action == Action::Create) || ($this->action == Action::Update &&  count($this->displayValues) > 0)) {
+        //if (($this->action == Action::Create) || ($this->action == Action::Update &&  count($this->displayValues) > 0)) {
+        if (($this->action == Action::Create) || ($this->action == Action::Update &&  isset($this->projectID))) {
             $this->displayProjectForm();
         } else {
             $this->displayProjectSelectionForm();
