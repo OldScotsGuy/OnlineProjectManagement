@@ -13,6 +13,8 @@ require_once("Objects/Model/UserModel.php");
 
 use Model\ProjectModel;
 use Model\UserModel;
+use Utils\Project;
+use Utils\User;
 
 class ProjectController
 {
@@ -44,8 +46,8 @@ class ProjectController
         switch ($this->action) {
             case "create":
                 // Form arrays of Project Leads and Project Clients
-                $this->usersLead = $this->userModel->retrieveUsersWithRole('lead');
-                $this->usersClient = $this->userModel->retrieveUsersWithRole('client');
+                $this->usersLead = $this->userModel->retrieveUsersWithRole(User::RoleLead);
+                $this->usersClient = $this->userModel->retrieveUsersWithRole(User::RoleClient);
                 // Check to see if we have project data to save in the database
                 if (isset($_POST['submit'])) {
                     $this->checkFormData();
@@ -88,7 +90,7 @@ class ProjectController
                 }
 
                 // Step 3: If we have all project data then these are the updated values that need to saved in the Projects table
-                if (isset($_POST['projectID']) && isset($_POST['title']) && isset($_POST['description']) && isset($_POST['userLead'])) {
+                if (isset($_POST['projectID']) && isset($_POST['title']) && isset($_POST['description']) && isset($_POST[Project::Lead])) {
                     if (isset($_POST['submit'])) {
                         $this->checkFormData();
                         // Attempt to save the new project data
@@ -139,22 +141,22 @@ class ProjectController
         } else {
             $this->message .= "<p> Please enter project description </p>";
         }
-        if ($_POST['userLead'] != '') {
-            $this->displayValues['leadEmail'] = $_POST['userLead'];
+        if ($_POST[Project::Lead] != '') {
+            $this->displayValues['leadEmail'] = $_POST[Project::Lead];
         } else {
             $this->message .= "<p> Please enter project lead </p>";
         }
     }
 
     function saveProjectData() {
-        if ($_POST['userClient'] != '' && $_POST['userClient'] != 'none') {
+        if ($_POST[Project::Client] != '' && $_POST[Project::Client] != 'none') {
             // Save Projects and UndertakenFor table data
-            if ($this->projectModel->insertProjectWithClient($_POST['title'], $_POST['description'], $_POST['userLead'], $_POST['userClient'])) {
+            if ($this->projectModel->insertProjectWithClient($_POST['title'], $_POST['description'], $_POST[Project::Lead], $_POST[Project::Client])) {
                 $this->message = "Project information saved";
             }
         } else {
             // Save Projects table data only
-            if ($this->projectModel->insertProject($_POST['title'], $_POST['description'], $_POST['userLead'])) {
+            if ($this->projectModel->insertProject($_POST['title'], $_POST['description'], $_POST[Project::Lead])) {
                 $this->message = "Project information saved";
             }
         }
@@ -165,18 +167,18 @@ class ProjectController
         $this->projectModel->deleteProjectClient($_POST['projectID']);
 
         // Save Projects table data
-        if ($this->projectModel->updateProject($_POST['projectID'],$_POST['title'], $_POST['description'], $_POST['userLead'])) {
+        if ($this->projectModel->updateProject($_POST['projectID'],$_POST['title'], $_POST['description'], $_POST[Project::Lead])) {
             $this->message = "Project information saved";
         }
 
         // Save UndertakenFor table data
-        if ($_POST['userClient'] != '' && $_POST['userClient'] != 'none') {
-            If ($this->projectModel->updateProjectClient($_POST['projectID'], $_POST['userClient'])) {
+        if ($_POST[Project::Client] != '' && $_POST[Project::Client] != 'none') {
+            If ($this->projectModel->updateProjectClient($_POST['projectID'], $_POST[Project::Client])) {
                 // Try to update client information
                 $this->message .= "Client Information Saved";
             } else {
                 // Assume client is a new addition to teh project
-                if($this->projectModel->insertProjectClient($_POST['projectID'], $_POST['userClient'])) {
+                if($this->projectModel->insertProjectClient($_POST['projectID'], $_POST[Project::Client])) {
                     $this->message .= "Client Information Saved";
                 }
             }

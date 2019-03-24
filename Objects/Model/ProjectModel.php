@@ -10,6 +10,8 @@ namespace Model;
 
 require_once("DatabaseConnection.php");
 
+use Utils\Project;
+
 class ProjectModel
 {
     private $db = null;
@@ -66,7 +68,7 @@ class ProjectModel
         $stmt->bind_param('i', $projectID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['leadEmail']);
+        $stmt->bind_result( $result[Project::ID], $result[Project::Title], $result[Project::Description], $result[Project::LeadEmail]);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
@@ -80,7 +82,7 @@ class ProjectModel
         $stmt->bind_param('i', $projectID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['projectID'], $result['title'], $result['description'], $result['lead'], $result['leadEmail']);
+        $stmt->bind_result( $result[Project::ID], $result[Project::Title], $result[Project::Description], $result[Project::Lead], $result[Project::LeadEmail]);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
@@ -113,16 +115,15 @@ class ProjectModel
 
         // Read users from the database
         $query = "SELECT P.projectID, P.title, U.username as 'lead', U.email FROM Projects as P, Users as U WHERE P.email = U.email";
-        //$query = "SELECT projectID, title, description, email FROM Projects";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($projectID,$title, $lead, $email);
         while ($stmt->fetch()) {
-            $results[$index]['projectID'] = $projectID;
-            $results[$index]['title'] = $title;
-            $results[$index]['lead'] = $lead;
-            $results[$index]['leadEmail'] = $email;
+            $results[$index][Project::ID] = $projectID;
+            $results[$index][Project::Title] = $title;
+            $results[$index][Project::Lead] = $lead;
+            $results[$index][Project::LeadEmail] = $email;
             $index += 1;
         }
         $stmt->free_result();
@@ -144,7 +145,7 @@ class ProjectModel
         $stmt->bind_param('i', $projectID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['projectID'], $result['client'], $result['clientEmail']);
+        $stmt->bind_result( $result[Project::ID], $result[Project::Client], $result[Project::ClientEmail]);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
