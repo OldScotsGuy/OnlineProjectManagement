@@ -13,8 +13,10 @@ use Model\ProjectModel;
 use Utils\Action;
 use Utils\Document;
 use Utils\Form;
+use Utils\Project;
 
 require_once("Objects/Model/DocumentModel.php");
+require_once("Objects/Model/ProjectModel.php");
 
 class DocumentController
 {
@@ -36,31 +38,41 @@ class DocumentController
     }
 
     function databaseOperations() {
-        if (!isset($_POST[Document::ProjectID])) {
+        if (!isset($_GET[Project::ID])) {
+
             // $this->projectID not set so load projects for project selection
             $this->projects = $this->projectModel->retrieveProjects();
             if (count($this->projects) == 0) $this->message = "No projects to view the documents of.";
         } else {
+            $this->projectID = $_GET[Project::ID];
             switch ($this->action) {
                 case Action::Upload:
+                    // If form data has been submitted then check and upload document
                     if ($_POST[Form::SubmitData]) {
                         $this->checkFormData();
                         $this->checkFile();
                         if ($this->message == '') {
                             // do the document upload thing
                             $this->processFile();
-                            $this->documentModel->insertDocument($_POST[Document::Title], $this->documentName, $_POST[Document::ProjectID]);
+                            $this->documentModel->insertDocument($_POST[Document::Title], $this->documentName, $this->projectID);
                             $this->message = 'Document Uploaded';
                         }
                     }
                     break;
 
                 case Action::View:
-                    // Establish $this->documents
+                    $this->documents = $this->documentModel->retrieveProjectDocuments($this->projectID);
                     break;
 
                 case Action::Delete:
-
+                    if (isset($_GET[Document::ID])) {
+                        if ($this->documentModel->deleteDocument($_GET[Document::ID])) {
+                            $this->message = "<p>Document deleted</p>";
+                        }
+                        header('Location: index.php?page=document&action='. Action::View .'&'. Project::ID .'='.$this->projectID);
+                    } else {
+                        $this->message .= '<p>Select Task to delete</p>';
+                    }
                     break;
             }
         }

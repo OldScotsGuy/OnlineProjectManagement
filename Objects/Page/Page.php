@@ -17,7 +17,7 @@ class Page
         "User Entry"  => "index.php?page=user&action=create",
         "Project Entry" => "index.php?page=project",
         "Task Entry" => "index.php?page=task",
-        "Upload Docs" => "index.php?page=document"
+        "Project Docs" => "index.php?page=document"
     );
 
     // Generalised setter

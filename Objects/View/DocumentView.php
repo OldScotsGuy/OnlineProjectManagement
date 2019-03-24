@@ -8,21 +8,17 @@
 
 namespace View;
 
+require_once("Objects/Controller/DocumentController.php");
+
+use Controller\DocumentController;
 use Utils\Action;
 use Utils\Document;
 use Utils\Form;
 use Utils\Project;
 
-class DocumentView
+class DocumentView extends DocumentController
 {
     private $html = array();
-
-    // Variables to be evaluate by the controller
-    private $projectID = null;
-    private $projects = null;
-    private $documents = array();
-    private $action = null;
-    private $message = null;
 
     public function __toString() {
         if (isset($this->projectID)) {
@@ -46,10 +42,10 @@ class DocumentView
     }
 
     function selectProject() {
-        $this->html[] = '<form action ="index.php?page=document&action=' . Action::View . '" method="post">';
+        $this->html[] = '<form action ="index.php?page=document&action=' . Action::View . '" method="get">';
         $this->html[] = '<p>' . $this->message . '</p>';
-        $this->html[] = '<label for="' . Document::ProjectID . '">Which Project Do You want to View The Documents of? </label>';
-        $select = '<select name = "' . Document::ProjectID . '" id="' . Document::ProjectID . '"';
+        $this->html[] = '<label for="' . Project::ID . '">Which Project Do You want to View The Documents of? </label>';
+        $select = '<select name = "' . Project::ID . '" id="' . Project::ID . '"';
         if (count($this->projects) == 0) {
             $select .= ' disabled>';
         } else {
@@ -69,7 +65,8 @@ class DocumentView
 
     function displayDocuments() {
         foreach ($this->documents as $document) {
-            echo '<p><a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
+            $this->html[] = '<p><a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
+            $this->html[] = '<p><a href="index.php?page=document&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Task</a></p>';
         }
     }
 

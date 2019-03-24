@@ -76,7 +76,7 @@ class TaskController
                     if ($this->message == "") {
                         if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Project::ID], $_POST[Task::Owner])) {
                             $this->message = "Task information updated";
-                            header('Location: index.php?page=status&projectID=' . $this->projectID);
+                            header('Location: index.php?page=status&'. Project::ID .'=' . $this->projectID);
                         }
                     }
                 } else {
@@ -100,7 +100,9 @@ class TaskController
                     if ($this->taskModel->deleteTask($this->taskID)) {
                         $this->message = "Task deleted";
                     }
-                    header('Location: index.php?page=status&projectID=' . $this->projectID);
+                    header('Location: index.php?page=status&'. Project::ID .'=' . $this->projectID);
+                } else {
+                    $this->message .= '<p>Select Task to delete</p>';
                 }
                 break;
         }

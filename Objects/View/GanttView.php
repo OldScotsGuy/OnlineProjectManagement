@@ -95,8 +95,8 @@ class GanttView extends GanttController
 
             // Add Task update / delete / notes in row under task detail
             $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">';
-            $row .= '<a href="index.php?page=task&action=update&taskID=' . $task[Task::ID] . '&projectID=' . $this->projectID . '">Edit Task</a>';
-            $row .= '<a href="index.php?page=task&action=delete&taskID=' . $task[Task::ID] . '&projectID=' . $this->projectID . '">Delete Task</a>';
+            $row .= '<a href="index.php?page=task&action=update&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Edit Task</a>';
+            $row .= '<a href="index.php?page=task&action=delete&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Task</a>';
             $row .= 'Task Notes: ' . $task[Task::Notes];
             $row .= '</td></tr>';
 

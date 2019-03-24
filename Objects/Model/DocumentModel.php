@@ -55,6 +55,29 @@ class DocumentModel
         return $result;
     }
 
+    function retrieveProjectDocuments($projectID) {
+        $docID = null;
+        $docTitle = null;
+        $docFilename = null;
+        $docProjectID = null;
+        $results = array();
+        $index = 0;
+        $query = "SELECT docID, title, filename, projectID FROM Documents WHERE projectID = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $projectID);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($docID, $docTitle, $docFilename, $docProjectID);
+        while ($stmt->fetch()) {
+            $results[$index][Document::ID] = $docID;
+            $results[$index][Document::Title] = $docTitle;
+            $results[$index][Document::FileName] = $docFilename;
+            $results[$index][Document::ProjectID] = $docProjectID;
+            $index += 1;
+        }
+        return $results;
+    }
+
     function deleteDocument($docID) {
         $query = "DELETE FROM Documents WHERE docID = ?";
         $stmt = $this->db->prepare($query);

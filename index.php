@@ -25,6 +25,7 @@ use Page\Page;
 use View\UserView;
 use View\ProjectView;
 use View\TaskView;
+use View\DocumentView;
 use View\GanttView;
 
 // Get page and action variables
@@ -60,7 +61,8 @@ switch ($page) {
         break;
 
     case "document":
-
+        $DocumentView = new DocumentView($action);
+        $HomePage->content = '<section>' . $DocumentView . '</section>';
         break;
 
     case "status":
