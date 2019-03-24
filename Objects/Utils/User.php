@@ -15,4 +15,7 @@ abstract class User
     const Username = 'username';
     const Password = 'password';
     const Role = 'role';
+    const RoleLead = 'lead';
+    const RoleClient = 'client';
+    const RoleMember = 'member';
 }

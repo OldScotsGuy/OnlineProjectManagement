@@ -14,6 +14,7 @@ use Controller\TaskController;
 use Utils\Action;
 use Utils\Project;
 use Utils\Task;
+use Utils\User;
 
 class TaskView extends TaskController
 {
@@ -77,16 +78,16 @@ class TaskView extends TaskController
 
     function addUserInput($roleDescription, $value, $userList) {
         $this->html[] = '<label for="task' . $roleDescription .'">Task ' . ucfirst($roleDescription) . ': </label>';
-        $this->html[] = '<select name = "task' . $roleDescription .'" id="user' . $roleDescription .'">';
+        $this->html[] = '<select name = "task' . $roleDescription .'" id="task' . $roleDescription .'">';
 
         for ($i=0; $i<count($userList); $i++) {
-            $this->html[] = '<option value = "' . $userList[$i]['email'] . '"' . ($value == $userList[$i]['email'] ? " selected " : "") . '>' . $userList[$i]['username'] . '</option>';
+            $this->html[] = '<option value = "' . $userList[$i][User::Email] . '"' . ($value == $userList[$i][User::Email] ? " selected " : "") . '>' . $userList[$i][User::Username] . '</option>';
         }
         $this->html[] = '</select><br>';
     }
 
     function projectSelection() {
-        $this->html[] = '<label for="projectID">Select Project Task Belongs to: </label>';
+        $this->html[] = '<label for="' . Project::ID .'">Select Project Task Belongs to: </label>';
         $select = '<select name = "' . Project::ID .'" id="' . Project::ID .'"';
         if (count($this->projects) == 0) {
             $select .= ' disabled>';

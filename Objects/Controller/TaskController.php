@@ -14,6 +14,7 @@ use Model\UserModel;
 use Utils\Action;
 use Utils\Project;
 use Utils\Task;
+use Utils\User;
 
 require_once("Objects/Model/TaskModel.php");
 require_once("Objects/Model/ProjectModel.php");
@@ -49,7 +50,7 @@ class TaskController
 
     function databaseOperations() {
         // Read project list and non-client users for task data entry
-        $this->nonClientUsers = array_merge($this->userModel->retrieveUsersWithRole('lead'), $this->userModel->retrieveUsersWithRole('member'));
+        $this->nonClientUsers = array_merge($this->userModel->retrieveUsersWithRole(User::RoleLead), $this->userModel->retrieveUsersWithRole(User::RoleMember));
         $this->projects = $this->projectModel->retrieveProjects();
         if (count($this->projects) == 0) $this->message = "No projects to assign task to";
 
