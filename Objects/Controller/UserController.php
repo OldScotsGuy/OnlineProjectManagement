@@ -10,6 +10,9 @@ namespace Controller;
 require_once("Objects/Model/UserModel.php");
 
 use Model\UserModel;
+use Utils\Action;
+use Utils\Form;
+use Utils\User;
 
 class UserController
 {
@@ -34,48 +37,62 @@ class UserController
 
     function databaseOperations() {
         switch ($this->action) {
-            case "create":
-                if (isset($_POST['submit'])) {
+            case Action::Create:
+                if (isset($_POST[Form::SubmitData])) {
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
                     if ($this->message == "") {
-                        if ($this->userModel->insertUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
+                        if ($this->userModel->insertUser($_POST[User::Username], $_POST[User::Password], $_POST[User::Email], $_POST[User::Role])) {
                             $this->message = "User information saved";
                         }
                     }
                 }
                 break;
-            case "update":
+            case Action::Update:
                 // Step 1: No information at all, so need to present initial selection of all users
-                if (!isset($_POST['email'])) {
+                if (!isset($_POST[User::Email])) {
+                    // Because displayValues has not been set the user selection screen will be presented
                     $this->users = $this->userModel->retrieveUsers();
                     if (count($this->users) == 0) $this->message = "No users to update";
                 }
                 // Step 2: Email is the Users primary key, hence if no other data we only have initial user selection
-                if (isset($_POST['email']) && !isset($_POST['username'])) {
-                    $this->users = array();
-                    $this->displayValues = $this->userModel->retrieveUser($_POST['email']);
-                    // Force entry of a new password - otherwise we would hash the hash of teh old password
-                    $this->displayValues['password'] = null;
+                //if (isset($_POST[User::Email]) && !isset($_POST['username'])) {
+                if (isset($_POST[Form::SubmitSelection])) {
+                    //$this->users = array();
+                    $this->displayValues = $this->userModel->retrieveUser($_POST[User::Email]);
+                    // Force entry of a new password - otherwise we would hash the hash of the old password
+                    $this->displayValues[User::Password] = null;
                 }
                 // Step 3: If we have all user data then these are the updated values that need to saved in the Users table
-                if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
+                if (isset($_POST[Form::SubmitData])) {
+                    $this->checkFormData();
+                    if ($this->message = '') {
+                        if ($this->userModel->updateUser($_POST[User::Username], $_POST[User::Password], $_POST[User::Email], $_POST[User::Role])) {
+                            $this->message = "User information updated";
+                            $this->displayValues = array();     // Ensures the user selection form is now presented
+                        }
+                        // Reset UserView users array to offer a second update
+                        $this->users = $this->userModel->retrieveUsers();
+                    }
+                }
+/*                if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
                     // Attempt to save user data
                     if ($this->userModel->updateUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
                         $this->message = "User information updated";
                     }
                     // Reset UserView users array to offer a second update
                     $this->users = $this->userModel->retrieveUsers();
-                }
+                } */
                 break;
-            case "delete" :
+            case Action::Delete :
                 // No information at all, so need to present initial selection of all users
-                if (!isset($_POST['email'])) {
+                if (!isset($_POST[User::Email])) {
                     $this->users = $this->userModel->retrieveUsers();
                 }
-                // Email is the Users primary key, hence if no other data we have the user for deletion
-                if (isset($_POST['email']) && !isset($_POST['username'])) {
-                    if ($this->displayValues = $this->userModel->deleteUser($_POST['email'])) {
+                // Email is the Users primary key hence we have required information for deletion
+                //if (isset($_POST['email']) && !isset($_POST['username'])) {
+                if (isset($_POST[User::Email])) {
+                    if ($this->displayValues = $this->userModel->deleteUser($_POST[User::Email])) {
                         $this->message = "User deleted";
                     }
                     $this->users = $this->userModel->retrieveUsers();
@@ -86,23 +103,23 @@ class UserController
 
     function checkFormData() {
         $this->message = "";
-        if ($_POST['username'] != '') {
-            $this->displayValues['username'] = $_POST['username'];
+        if ($_POST[User::Username] != '') {
+            $this->displayValues[User::Username] = $_POST[User::Username];
         } else {
             $this->message .= "<p> Please enter username </p>";
         }
-        if ($_POST['password'] != '') {
-            $this->displayValues['password'] = $_POST['password'];
+        if ($_POST[User::Password] != '') {
+            $this->displayValues[User::Password] = $_POST[User::Password];
         } else {
             $this->message .= "<p> Please enter password </p>";
         }
-        if ($_POST['email'] != '') {
-            $this->displayValues['email'] = $_POST['email'];
+        if ($_POST[User::Email] != '') {
+            $this->displayValues[User::Email] = $_POST[User::Email];
         } else {
             $this->message .= "<p> Please enter user email </p>";
         }
-        if ($_POST['role'] != '') {
-            $this->displayValues['role'] = $_POST['role'];
+        if ($_POST[User::Role] != '') {
+            $this->displayValues[User::Role] = $_POST[User::Role];
         } else {
             $this->message .= "<p> Please enter user email </p>";
         }

@@ -13,6 +13,7 @@ require("Objects/Utils/Document.php");
 require("Objects/Utils/Project.php");
 require("Objects/Utils/Task.php");
 require("Objects/Utils/User.php");
+require("Objects/Utils/Form.php");
 
 // Load View Objects
 require_once("Objects/View/UserView.php");

@@ -12,6 +12,7 @@ require_once("Objects/Controller/UserController.php");
 
 use Controller\UserController;
 use Utils\Action;
+use Utils\Form;
 use Utils\User;
 
 class UserView extends UserController
@@ -20,11 +21,20 @@ class UserView extends UserController
 
     public function __toString()
     {
-        $this->display();
+        $this->displayHeader();
+
+        // Select Which Form to Display
+        if (($this->action == Action::Create) || ($this->action == Action::Update &&  count($this->displayValues) > 0)) {
+            $this->displayUserForm();
+        } else {
+            $this->initialUserSelection();
+        }
+
+        // Create String to Display
         return implode("\n", $this->html);
     }
 
-    function display() {
+    function displayHeader() {
         // Title and message
         $this->html[] = "<h2>" . ucfirst($this->action) . " User</h2>";
         $this->html[] = "<p>" . $this->message ."</p>";
@@ -33,34 +43,23 @@ class UserView extends UserController
         $this->html[] = '<p><a href="index.php?page=user&action=' . Action::Create . '">Create User</a></p>';
         $this->html[] = '<p><a href="index.php?page=user&action=' . Action::Update . '">Update User</a></p>';
         $this->html[] = '<p><a href="index.php?page=user&action=' . Action::Delete . '">Delete User</a></p>';
+    }
 
+    function displayUserForm() {
         // User Form
         $this->html[] = '<form action ="index.php?page=user&action=' . $this->action .'" method="post">';
-        if (($this->action == Action::Create) || ($this->action == Action::Update &&  count($this->displayValues) > 0)) {
 
-            // User data: username, password, email, role
-            $this->addField("text", User::Username, "Username:", (isset($this->displayValues[User::Username]) ? $this->displayValues[User::Username] : null ));
-            $this->addField("password", User::Password, "New Password:", (isset($this->displayValues[User::Password]) ? $this->displayValues[User::Password] : null));
-            $this->addField("email", User::Email, "Email:", (isset($this->displayValues[User::Email]) ? $this->displayValues[User::Email] : null));
-            $this->addRole(isset($this->displayValues[User::Role]) ? $this->displayValues[User::Role] : null);
+        // User data: username, password, email, role
+        $this->addField("text", User::Username, "Username:", (isset($this->displayValues[User::Username]) ? $this->displayValues[User::Username] : null ));
+        $this->addField("password", User::Password, "New Password:", (isset($this->displayValues[User::Password]) ? $this->displayValues[User::Password] : null));
+        $this->addField("email", User::Email, "Email:", (isset($this->displayValues[User::Email]) ? $this->displayValues[User::Email] : null));
+        $this->addRole(isset($this->displayValues[User::Role]) ? $this->displayValues[User::Role] : null);
 
-            // Submit button
-            if ($this->action == Action::Create) {
-                $this->html[] = '<br><br><input type="submit" name="submit" value="Create User"/>';
-            } else {
-                $this->html[] = '<br><br><input type="submit" name="submit" value="Update User"/>';
-            }
+        // Submit button
+        if ($this->action == Action::Create) {
+            $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Create User"/>';
         } else {
-            // User selection drop down box
-            $this->initialSelection();
-
-            // Submit button
-            if ($this->action == Action::Update) {
-                // Disable submit button if no users to update
-                $this->html[] = '<br><br><input type="submit" name = "submit" value="Select User to Update"' . (count($this->users) > 0 ? '' : 'disabled') . '/>';
-            } else {
-                $this->html[] = '<br><br><input type="submit" name = "submit" value="Select User to Delete"/>';
-            }
+            $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Update User"/>';
         }
         $this->html[] = '</form>';
     }
@@ -86,7 +85,10 @@ class UserView extends UserController
         $this->html[] = '</select>';
     }
 
-    function initialSelection() {
+    function initialUserSelection() {
+        // User Selection Form
+        $this->html[] = '<form action ="index.php?page=user&action=' . $this->action .'" method="post">';
+
         $this->html[] = '<label for="' . User::Email . '">Select User to ' . ucfirst($this->action) . ': </label>';
         $select = '<select name = "' . User::Email . '" id="' . User::Email . '"';
         if (count($this->users) == 0) {
@@ -99,5 +101,14 @@ class UserView extends UserController
             $this->html[] = '<option value = "'. $user[User::Email] .'">Username: ' . $user[User::Username] . '  Role: ' . $user[User::Role] . '  Email: ' . $user[User::Email] .'</option>';
         }
         $this->html[] = '</select>';
+
+        // Submit button
+        if ($this->action == Action::Update) {
+            // Disable submit button if no users to update
+            $this->html[] = '<br><br><input type="submit" name = "' . Form::SubmitSelection . '" value="Select User to Update"' . (count($this->users) > 0 ? '' : 'disabled') . '/>';
+        } else {
+            $this->html[] = '<br><br><input type="submit" name = "' . Form::SubmitSelection . '" value="Select User to Delete"/>';
+        }
+        $this->html[] = '</form>';
     }
 }

@@ -8,6 +8,8 @@
 
 namespace Model;
 
+use Utils\User;
+
 require_once("DatabaseConnection.php");
 
 class UserModel
@@ -46,7 +48,7 @@ class UserModel
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result( $result['email'], $result['username'], $result['password'], $result['role']);
+        $stmt->bind_result( $result[User::Email], $result[User::Username], $result[User::Password], $result[User::Role]);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
@@ -84,10 +86,10 @@ class UserModel
         $stmt->store_result();
         $stmt->bind_result($email,$username, $paswword, $role);
         while ($stmt->fetch()) {
-            $results[$index]['email'] = $email;
-            $results[$index]['username'] = $username;
-            $results[$index]['paswword'] = $password;
-            $results[$index]['role'] = $role;
+            $results[$index][User::Email] = $email;
+            $results[$index][User::Username] = $username;
+            $results[$index][User::Password] = $password;
+            $results[$index][User::Role] = $role;
             $index += 1;
         }
         $stmt->free_result();
@@ -109,15 +111,15 @@ class UserModel
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($email,$username, $paswword, $role);
-        if ($role == 'client') {
-            $results[$index] = array('email' => 'none', 'username' => 'none', 'password' => 'none', 'role' => 'none');
+        if ($role == User::RoleClient) {
+            $results[$index] = array(User::Email => 'none', User::Username => 'none', User::Password => 'none', User::Role => 'none');
             $index += 1;
         }
         while ($stmt->fetch()) {
-            $results[$index]['email'] = $email;
-            $results[$index]['username'] = $username;
-            $results[$index]['paswword'] = $password;
-            $results[$index]['role'] = $role;
+            $results[$index][User::Email] = $email;
+            $results[$index][User::Username] = $username;
+            $results[$index][User::Password] = $password;
+            $results[$index][User::Role] = $role;
             $index += 1;
         }
         $stmt->free_result();
