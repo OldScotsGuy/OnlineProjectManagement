@@ -34,10 +34,10 @@ class DocumentModel
         $this->db->close();
     }
 
-    function insertDocument($documentTitle, $documentName, $projectID) {
+    function insertDocument($documentTitle, $documentFilename, $projectID) {
         $query = "INSERT INTO Documents (title, filename, projectID) VALUES (?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssi', $documentTitle, $documentName, $projectID);
+        $stmt->bind_param('ssi', $documentTitle, $documentFilename, $projectID);
         $stmt->execute();
         return ($stmt->affected_rows > 0);
     }

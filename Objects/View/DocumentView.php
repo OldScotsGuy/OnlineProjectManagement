@@ -69,7 +69,7 @@ class DocumentView
 
     function displayDocuments() {
         foreach ($this->documents as $document) {
-            echo '<p><a href="documents/' . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
+            echo '<p><a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
         }
     }
 

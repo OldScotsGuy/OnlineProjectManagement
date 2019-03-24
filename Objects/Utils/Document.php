@@ -15,4 +15,5 @@ abstract class Document
     const Title = 'documentTitle';
     const FileName = 'fileName';
     const ProjectID = 'projectID';
+    const Path = 'documents/';
 }

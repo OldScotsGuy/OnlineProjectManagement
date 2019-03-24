@@ -80,7 +80,7 @@ class TaskController
                         }
                     }
                 } else {
-                    // Read taskID and projectID from URL
+                    // Read taskID and projectID from URL - we are coming from the project status page
                     $this->taskID = $_GET[Task::ID];
                     $this->projectID = $_GET[Project::ID];
 
@@ -91,7 +91,7 @@ class TaskController
                 }
                 break;
             case Action::Delete :
-                // Read taskID and projectID from URL
+                // Read taskID and projectID from URL - we are coming from the project status page
                 $this->taskID = $_GET[Task::ID];
                 $this->projectID = $_GET[Project::ID];
 
