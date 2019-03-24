@@ -50,15 +50,14 @@ class UserController
                 break;
             case Action::Update:
                 // Step 1: No information at all, so need to present initial selection of all users
-                if (!isset($_POST[User::Email])) {
+                if (empty($_POST[User::Email])) {
                     // Because displayValues has not been set the user selection screen will be presented
                     $this->users = $this->userModel->retrieveUsers();
                     if (count($this->users) == 0) $this->message = "No users to update";
                 }
                 // Step 2: Email is the Users primary key, hence if no other data we only have initial user selection
-                //if (isset($_POST[User::Email]) && !isset($_POST['username'])) {
                 if (isset($_POST[Form::SubmitSelection])) {
-                    //$this->users = array();
+                    $this->message = "Step 2";
                     $this->displayValues = $this->userModel->retrieveUser($_POST[User::Email]);
                     // Force entry of a new password - otherwise we would hash the hash of the old password
                     $this->displayValues[User::Password] = null;
@@ -66,7 +65,7 @@ class UserController
                 // Step 3: If we have all user data then these are the updated values that need to saved in the Users table
                 if (isset($_POST[Form::SubmitData])) {
                     $this->checkFormData();
-                    if ($this->message = '') {
+                    if ($this->message == '') {
                         if ($this->userModel->updateUser($_POST[User::Username], $_POST[User::Password], $_POST[User::Email], $_POST[User::Role])) {
                             $this->message = "User information updated";
                             $this->displayValues = array();     // Ensures the user selection form is now presented
@@ -75,14 +74,6 @@ class UserController
                         $this->users = $this->userModel->retrieveUsers();
                     }
                 }
-/*                if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && isset($_POST['role'])) {
-                    // Attempt to save user data
-                    if ($this->userModel->updateUser($_POST['username'], $_POST['password'], $_POST['email'], $_POST['role'])) {
-                        $this->message = "User information updated";
-                    }
-                    // Reset UserView users array to offer a second update
-                    $this->users = $this->userModel->retrieveUsers();
-                } */
                 break;
             case Action::Delete :
                 // No information at all, so need to present initial selection of all users
@@ -90,7 +81,6 @@ class UserController
                     $this->users = $this->userModel->retrieveUsers();
                 }
                 // Email is the Users primary key hence we have required information for deletion
-                //if (isset($_POST['email']) && !isset($_POST['username'])) {
                 if (isset($_POST[User::Email])) {
                     if ($this->displayValues = $this->userModel->deleteUser($_POST[User::Email])) {
                         $this->message = "User deleted";
