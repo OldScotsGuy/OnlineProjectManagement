@@ -12,6 +12,7 @@ require_once("Objects/Controller/TaskController.php");
 
 use Controller\TaskController;
 use Utils\Action;
+use Utils\Form;
 use Utils\Project;
 use Utils\Task;
 use Utils\User;
@@ -47,9 +48,9 @@ class TaskView extends TaskController
 
         // Submit button
         if ($this->action == Action::Create) {
-            $this->html[] = '<br><br><input type="submit" name="submit" value="Create Task"/>';
+            $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Create Task"/>';
         } else {
-            $this->html[] = '<br><br><input type="submit" name="submit" value="Update Task"/>';
+            $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Update Task"/>';
             //$this->html[] = '<br><br><a href = "index.php?page=task&action=delete&taskID=' . $this->taskID . '">Delete Task</a>';
         }
         $this->html[] = '</form>';

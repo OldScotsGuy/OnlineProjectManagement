@@ -15,5 +15,7 @@ abstract class Project
     const Title = 'title';
     const Description = 'description';
     const LeadEmail = 'leadEmail';
+    const ClientEmail = 'clientEmail';
     const Lead = 'lead';
+    const Client = 'client';
 }

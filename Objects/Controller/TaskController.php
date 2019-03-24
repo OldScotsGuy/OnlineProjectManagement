@@ -12,6 +12,7 @@ use Model\TaskModel;
 use Model\ProjectModel;
 use Model\UserModel;
 use Utils\Action;
+use Utils\Form;
 use Utils\Project;
 use Utils\Task;
 use Utils\User;
@@ -56,7 +57,7 @@ class TaskController
 
         switch ($this->action) {
             case Action::Create:
-                if (isset($_POST['submit'])) {
+                if (isset($_POST[Form::SubmitData])) {
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
                     if ($this->message == "") {
@@ -67,7 +68,7 @@ class TaskController
                 }
                 break;
             case Action::Update:
-                if (isset($_POST['submit'])) {
+                if (isset($_POST[Form::SubmitData])) {
                     // Form submitted so check and save data if appropriate
                     $this->taskID = $_POST[Task::ID];
                     $this->projectID = $_POST[Project::ID];

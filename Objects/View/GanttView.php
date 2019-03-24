@@ -11,6 +11,7 @@ namespace View;
 require_once("Objects/Controller/GanttController.php");
 
 use Controller\GanttController;
+use Utils\Form;
 use Utils\Project;
 use Utils\Task;
 
@@ -174,7 +175,7 @@ class GanttView extends GanttController
         }
         $this->html[] = '</select>';
         // Disable the submit button if no projects present
-        $this->html[] = '<br><br><input type="submit" name="submit" value="Select Project to View"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
+        $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitSelection . '" value="Select Project to View"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
 
         $this->html[] = '</form>';
     }
