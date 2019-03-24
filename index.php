@@ -16,10 +16,10 @@ require("Objects/Utils/User.php");
 require("Objects/Utils/Form.php");
 
 // Load View Objects
-require_once("Objects/View/UserView.php");
-require_once("Objects/View/ProjectVIew.php");
-require_once("Objects/View/TaskView.php");
-require_once("Objects/View/GanttView.php");
+require("Objects/View/UserView.php");
+require("Objects/View/ProjectVIew.php");
+require("Objects/View/TaskView.php");
+require("Objects/View/GanttView.php");
 
 use Page\Page;
 use View\UserView;

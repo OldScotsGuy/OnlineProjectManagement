@@ -44,14 +44,13 @@ class TaskView extends TaskController
         $this->addField("number", "taskNo", "Task no:", (isset($this->displayValues[Task::No]) ? $this->displayValues[Task::No] : null));
         $this->addTextArea( "notes", "Task Notes:", (isset($this->displayValues[Task::Notes]) ? $this->displayValues[Task::Notes] : null));
         $this->addUserInput(Task::Owner, (isset($this->displayValues[Task::Owner]) ? $this->displayValues[Task::Owner] : null), $this->nonClientUsers);
-        $this->html[] = '<input type="hidden" name="taskID" value="' . $this->taskID . '"/>';                   // Carry TaskID across
+        $this->html[] = '<input type="hidden" name="' . Task::ID . '" value="' . $this->taskID . '"/>';                   // Carry TaskID across
 
         // Submit button
         if ($this->action == Action::Create) {
             $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Create Task"/>';
         } else {
             $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Update Task"/>';
-            //$this->html[] = '<br><br><a href = "index.php?page=task&action=delete&taskID=' . $this->taskID . '">Delete Task</a>';
         }
         $this->html[] = '</form>';
     }

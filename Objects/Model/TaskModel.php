@@ -31,7 +31,7 @@ class TaskModel
                           email nvarchar(128) not null,
                           PRIMARY KEY(taskID),
                           FOREIGN KEY(projectID) REFERENCES Projects(projectID) ON DELETE CASCADE,
-                          FOREIGN KEY(email) REFERENCES Users(email))";
+                          FOREIGN KEY(email) REFERENCES Users(email) ON DELETE CASCADE)";
         $result = $this->db->query($query);
     }
 

@@ -8,6 +8,8 @@
 
 namespace Model;
 
+use Utils\Document;
+
 require("DatabaseConnection.php");
 
 class DocumentModel
@@ -17,11 +19,13 @@ class DocumentModel
     function __construct()
     {
         $this->db = new DatabaseConnection();
-        $query = "CREATE TABLE IF NOT EXISTS `Documents` (
-                          `docID` int(4) not null auto_increment,
-                          `title` nvarchar(128),
-                          `name` nvarchar(256),
-                           PRIMARY KEY(`docID`));";
+        $query = "CREATE TABLE IF NOT EXISTS Documents (
+                          docID int(4) not null auto_increment,
+                          title nvarchar(128),
+                          filename nvarchar(256),
+                          projectID integer(4) not null,
+                          PRIMARY KEY(docID),
+                          FOREIGN KEY(projectID) REFERENCES Projects(projectID) ON DELETE CASCADE);";
         $result = $this->db->query($query);
     }
 
@@ -30,22 +34,22 @@ class DocumentModel
         $this->db->close();
     }
 
-    function insertDocument($documentTitle, $documentName) {
-        $query = "INSERT INTO Documents (`title`, `name`) VALUES (?, ?)";
+    function insertDocument($documentTitle, $documentName, $projectID) {
+        $query = "INSERT INTO Documents (title, filename, projectID) VALUES (?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ss', $documentTitle, $documentName);
+        $stmt->bind_param('ssi', $documentTitle, $documentName, $projectID);
         $stmt->execute();
         return ($stmt->affected_rows > 0);
     }
 
     function retrieveDocument($docID) {
         $result = array();
-        $query = "SELECT title, name FROM Documents WHERE docID = ?";
+        $query = "SELECT docID, title, filename, projectID FROM Documents WHERE docID = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $docID);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($result['docTitle'], $result['docName']);
+        $stmt->bind_result($result[Document::ID], $result[Document::Title], $result[Document::FileName], $result[Document::ProjectID]);
         $stmt->fetch();
         $stmt->free_result();
         return $result;
