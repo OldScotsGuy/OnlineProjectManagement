@@ -161,6 +161,7 @@ class GanttView extends GanttController
 
     private function selectProject() {
         $this->html[] = '<form action ="index.php?page=status" method="get">';
+        $this->html[] = '<h2>Project Status</h2>';
         $this->html[] = '<p>' . $this->message . '</p>';
         $this->html[] = '<label for="projectID">Select Project to View Status of: </label>';
         $select = '<select name = "' . Project::ID .'" id="' . Project::ID .'"';

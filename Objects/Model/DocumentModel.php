@@ -10,7 +10,7 @@ namespace Model;
 
 use Utils\Document;
 
-require("DatabaseConnection.php");
+require_once("DatabaseConnection.php");
 
 class DocumentModel
 {

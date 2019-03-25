@@ -20,6 +20,7 @@ require("Objects/View/UserView.php");
 require("Objects/View/ProjectVIew.php");
 require("Objects/View/TaskView.php");
 require("Objects/View/GanttView.php");
+require("Objects/View/DocumentView.php");
 
 use Page\Page;
 use View\UserView;

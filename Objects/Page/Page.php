@@ -8,6 +8,8 @@
 
 namespace Page;
 
+use Utils\Action;
+
 class Page
 {
     public $content = null;
@@ -17,7 +19,7 @@ class Page
         "User Entry"  => "index.php?page=user&action=create",
         "Project Entry" => "index.php?page=project",
         "Task Entry" => "index.php?page=task",
-        "Project Docs" => "index.php?page=document"
+        "Project Docs" => "index.php?page=document&action=" . Action::Upload
     );
 
     // Generalised setter

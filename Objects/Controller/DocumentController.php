@@ -38,44 +38,66 @@ class DocumentController
     }
 
     function databaseOperations() {
-        if (!isset($_GET[Project::ID])) {
+        switch ($this->action) {
+            case Action::Upload:
+                // Step 1 - Need to select project
+                if (!isset($_POST[Project::ID])) {
+                    // $this->projectID not set so load projects for project selection
+                    $this->projects = $this->projectModel->retrieveProjects();
+                    if (count($this->projects) == 0) $this->message = "No projects to view the documents of.";
+                } else {
+                    $this->projectID = $_POST[Project::ID];
+                }
 
-            // $this->projectID not set so load projects for project selection
-            $this->projects = $this->projectModel->retrieveProjects();
-            if (count($this->projects) == 0) $this->message = "No projects to view the documents of.";
-        } else {
-            $this->projectID = $_GET[Project::ID];
-            switch ($this->action) {
-                case Action::Upload:
-                    // If form data has been submitted then check and upload document
-                    if ($_POST[Form::SubmitData]) {
-                        $this->checkFormData();
-                        $this->checkFile();
-                        if ($this->message == '') {
-                            // do the document upload thing
-                            $this->processFile();
-                            $this->documentModel->insertDocument($_POST[Document::Title], $this->documentName, $this->projectID);
-                            $this->message = 'Document Uploaded';
-                        }
+                // Step 2 - Form data has been submitted so check and upload document
+                if (isset($_POST[Form::SubmitData])) {
+                    $this->projectID = $_POST[Project::ID];
+                    $this->checkFormData();
+                    $this->checkFile();
+                    if ($this->message == '') {
+                        // do the document upload thing
+                        $this->processFile();
+                        $this->documentModel->insertDocument($_POST[Document::Title], $this->documentName, $this->projectID);
+                        $this->message = 'Document Uploaded';
                     }
-                    break;
+                }
+                break;
 
-                case Action::View:
-                    $this->documents = $this->documentModel->retrieveProjectDocuments($this->projectID);
-                    break;
-
-                case Action::Delete:
-                    if (isset($_GET[Document::ID])) {
-                        if ($this->documentModel->deleteDocument($_GET[Document::ID])) {
-                            $this->message = "<p>Document deleted</p>";
-                        }
-                        header('Location: index.php?page=document&action='. Action::View .'&'. Project::ID .'='.$this->projectID);
+            case Action::View:
+                // If coming from the project selection form, ProjectID can be obtained via $_POST
+                // if coming from the document delete action, ProjectID can be obtained via $_GET
+                if (!isset($_POST[Project::ID]) && !isset($_GET[Project::ID])) {
+                    // Step 1 - Need to select project
+                    $this->projects = $this->projectModel->retrieveProjects();
+                    if (count($this->projects) == 0) $this->message = "No projects to view the documents of.";
+                } else {
+                    // Step 2 - Now list project documents
+                    if (isset($_POST[Project::ID])) {
+                        $this->projectID = $_POST[Project::ID];
                     } else {
-                        $this->message .= '<p>Select Task to delete</p>';
+                        $this->projectID = $_GET[Project::ID];
                     }
-                    break;
-            }
+                    $this->documents = $this->documentModel->retrieveProjectDocuments($this->projectID);
+                }
+                break;
+
+            case Action::Delete:
+                if (isset($_GET[Document::ID])) {
+                    // Delete document from documents directory
+                    $temp = $this->documentModel->retrieveDocument($_GET[Document::ID]);
+                    unlink(Document::Path . $temp[Document::FileName]);
+
+                    // Delete from database
+                    if ($this->documentModel->deleteDocument($_GET[Document::ID])) {
+                        $this->message = "<p>Document deleted</p>";
+                    }
+                    header('Location: index.php?page=document&action='. Action::View .'&'. Project::ID .'='.$_GET[Project::ID]);
+                } else {
+                    $this->message .= '<p>Select Task to delete</p>';
+                }
+                break;
         }
+
     }
 
     function checkFormData() {

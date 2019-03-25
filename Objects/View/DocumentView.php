@@ -21,6 +21,7 @@ class DocumentView extends DocumentController
     private $html = array();
 
     public function __toString() {
+        $this->displayHeader();
         if (isset($this->projectID)) {
             // With a projectID we can either view documents, or upload / delete a document
             switch ($this->action) {
@@ -41,10 +42,21 @@ class DocumentView extends DocumentController
         return implode("\n", $this->html);
     }
 
+    function displayHeader() {
+        // Title and Message
+        $this->html[] = "<h2>" . ucfirst($this->action) . " Project Documents</h2>";
+        $this->html[] = "<p>" . $this->message ."</p>";
+
+        // Navigation links
+        $this->html[] = '<p><a href="index.php?page=document&action=' . Action::Upload . '">Upload Project Document</a></p>';
+        $this->html[] = '<p><a href="index.php?page=document&action=' . Action::View . '">View Project Documents</a></p>';
+        $this->html[] = '<p><a href="index.php?page=document&action=' . Action::Delete . '">Delete Project Document</a></p>';
+    }
+
     function selectProject() {
-        $this->html[] = '<form action ="index.php?page=document&action=' . Action::View . '" method="get">';
+        $this->html[] = '<form action ="index.php?page=document&action=' . $this->action . '" method="post">';
         $this->html[] = '<p>' . $this->message . '</p>';
-        $this->html[] = '<label for="' . Project::ID . '">Which Project Do You want to View The Documents of? </label>';
+        $this->html[] = '<label for="' . Project::ID . '">Select Project:</label>';
         $select = '<select name = "' . Project::ID . '" id="' . Project::ID . '"';
         if (count($this->projects) == 0) {
             $select .= ' disabled>';
@@ -66,7 +78,7 @@ class DocumentView extends DocumentController
     function displayDocuments() {
         foreach ($this->documents as $document) {
             $this->html[] = '<p><a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
-            $this->html[] = '<p><a href="index.php?page=document&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Task</a></p>';
+            $this->html[] = '<p><a href="index.php?page=document&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Document</a></p>';
         }
     }
 
