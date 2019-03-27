@@ -13,6 +13,7 @@ use Model\ProjectModel;
 use Model\UserModel;
 use Utils\Action;
 use Utils\Form;
+use Utils\FormComponents;
 use Utils\Project;
 use Utils\Task;
 use Utils\User;
@@ -34,12 +35,14 @@ class TaskController
     protected $displayValues = array();     // Used for task update when arriving from project status page
     protected $action = null;               // create: when arriving from navigation bar, update: when arriving from project status page
     protected $message = "";                // Set by controller
+    protected $formComponents = null;
 
     function __construct($action) {
         $this->projectModel = new ProjectModel();
         $this->userModel = new UserModel();
         $this->taskModel = new TaskModel();
         $this->action = $action;
+        $this->formComponents = new FormComponents();
         $this->databaseOperations();
     }
 

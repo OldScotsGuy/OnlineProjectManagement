@@ -13,6 +13,7 @@ require_once("Objects/Controller/TaskController.php");
 use Controller\TaskController;
 use Utils\Action;
 use Utils\Form;
+use Utils\PageName;
 use Utils\Project;
 use Utils\Task;
 use Utils\User;
@@ -29,33 +30,66 @@ class TaskView extends TaskController
 
     function displayTaskForm() {
         // Title and message
-        $this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
-        $this->html[] = "<p>" . $this->message ."</p>";
+        $this->html[] = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Task", $this->message));
+        //$this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
+        //$this->html[] = "<p>" . $this->message ."</p>";
 
         // Task Entry Form
-        $this->html[] = '<form action ="index.php?page=task&action=' . $this->action .'" method="post">';
+        $this->html[] = '<form action ="index.php?page='. PageName::Task .'&action=' . $this->action .'" method="post">';
 
         // Task data: taskID, taskName, startDate, endDate, percent, taskNo, notes, projectID, email
-        $this->projectSelection();
-        $this->addField("text", Task::Name, "Task Name:", (isset($this->displayValues[Task::Name]) ? $this->displayValues[Task::Name] : null ));
-        $this->addField("date", Task::StartDate, "Start Date:", (isset($this->displayValues[Task::StartDate]) ? $this->displayValues[Task::StartDate] : null ));
-        $this->addField("date", Task::EndDate, "End Date:", (isset($this->displayValues[Task::EndDate]) ? $this->displayValues[Task::EndDate] : null ));
-        $this->addField("number", Task::Percent, "Percent Complete:", (isset($this->displayValues[Task::Percent]) ? $this->displayValues[Task::Percent] : null));
-        $this->addField("number", "taskNo", "Task no:", (isset($this->displayValues[Task::No]) ? $this->displayValues[Task::No] : null));
-        $this->addTextArea( "notes", "Task Notes:", (isset($this->displayValues[Task::Notes]) ? $this->displayValues[Task::Notes] : null));
-        $this->addUserInput(Task::Owner, (isset($this->displayValues[Task::Owner]) ? $this->displayValues[Task::Owner] : null), $this->nonClientUsers);
+        //$this->projectSelection();
+        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project Task Belongs to: :', $this->projects));
+
+        // Enter Task name
+        $value = (isset($this->displayValues[Task::Name]) ? $this->displayValues[Task::Name] : null );
+        $this->html = array_merge($this->html, $this->formComponents->addField("text", Task::Name, "Task Name:", $value, 'required'));
+        //$this->addField("text", Task::Name, "Task Name:", (isset($this->displayValues[Task::Name]) ? $this->displayValues[Task::Name] : null ));
+
+        // Enter Task Start Date
+        $value = (isset($this->displayValues[Task::StartDate]) ? $this->displayValues[Task::StartDate] : null );
+        $this->html = array_merge($this->html, $this->formComponents->addField("date", Task::StartDate, "Task Start Date:", $value, 'required'));
+        //$this->addField("date", Task::StartDate, "Start Date:", (isset($this->displayValues[Task::StartDate]) ? $this->displayValues[Task::StartDate] : null ));
+
+        // Enter Task End Date
+        $value = (isset($this->displayValues[Task::EndDate]) ? $this->displayValues[Task::EndDate] : null );
+        $this->html = array_merge($this->html, $this->formComponents->addField("date", Task::EndDate, "Task End Date:", $value, 'required'));
+        //$this->addField("date", Task::EndDate, "End Date:", (isset($this->displayValues[Task::EndDate]) ? $this->displayValues[Task::EndDate] : null ));
+
+        // Enter Percentage Task Complete
+        $value = (isset($this->displayValues[Task::Percent]) ? $this->displayValues[Task::Percent] : null );
+        $this->html = array_merge($this->html, $this->formComponents->addField("number", Task::Percent, "Task Percentage Complete:", $value, 'required min="0" max="100"'));
+        //$this->addField("number", Task::Percent, "Percent Complete:", (isset($this->displayValues[Task::Percent]) ? $this->displayValues[Task::Percent] : null));
+
+        // Enter Task Number - for display purposes only
+        $value = (isset($this->displayValues[Task::No]) ? $this->displayValues[Task::No] : null );
+        $this->html = array_merge($this->html, $this->formComponents->addField("number", Task::No, "Task No:", $value, 'required min="-100" max="100"'));
+        //$this->addField("number", "taskNo", "Task no:", (isset($this->displayValues[Task::No]) ? $this->displayValues[Task::No] : null));
+
+        // Enter Task Notes
+        $value = (isset($this->displayValues[Task::Notes]) ? $this->displayValues[Task::Notes] : null );
+        $this->html = array_merge($this->html, $this->formComponents->addTextArea(Task::Notes, "Task Notes::", $value));
+        //$this->addTextArea( "notes", "Task Notes:", (isset($this->displayValues[Task::Notes]) ? $this->displayValues[Task::Notes] : null));
+
+        // Enter Task Owner
+        $value = (isset($this->displayValues[Task::Owner]) ? $this->displayValues[Task::Owner] : null);
+        $this->html = array_merge($this->html, $this->formComponents->addUserInput(Task::Owner, "Task Owner:", $value, $this->nonClientUsers));
+        //$this->addUserInput(Task::Owner, (isset($this->displayValues[Task::Owner]) ? $this->displayValues[Task::Owner] : null), $this->nonClientUsers);
+
         $this->html[] = '<input type="hidden" name="' . Task::ID . '" value="' . $this->taskID . '"/>';                   // Carry TaskID across
 
         // Submit button
-        if ($this->action == Action::Create) {
+        $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, ucfirst($this->action) . " Task"));
+
+/*        if ($this->action == Action::Create) {
             $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Create Task"/>';
         } else {
             $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Update Task"/>';
-        }
+        } */
         $this->html[] = '</form>';
     }
 
-    function addField($type, $name, $text, $value) {
+    /*function addField($type, $name, $text, $value) {
         $this->html[] = '<label for="' . $name . '">' . $text . '</label>';
         $input = '<input type="'. $type . '" name="' . $name . '" id="' . $name . '"';
         if ($value != null) {
@@ -100,5 +134,5 @@ class TaskView extends TaskController
             $this->html[] = '<option value = "'. $project[Project::ID] .'"' . ($project[Project::ID] == $this->projectID ? " selected " : "") . '>Project Title: ' . $project[Project::Title] . '  Lead: ' . $project[Project::Lead] . '  Email: ' . $project[Project::LeadEmail] .'</option>';
         }
         $this->html[] = '</select><br>';
-    }
+    } */
 }
