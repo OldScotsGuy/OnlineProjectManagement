@@ -100,17 +100,12 @@ if ($trackLogin->userLoggedIn()) {
         // Form submitted so read and check form data
         $email = $_POST[User::Email];
         $password = $_POST[User::Password];
-        $message .= $trackLogin->checkLoginData($email, $password);
+        $message .= $trackLogin->checkLoginData($_POST[User::Email], $password);
+
         if ($message == '') {
-
             // Form filled out so now check login data against the database
-            $result = $trackLogin->validLogin($email, $password);
-            if (isset($result[User::Username])) {
-
-                // Match on user email and passwords so set session variables
-                $_SESSION[User::Username] = $result[User::Username];
-                $_SESSION[User::Email] = $result[User::Email];
-                $_SESSION[User::Role] = $result[User::Role];
+            $trackLogin->attemptLogin($email, $password);
+            if ($trackLogin->userLoggedIn()) {
                 header("Location: index.php");
             } else {
                 // Login data did not match that stored in the database

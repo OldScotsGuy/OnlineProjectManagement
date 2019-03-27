@@ -28,9 +28,15 @@ class LoginManagement
         return (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email])) && isset($_SESSION[User::Role]);
     }
 
-    function validLogin($email, $password) {
-        return $this->userModel->checkUserCredentials($email, $password);
-        //return $this->userModel->retrieveUser($email);
+    function attemptLogin($email, $password) {
+
+        $result = $this->userModel->checkUserCredentials($email, $password);
+        if (isset($result[User::Username])) {
+            // Match on user email and passwords so set session variables
+            $_SESSION[User::Username] = $result[User::Username];
+            $_SESSION[User::Email] = $result[User::Email];
+            $_SESSION[User::Role] = $result[User::Role];
+        }
     }
 
     function checkLoginData($email, $password) {
