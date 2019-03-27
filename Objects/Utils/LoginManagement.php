@@ -58,18 +58,20 @@ class LoginManagement
 
     function displayLoginForm($message) {
         // Title and message
-        $this->html[] = "<h2>User Login</h2>";
-        $this->html[] = "<p>" . $message ."</p>";
+        $this->html[] = array_merge($this->html, $this->formComponents->header("User Login", $message));
+        //$this->html[] = "<h2>User Login</h2>";
+        //$this->html[] = "<p>" . $message ."</p>";
 
         $this->html[] = '<form action ="index.php" method="post">';
 
-        // User data: username, password, email, role
-        $this->html = array_merge($this->html, $this->formComponents->addField("text", User::Email, "User Email:", '', ''));
-        $this->html =  array_merge($this->html, $this->formComponents->addField("password", User::Password, "Password:", '', ''));
+        // Login: email, password
+        $this->html = array_merge($this->html, $this->formComponents->addField("text", User::Email, "Enter Email:", '', 'required'));
+        $this->html =  array_merge($this->html, $this->formComponents->addField("password", User::Password, "Password:", '', 'required'));
 
         // Submit button
-        $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Login"/>';
-        $this->html[] = '</form>';
+        $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, "Login"));
+        //$this->html[] = '<br><br><input type="submit" name="' . Form::SubmitData . '" value="Login"/>';
+        //$this->html[] = '</form>';
         return implode("\n", $this->html);
     }
 }

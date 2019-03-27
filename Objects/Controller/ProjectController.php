@@ -15,6 +15,7 @@ use Model\ProjectModel;
 use Model\UserModel;
 use Utils\Action;
 use Utils\Form;
+use Utils\FormComponents;
 use Utils\Project;
 use Utils\User;
 
@@ -30,10 +31,12 @@ class ProjectController
     protected $displayValues = array();
     protected $action = null;
     protected $message = "";
+    protected $formComponents = null;
 
     function __construct($action) {
         $this->projectModel = new ProjectModel();
         $this->userModel = new UserModel();
+        $this->formComponents = new FormComponents();
         $this->action = $action;
         $this->databaseOperations();
     }

@@ -12,6 +12,7 @@ require_once("Objects/Model/UserModel.php");
 use Model\UserModel;
 use Utils\Action;
 use Utils\Form;
+use Utils\FormComponents;
 use Utils\User;
 
 class UserController
@@ -22,10 +23,12 @@ class UserController
     protected $displayValues = array();
     protected $action = null;
     protected $message = "";
+    protected $formComponents = null;
 
     function __construct($action) {
         $this->userModel = new UserModel();
         $this->action = $action;
+        $this->formComponents = new FormComponents();
         $this->databaseOperations();
     }
 

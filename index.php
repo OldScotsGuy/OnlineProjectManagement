@@ -14,6 +14,7 @@ require("Objects/Utils/Project.php");
 require("Objects/Utils/Task.php");
 require("Objects/Utils/User.php");
 require("Objects/Utils/Form.php");
+require("Objects/Utils/PageName.php");
 
 // Load View Objects
 require("Objects/Utils/FormComponents.php");
@@ -36,7 +37,7 @@ use Utils\Action;
 use Utils\Form;
 use Utils\User;
 use Utils\LoginManagement;
-
+use Utils\PageName;
 session_start();
 
 // Instance page template
@@ -52,7 +53,7 @@ if ($trackLogin->userLoggedIn()) {
 
     // Get page and action variables
     if (empty($_GET['page'])) {
-        $page = "status";
+        $page = PageName::Status;
     } else {
         $page = $_GET['page'];
     }
@@ -64,27 +65,27 @@ if ($trackLogin->userLoggedIn()) {
 
     // Generate Page Content
     switch ($page) {
-        case "user":    // Process user information
+        case PageName::User:    // Process user information
             $UserView = new UserView($action);
             $HomePage->content = '<section>'. $UserView . '</section>';
             break;
 
-        case "project":
+        case PageName::Project:
             $ProjectView = new ProjectView($action);
             $HomePage->content = '<section>'. $ProjectView . '</section>';
             break;
 
-        case "task":
+        case PageName::Task:
             $TaskView = new TaskView($action);
             $HomePage->content = '<section>' . $TaskView . '</section>';
             break;
 
-        case "document":
+        case PageName::Document:
             $DocumentView = new DocumentView($action);
             $HomePage->content = '<section>' . $DocumentView . '</section>';
             break;
 
-        case "status":
+        case PageName::Status:
             $GanttView = new GanttView();
             $HomePage->content = '<section>' . $GanttView . '</section>';
             break;
