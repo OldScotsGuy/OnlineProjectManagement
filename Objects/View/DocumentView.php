@@ -45,7 +45,7 @@ class DocumentView extends DocumentController
 
     function displayHeader() {
         // Title and Message
-        $this->html[] = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
         //$this->html[] = "<h2>" . ucfirst($this->action) . " Project Documents</h2>";
         //$this->html[] = "<p>" . $this->message ."</p>";
 
@@ -53,7 +53,7 @@ class DocumentView extends DocumentController
         $navigationLinks = array(   'Upload Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Upload,
                                     'View Project Documents' => 'index.php?page='. PageName::Document .'&action=' . Action::View,
                                     'Delete Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Delete);
-        $this->html[] = array_merge($this->html, $this->formComponents->addNavigationLinks($navigationLinks));
+        $this->html = array_merge($this->html, $this->formComponents->addNavigationLinks($navigationLinks));
         //$this->html[] = '<p><a href="index.php?page=document&action=' . Action::Upload . '">Upload Project Document</a></p>';
         //$this->html[] = '<p><a href="index.php?page=document&action=' . Action::View . '">View Project Documents</a></p>';
         //$this->html[] = '<p><a href="index.php?page=document&action=' . Action::Delete . '">Delete Project Document</a></p>';

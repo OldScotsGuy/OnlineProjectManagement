@@ -58,7 +58,7 @@ class LoginManagement
 
     function displayLoginForm($message) {
         // Title and message
-        $this->html[] = array_merge($this->html, $this->formComponents->header("User Login", $message));
+        $this->html = array_merge($this->html, $this->formComponents->header("User Login", $message));
         //$this->html[] = "<h2>User Login</h2>";
         //$this->html[] = "<p>" . $message ."</p>";
 

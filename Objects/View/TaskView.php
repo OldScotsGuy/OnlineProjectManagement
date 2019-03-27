@@ -30,7 +30,7 @@ class TaskView extends TaskController
 
     function displayTaskForm() {
         // Title and message
-        $this->html[] = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Task", $this->message));
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Task", $this->message));
         //$this->html[] = "<h2>" . ucfirst($this->action) . " Task</h2>";
         //$this->html[] = "<p>" . $this->message ."</p>";
 
