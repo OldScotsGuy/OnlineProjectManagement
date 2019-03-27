@@ -14,6 +14,7 @@ use Model\UserModel;
 use Utils\Action;
 use Utils\Form;
 use Utils\FormComponents;
+use Utils\PageName;
 use Utils\Project;
 use Utils\Task;
 use Utils\User;
@@ -79,7 +80,7 @@ class TaskController
                     if ($this->message == "") {
                         if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Project::ID], $_POST[Task::Owner])) {
                             $this->message = "Task information updated";
-                            header('Location: index.php?page=status&'. Project::ID .'=' . $this->projectID);
+                            header('Location: index.php?page='. PageName::Status .'&'. Project::ID .'=' . $this->projectID);
                         }
                     }
                 } else {
@@ -103,7 +104,7 @@ class TaskController
                     if ($this->taskModel->deleteTask($this->taskID)) {
                         $this->message = "Task deleted";
                     }
-                    header('Location: index.php?page=status&'. Project::ID .'=' . $this->projectID);
+                    header('Location: index.php?page='. PageName::Status .'&'. Project::ID .'=' . $this->projectID);
                 } else {
                     $this->message .= '<p>Select Task to delete</p>';
                 }

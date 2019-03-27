@@ -127,4 +127,17 @@ class FormComponents
         return $html;
     }
 
+    // =================================
+    // Document Specific Form Components
+    // =================================
+
+    function uploadDocument($projectID) {
+        $html = array();
+        $html[] = '<input type="hidden" name="' . Project::ID . '" value="' . $projectID . '"/>';   // Carry ProjectID across
+        $html[] = '<label for="' . Document::Title . '">Document Title:</label>';
+        $html[] = '<input type="text" name="' . Document::Title . '" id="' . Document::Title . '" size="100"  maxlength="1280" required />';
+        $html[] = '<br><br><input type="file" name="' . Document::FileName . '" required />';
+        $html[] = '<input type="submit" name="' . Form::SubmitData . '" value="Upload" />';
+        return $html;
+    }
 }

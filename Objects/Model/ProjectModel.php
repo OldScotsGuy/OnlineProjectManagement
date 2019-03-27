@@ -30,8 +30,8 @@ class ProjectModel
                           projectID integer(4) not null,
                           email nvarchar(128) not null,
                           PRIMARY KEY(projectID),
-                          FOREIGN KEY(projectID) REFERENCES Projects(projectID),
-                          FOREIGN KEY(email) REFERENCES Users(email))";
+                          FOREIGN KEY(projectID) REFERENCES Projects(projectID) ON DELETE CASCADE,
+                          FOREIGN KEY(email) REFERENCES Users(email) ON DELETE CASCADE)";
         $result = $this->db->query($query1);
         $result = $this->db->query($query2);
     }

@@ -13,6 +13,8 @@ use Model\ProjectModel;
 use Utils\Action;
 use Utils\Document;
 use Utils\Form;
+use Utils\FormComponents;
+use Utils\PageName;
 use Utils\Project;
 
 require_once("Objects/Model/DocumentModel.php");
@@ -29,11 +31,13 @@ class DocumentController
     protected $action = null;
     protected $message = null;
     protected $documentName = null;
+    protected $formComponents = null;
 
     function __construct($action) {
         $this->documentModel = new DocumentModel();
         $this->projectModel = new ProjectModel();
         $this->action = $action;
+        $this->formComponents = new FormComponents();
         $this->databaseOperations();
     }
 
@@ -91,7 +95,7 @@ class DocumentController
                     if ($this->documentModel->deleteDocument($_GET[Document::ID])) {
                         $this->message = "<p>Document deleted</p>";
                     }
-                    header('Location: index.php?page=document&action='. Action::View .'&'. Project::ID .'='.$_GET[Project::ID]);
+                    header('Location: index.php?page='. PageName::Document .'&action='. Action::View .'&'. Project::ID .'='.$_GET[Project::ID]);
                 } else {
                     $this->message .= '<p>Select Task to delete</p>';
                 }
