@@ -16,11 +16,15 @@ require("Objects/Utils/User.php");
 require("Objects/Utils/Form.php");
 
 // Load View Objects
+require("Objects/Utils/FormComponents.php");
 require("Objects/View/UserView.php");
 require("Objects/View/ProjectVIew.php");
 require("Objects/View/TaskView.php");
 require("Objects/View/GanttView.php");
 require("Objects/View/DocumentView.php");
+
+// Load Login object
+require("Objects/Utils/LoginManagement.php");
 
 use Page\Page;
 use View\UserView;
@@ -28,48 +32,93 @@ use View\ProjectView;
 use View\TaskView;
 use View\DocumentView;
 use View\GanttView;
+use Utils\Action;
+use Utils\Form;
+use Utils\User;
+use Utils\LoginManagement;
 
-// Get page and action variables
-if (empty($_GET['page'])) {
-    $page = "status";
-} else {
-    $page = $_GET['page'];
-}
-if (empty($_GET['action'])) {
-    $action = "create";
-} else {
-    $action = $_GET['action'];
-}
+session_start();
 
 // Instance page template
 $HomePage = new Page();
 
-// Generate Page Content
-switch ($page) {
-    case "user":    // Process user information
-        $UserView = new UserView($action);
-        $HomePage->content = '<section>'. $UserView . '</section>';
-        break;
+// Instance Login tracking
+$trackLogin = new LoginManagement();
 
-    case "project":
-        $ProjectView = new ProjectView($action);
-        $HomePage->content = '<section>'. $ProjectView . '</section>';
-        break;
+if ($trackLogin->userLoggedIn()) {
+//if (true) {
+    // User logged in
+    // ==============
 
-    case "task":
-        $TaskView = new TaskView($action);
-        $HomePage->content = '<section>' . $TaskView . '</section>';
-        break;
+    // Get page and action variables
+    if (empty($_GET['page'])) {
+        $page = "status";
+    } else {
+        $page = $_GET['page'];
+    }
+    if (empty($_GET['action'])) {
+        $action = Action::Create;
+    } else {
+        $action = $_GET['action'];
+    }
 
-    case "document":
-        $DocumentView = new DocumentView($action);
-        $HomePage->content = '<section>' . $DocumentView . '</section>';
-        break;
+    // Generate Page Content
+    switch ($page) {
+        case "user":    // Process user information
+            $UserView = new UserView($action);
+            $HomePage->content = '<section>'. $UserView . '</section>';
+            break;
 
-    case "status":
-        $GanttView = new GanttView();
-        $HomePage->content = '<section>' . $GanttView . '</section>';
-        break;
+        case "project":
+            $ProjectView = new ProjectView($action);
+            $HomePage->content = '<section>'. $ProjectView . '</section>';
+            break;
+
+        case "task":
+            $TaskView = new TaskView($action);
+            $HomePage->content = '<section>' . $TaskView . '</section>';
+            break;
+
+        case "document":
+            $DocumentView = new DocumentView($action);
+            $HomePage->content = '<section>' . $DocumentView . '</section>';
+            break;
+
+        case "status":
+            $GanttView = new GanttView();
+            $HomePage->content = '<section>' . $GanttView . '</section>';
+            break;
+    }
+
+} else {
+
+    // User not logged in
+    // ==================
+    $message = '';
+    if (isset($_POST[Form::SubmitData])) {
+
+        // Form submitted so read and check form data
+        $email = $_POST[User::Email];
+        $password = $_POST[User::Password];
+        $message .= $trackLogin->checkLoginData($email, $password);
+        if ($message == '') {
+
+            // Form filled out so now check login data against the database
+            $result = $trackLogin->validLogin($email, $password);
+            if (isset($result[User::Username])) {
+
+                // Match on user email and passwords so set session variables
+                $_SESSION[User::Username] = $result[User::Username];
+                $_SESSION[User::Email] = $result[User::Email];
+                $_SESSION[User::Role] = $result[User::Role];
+                header("Location: index.php");
+            } else {
+                // Login data did not match that stored in the database
+                $message .= '<p>User Email and Password do not match</p>';
+            }
+        }
+    }
+    $HomePage->content = '<section>' . $trackLogin->displayLoginForm($message) . '</section>';
 }
 
 // Display Page
