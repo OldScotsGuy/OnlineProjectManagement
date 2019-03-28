@@ -43,7 +43,7 @@ class Page
         }
     }
 
-    public function Display()
+    function Display()
     {
         echo "<!DOCTYPE html>\n<html lang=\"en\">\n";
         $this -> DisplayHead();
@@ -51,7 +51,7 @@ class Page
         echo "</html>\n";
     }
 
-    public function DisplayHead() {
+    function DisplayHead() {
         echo "<head>\n";
         echo "<meta charset=\"UTF-8\" name=\"keywords\" content=\"".$this->keywords."\"/>";
         echo "<title>".$this->title."</title>";
@@ -62,7 +62,7 @@ class Page
         echo "</head>\n";
     }
 
-    public function DisplayBody() {
+    function DisplayBody() {
         echo "<body>\n";
         $this -> DisplayHeader();
         $this -> DisplayMain();
@@ -70,7 +70,7 @@ class Page
         echo "</body>\n";
     }
 
-    public function DisplayHeader()
+    function DisplayHeader()
     {
         ?>
         <!-- page header -->
@@ -80,7 +80,7 @@ class Page
                 <h1>Project Name Here</h1>
                 <?php if (isset($_SESSION[User::Username])) echo "<p>Username:". $_SESSION[User::Username] ."</p>"?>
                 <?php if (isset($_SESSION[User::Role])) echo "<p>Role:". ucfirst($_SESSION[User::Role]) ."</p>"?>
-                <?php if (isset($_SESSION[User::Email])) echo "<p>Email:". $_SESSION[User::Email] ."</p>"?>
+                <?php if (isset($_SESSION[User::Email])) echo "<p><a href='index.php?action=". Action::Logout ."'>Logout</a></p>"?>
             </section>
             <nav>
                 <ul>
@@ -96,13 +96,13 @@ class Page
         <?php
     }
 
-    public function DisplayMain() {
+    function DisplayMain() {
         echo "<main>";
         echo $this->content;
         echo "</main>";
     }
 
-    public function DisplayFooter()
+    function DisplayFooter()
     {
         ?>
         <!-- page footer -->

@@ -48,7 +48,6 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
     // ==============
 
     // Get page and action variables
-    // =============================
     if (empty($_GET['page'])) {
         $page = PageName::Status;
     } else {
@@ -60,8 +59,13 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
         $action = $_GET['action'];
     }
 
+    // Check for User logout
+    if ($action == Action::Logout) {
+        session_destroy();
+        header('Location: index.php');
+    }
+
     // Generate Page Content
-    //======================
     $enhancedPrivileges = ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin);
     $authorisationErrorContent = '<section><p>This page content is unavailable</p></section>';
     switch ($page) {
@@ -111,5 +115,7 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
     $HomePage->content = '<section>' . $LoginView . '</section>';
 }
 
+// ============
 // Display Page
+// ============
 $HomePage->Display();

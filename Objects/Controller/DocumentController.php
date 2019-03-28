@@ -16,6 +16,7 @@ use Utils\Form;
 use Utils\FormComponents;
 use Utils\PageName;
 use Utils\Project;
+use Utils\User;
 
 require_once("Objects/Model/DocumentModel.php");
 require_once("Objects/Model/ProjectModel.php");
@@ -32,6 +33,7 @@ class DocumentController
     protected $message = null;
     protected $documentName = null;
     protected $formComponents = null;
+    protected $canDeleteDocument = false;
 
     function __construct($action) {
         $this->documentModel = new DocumentModel();
@@ -42,6 +44,8 @@ class DocumentController
     }
 
     function databaseOperations() {
+        // Set tasks delete privilege
+        $this->canDeleteDocument = ($_SESSION[User::Role] == User::RoleAdmin || $_SESSION[User::Role] == User::RoleLead);
         switch ($this->action) {
             case Action::Upload:
                 // Step 1 - Need to select project

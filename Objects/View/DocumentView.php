@@ -16,6 +16,7 @@ use Utils\Document;
 use Utils\Form;
 use Utils\PageName;
 use Utils\Project;
+use Utils\User;
 
 class DocumentView extends DocumentController
 {
@@ -48,10 +49,12 @@ class DocumentView extends DocumentController
         $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
 
         // Navigation links
-        $navigationLinks = array(   'Upload Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Upload,
-                                    'View Project Documents' => 'index.php?page='. PageName::Document .'&action=' . Action::View,
-                                    'Delete Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Delete);
-        $this->html = array_merge($this->html, $this->formComponents->addNavigationLinks($navigationLinks));
+        if ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin) {
+            $navigationLinks = array('Upload Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Upload,
+                'View Project Documents' => 'index.php?page='. PageName::Document .'&action=' . Action::View,
+                'Delete Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Delete);
+            $this->html = array_merge($this->html, $this->formComponents->addNavigationLinks($navigationLinks));
+        }
     }
 
     function selectProject() {
@@ -67,7 +70,7 @@ class DocumentView extends DocumentController
     function displayDocuments() {
         foreach ($this->documents as $document) {
             $this->html[] = '<p><a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
-            $this->html[] = '<p><a href="index.php?page=document&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Document</a></p>';
+            if ($this->canDeleteDocument) $this->html[] = '<p><a href="index.php?page=document&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Document</a></p>';
         }
     }
 

@@ -16,4 +16,5 @@ abstract class Action
     const Delete = 'delete';
     const Upload = 'upload';
     const View = 'view';
+    const Logout = 'logout';
 }
