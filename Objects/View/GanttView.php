@@ -11,9 +11,12 @@ namespace View;
 require_once("Objects/Controller/GanttController.php");
 
 use Controller\GanttController;
+use Utils\Action;
 use Utils\Form;
+use Utils\PageName;
 use Utils\Project;
 use Utils\Task;
+use Utils\User;
 
 // Creates the HTML to display the Gantt chart as a table
 // Uses the data parsed from the project object by the GanttController object
@@ -94,9 +97,10 @@ class GanttView extends GanttController
             $row .= $this->addPaddingDays($task[Task::End] + 1, $this->numDays)  . '</tr>';
 
             // Add Task update / delete / notes in row under task detail
+            $this->canEditTask = ($this->canDeleteTask || ($_SESSION[User::Role] == User::RoleMember) && $_SESSION[User::Email] == $task[Task::Email]);
             $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">';
-            $row .= '<a href="index.php?page=task&action=update&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Edit Task</a>';
-            $row .= '<a href="index.php?page=task&action=delete&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Task</a>';
+            if ($this->canEditTask) $row .= '<a href="index.php?page='. PageName::Task .'&action='. Action::Update .'&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Edit Task</a>';
+            if ($this->canDeleteTask) $row .= '<a href="index.php?page='. PageName::Task .'&action='. Action::Delete .'&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Task</a>';
             $row .= 'Task Notes: ' . $task[Task::Notes];
             $row .= '</td></tr>';
 

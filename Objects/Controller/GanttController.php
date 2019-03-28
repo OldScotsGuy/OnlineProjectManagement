@@ -12,6 +12,7 @@ use Model\TaskModel;
 use Model\ProjectModel;
 use Utils\Project;
 use Utils\Task;
+use Utils\User;
 
 require_once("Objects/Model/TaskModel.php");
 require_once("Objects/Model/ProjectModel.php");
@@ -40,6 +41,8 @@ class GanttController
     private $lastDayTimestamp = false;
     protected $numDays = null;          // Total number of days in Gantt Chart
     protected $taskData = array();
+    protected $canEditTask = false;
+    protected $canDeleteTask = false;
 
     // Date header data
     protected $yearStartData = array();
@@ -70,10 +73,6 @@ class GanttController
     private function parseTaskData()
     {
         $this->taskData = $this->taskModel->retrieveProjectTasks($this->projectID);
-        /*$tasks = array( array('taskID' => 1, 'taskName' => 'Specification', 'startDate' => '2019-01-28', 'endDate' => '2019-02-03', 'percent' => 100, 'taskNo' => 1, 'notes' => 'Understand user requirements', 'projectID' => 2, 'email' => 'asde@asde', 'owner' => 'John'),
-                        array('taskID' => 2, 'taskName' => 'panic', 'startDate' => '2019-02-07', 'endDate' => '2019-02-14', 'percent' => 100, 'taskNo' => 2, 'notes' => 'Realised the amount of work required', 'projectID' => 2, 'email' => 'asde@asde', 'owner' => 'John'),
-                        array('taskID' => 3, 'taskName' => 'Coding', 'startDate' => '2019-02-15', 'endDate' => '2019-03-07', 'percent' => 50, 'taskNo' => 3, 'notes' => 'The fun bit .. when everything works', 'projectID' => 2, 'email' => 'asde@asde', 'owner' => 'John')
-                      ); */
 
         // Find the start and finish project dates
         foreach ($this->taskData as $task)
@@ -97,6 +96,9 @@ class GanttController
 
         // Order tasks by task number
         usort($this->taskData, function ($a,$b) {return $a[Task::No] - $b[Task::No]; });
+
+        // Set tasks delete privilege
+        $this->canDeleteTask = ($_SESSION[User::Role] == User::RoleAdmin || $_SESSION[User::Role] == User::RoleLead);
     }
 
     // Classifies days according to weekend / today / month start

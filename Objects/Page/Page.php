@@ -80,7 +80,7 @@ class Page
                 <h1>Project Name Here</h1>
                 <?php if (isset($_SESSION[User::Username])) echo "<p>Username:". $_SESSION[User::Username] ."</p>"?>
                 <?php if (isset($_SESSION[User::Role])) echo "<p>Role:". ucfirst($_SESSION[User::Role]) ."</p>"?>
-                <?php if (isset($_SESSION[User::Email])) echo "<p>Email:". ucfirst($_SESSION[User::Email]) ."</p>"?>
+                <?php if (isset($_SESSION[User::Email])) echo "<p>Email:". $_SESSION[User::Email] ."</p>"?>
             </section>
             <nav>
                 <ul>
