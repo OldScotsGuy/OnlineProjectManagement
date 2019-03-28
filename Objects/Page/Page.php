@@ -9,6 +9,8 @@
 namespace Page;
 
 use Utils\Action;
+use Utils\PageName;
+use Utils\Project;
 use Utils\User;
 
 class Page
@@ -17,12 +19,6 @@ class Page
     private $title = "Online Project Management Tool";
     private $keywords = "Gantt";
     private $buttons = array();
-    /*public $buttons = array("Project Status"   => "index.php?page=status",
-                            "User Entry"  => "index.php?page=user&action=create",
-                            "Project Entry" => "index.php?page=project",
-                            "Task Entry" => "index.php?page=task",
-                            "Project Docs" => "index.php?page=document&action=" . Action::View
-                            ); */
 
     function __construct() {
         $this->setNavigationLinks();
@@ -36,13 +32,13 @@ class Page
 
     function setNavigationLinks() {
         if (isset($_SESSION[User::Role])) {
-            $this->buttons = array( "Project Status"   => "index.php?page=status",
-                "Project Docs" => "index.php?page=document&action=" . Action::View);
+            $this->buttons = array( "Project Status"   => "index.php?page=". PageName::Status,
+                "Project Docs" => "index.php?page=". PageName::Document ."&action=" . Action::View);
 
             if ($_SESSION[User::Role] == User::RoleAdmin || $_SESSION[User::Role] == User::RoleLead) {
-                $this->buttons += array("User Entry"  => "index.php?page=user&action=create",
-                    "Project Entry" => "index.php?page=project",
-                    "Task Entry" => "index.php?page=task");
+                $this->buttons += array("User Entry"  => "index.php?page=". PageName::User,
+                    "Project Entry" => "index.php?page=".PageName::Project,
+                    "Task Entry" => "index.php?page=". PageName::Task);
             }
         }
     }
@@ -82,6 +78,9 @@ class Page
             <section>
                 <img src="assets/images/#" alt="Logo Here" id="logo"/>
                 <h1>Project Name Here</h1>
+                <?php if (isset($_SESSION[User::Username])) echo "<p>Username:". $_SESSION[User::Username] ."</p>"?>
+                <?php if (isset($_SESSION[User::Role])) echo "<p>Role:". ucfirst($_SESSION[User::Role]) ."</p>"?>
+                <?php if (isset($_SESSION[User::Email])) echo "<p>Email:". ucfirst($_SESSION[User::Email]) ."</p>"?>
             </section>
             <nav>
                 <ul>

@@ -10,6 +10,7 @@ namespace View;
 
 use Controller\LoginController;
 use Utils\User;
+use Utils\Form;
 
 require_once("Objects/Controller/LoginController.php");
 

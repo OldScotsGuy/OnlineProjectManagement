@@ -109,9 +109,9 @@ class FormComponents
         }
         $html[] = $select;
         foreach ($projects as $project) {
-            $html[] = '<option value = "'. $project[Project::ID] .'">Title: ' . $project[Project::Title] . ' Project Lead: ' . $project[Project::Lead] . '  Project Lead Email: ' . $project[Project::LeadEmail] .'</option>';
+            $html[] = '<option value = "'. $project[Project::ID] .'">Title: ' . $project[Project::Title] . '--Project Lead: ' . $project[Project::Lead] . '</option>';
         }
-        $html[] = '</select>';
+        $html[] = '</select><br/>';
         return $html;
     }
 
