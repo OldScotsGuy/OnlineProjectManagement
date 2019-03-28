@@ -1,28 +1,52 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: nickh
- * Date: 26/03/2019
- * Time: 19:08
+ * User: P1.NickHarle
+ * Date: 28/03/2019
+ * Time: 14:47
  */
 
-namespace Utils;
-
-require_once("Objects/Model/UserModel.php");
+namespace Controller;
 
 use Model\UserModel;
+use Utils\FormComponents;
+use Utils\Form;
+use Utils\User;
 
-class LoginManagement
+class LoginController
 {
     private $userModel = null;
-    private $formComponents = null;
-    private $html = array();
+    protected $formComponents = null;
+    protected $message = null;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
         $this->formComponents = new FormComponents();
+        $this->assessLoginAttempt();
     }
+
+    function assessLoginAttempt() {
+        if (isset($_POST[Form::SubmitData])) {
+
+            // Form submitted so read and check form data
+            $email = $_POST[User::Email];
+            $password = $_POST[User::Password];
+            $this->message = $this->checkLoginData($_POST[User::Email], $password);
+
+            if ($this->message == '') {
+                // Form filled out so now check login data against the database
+                $this->attemptLogin($email, $password);
+                if ($this->userLoggedIn()) {
+                    header("Location: index.php");
+                } else {
+                    // Login data did not match that stored in the database
+                    $this->message = '<p>User Email and Password do not match</p>';
+                }
+            }
+        }
+    }
+
 
     function userLoggedIn() {
         return (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email])) && isset($_SESSION[User::Role]);
@@ -56,18 +80,5 @@ class LoginManagement
         session_destroy();
     }
 
-    function displayLoginForm($message) {
-        // Title and message
-        $this->html = array_merge($this->html, $this->formComponents->header("User Login", $message));
 
-        $this->html[] = '<form action ="index.php" method="post">';
-
-        // Login: email, password
-        $this->html = array_merge($this->html, $this->formComponents->addField("text", User::Email, "Enter Email:", '', 'required'));
-        $this->html =  array_merge($this->html, $this->formComponents->addField("password", User::Password, "Password:", '', 'required'));
-
-        // Submit button
-        $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, "Login"));
-        return implode("\n", $this->html);
-    }
 }

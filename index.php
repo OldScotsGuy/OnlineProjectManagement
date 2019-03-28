@@ -23,9 +23,10 @@ require("Objects/View/ProjectVIew.php");
 require("Objects/View/TaskView.php");
 require("Objects/View/GanttView.php");
 require("Objects/View/DocumentView.php");
+require("Objects/View/LoginView.php");
 
 // Load Login object
-require("Objects/Utils/LoginManagement.php");
+//require("Objects/Utils/LoginManagement.php");
 
 use Page\Page;
 use View\UserView;
@@ -33,21 +34,25 @@ use View\ProjectView;
 use View\TaskView;
 use View\DocumentView;
 use View\GanttView;
+use View\LoginView;
 use Utils\Action;
+use Utils\PageName;
 use Utils\Form;
 use Utils\User;
 use Utils\LoginManagement;
-use Utils\PageName;
+
 session_start();
 
 // Instance page template
 $HomePage = new Page();
 
 // Instance Login tracking
-$trackLogin = new LoginManagement();
+//$trackLogin = new LoginManagement();
+$LoginView = new LoginView();
 
-if ($trackLogin->userLoggedIn()) {
+if ($LoginView->userLoggedIn()) {
 //if (true) {
+    // ==============
     // User logged in
     // ==============
 
@@ -92,10 +97,12 @@ if ($trackLogin->userLoggedIn()) {
     }
 
 } else {
-
+    // ==================
     // User not logged in
     // ==================
-    $message = '';
+    $HomePage->content = '<section>' . $LoginView . '</section>';
+
+/*    $message = '';
     if (isset($_POST[Form::SubmitData])) {
 
         // Form submitted so read and check form data
@@ -114,7 +121,7 @@ if ($trackLogin->userLoggedIn()) {
             }
         }
     }
-    $HomePage->content = '<section>' . $trackLogin->displayLoginForm($message) . '</section>';
+    $HomePage->content = '<section>' . $trackLogin->displayLoginForm($message) . '</section>'; */
 }
 
 // Display Page
