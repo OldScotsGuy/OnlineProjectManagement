@@ -9,23 +9,42 @@
 namespace Page;
 
 use Utils\Action;
+use Utils\User;
 
 class Page
 {
     public $content = null;
-    public $title = "Online Project Management Tool";
-    public $keywords = "Gantt";
-    public $buttons = array("Project Status"   => "index.php?page=status",
-        "User Entry"  => "index.php?page=user&action=create",
-        "Project Entry" => "index.php?page=project",
-        "Task Entry" => "index.php?page=task",
-        "Project Docs" => "index.php?page=document&action=" . Action::Upload
-    );
+    private $title = "Online Project Management Tool";
+    private $keywords = "Gantt";
+    private $buttons = array();
+    /*public $buttons = array("Project Status"   => "index.php?page=status",
+                            "User Entry"  => "index.php?page=user&action=create",
+                            "Project Entry" => "index.php?page=project",
+                            "Task Entry" => "index.php?page=task",
+                            "Project Docs" => "index.php?page=document&action=" . Action::View
+                            ); */
+
+    function __construct() {
+        $this->setNavigationLinks();
+    }
 
     // Generalised setter
     public function __set($name, $value)
     {
         $this->$name = $value;
+    }
+
+    function setNavigationLinks() {
+        if (isset($_SESSION[User::Role])) {
+            $this->buttons = array( "Project Status"   => "index.php?page=status",
+                "Project Docs" => "index.php?page=document&action=" . Action::View);
+
+            if ($_SESSION[User::Role] == User::RoleAdmin || $_SESSION[User::Role] == User::RoleLead) {
+                $this->buttons += array("User Entry"  => "index.php?page=user&action=create",
+                    "Project Entry" => "index.php?page=project",
+                    "Task Entry" => "index.php?page=task");
+            }
+        }
     }
 
     public function Display()

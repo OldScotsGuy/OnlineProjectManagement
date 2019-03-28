@@ -8,6 +8,8 @@
 
 namespace Controller;
 
+require_once("Objects/Model/UserModel.php");
+
 use Model\UserModel;
 use Utils\FormComponents;
 use Utils\Form;

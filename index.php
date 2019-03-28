@@ -69,20 +69,34 @@ if ($LoginView->userLoggedIn()) {
     }
 
     // Generate Page Content
+    $enhancedPrivileges = ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin);
+    $authorisationErrorContent = '<section><p>This page content is unavailable</p></section>';
     switch ($page) {
-        case PageName::User:    // Process user information
-            $UserView = new UserView($action);
-            $HomePage->content = '<section>'. $UserView . '</section>';
+        case PageName::User:
+            if ($enhancedPrivileges) {
+                $UserView = new UserView($action);
+                $HomePage->content = '<section>'. $UserView . '</section>';
+            } else {
+                $HomePage->content = $authorisationErrorContent;
+            }
             break;
 
         case PageName::Project:
-            $ProjectView = new ProjectView($action);
-            $HomePage->content = '<section>'. $ProjectView . '</section>';
+            if ($enhancedPrivileges) {
+                $ProjectView = new ProjectView($action);
+                $HomePage->content = '<section>'. $ProjectView . '</section>';
+            } else {
+                $HomePage->content = $authorisationErrorContent;
+            }
             break;
 
         case PageName::Task:
-            $TaskView = new TaskView($action);
-            $HomePage->content = '<section>' . $TaskView . '</section>';
+            if (($_SESSION[User::Role] == User::RoleMember && $action == Action::Update) || $enhancedPrivileges) {
+                $TaskView = new TaskView($action);
+                $HomePage->content = '<section>' . $TaskView . '</section>';
+            } else {
+                $HomePage->content = $authorisationErrorContent;
+            }
             break;
 
         case PageName::Document:
