@@ -32,14 +32,6 @@ class TaskView extends TaskController
         // Title and message
         $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Task", $this->message));
 
-        // Navigation links
-/*        if ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin) {
-            $navigationLinks = array('Create Task' => 'index.php?page='. PageName::Task .'&action=' . Action::Create,
-                'Update Task' => 'index.php?page='. PageName::Task .'&action=' . Action::Update,
-                'Delete Task' => 'index.php?page='. PageName::Task .'&action=' . Action::Delete);
-            $this->html = array_merge($this->html, $this->formComponents->addNavigationLinks($navigationLinks));
-        } */
-
         // Task Entry Form
         $this->html[] = '<form action ="index.php?page='. PageName::Task .'&action=' . $this->action .'" method="post">';
 

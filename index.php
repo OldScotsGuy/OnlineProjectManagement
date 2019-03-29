@@ -67,12 +67,12 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
 
     // Generate Page Content
     $enhancedPrivileges = ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin);
-    $authorisationErrorContent = '<section><p>This page content is unavailable</p></section>';
+    $authorisationErrorContent = '<p>This page content is unavailable</p>';
     switch ($page) {
         case PageName::User:
             if ($enhancedPrivileges) {
                 $UserView = new UserView($action);
-                $HomePage->content = '<section>'. $UserView . '</section>';
+                $HomePage->content =$UserView;
             } else {
                 $HomePage->content = $authorisationErrorContent;
             }
@@ -81,7 +81,7 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
         case PageName::Project:
             if ($enhancedPrivileges) {
                 $ProjectView = new ProjectView($action);
-                $HomePage->content = '<section>'. $ProjectView . '</section>';
+                $HomePage->content =$ProjectView;
             } else {
                 $HomePage->content = $authorisationErrorContent;
             }
@@ -90,7 +90,7 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
         case PageName::Task:
             if (($_SESSION[User::Role] == User::RoleMember && $action == Action::Update) || $enhancedPrivileges) {
                 $TaskView = new TaskView($action);
-                $HomePage->content = '<section>' . $TaskView . '</section>';
+                $HomePage->content = $TaskView;
             } else {
                 $HomePage->content = $authorisationErrorContent;
             }
@@ -98,12 +98,12 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
 
         case PageName::Document:
             $DocumentView = new DocumentView($action);
-            $HomePage->content = '<section>' . $DocumentView . '</section>';
+            $HomePage->content = $DocumentView;
             break;
 
         case PageName::Status:
             $GanttView = new GanttView();
-            $HomePage->content = '<section>' . $GanttView . '</section>';
+            $HomePage->content = $GanttView;
             break;
     }
 
@@ -112,7 +112,7 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
     // User not logged in
     // ==================
     $LoginView = new LoginView();
-    $HomePage->content = '<section>' . $LoginView . '</section>';
+    $HomePage->content = $LoginView;
 }
 
 // ============

@@ -165,23 +165,18 @@ class GanttView extends GanttController
 
     private function selectProject() {
         $this->html[] = '<form action ="index.php?page=status" method="get">';
-        $this->html[] = '<h2>Project Status</h2>';
-        $this->html[] = '<p>' . $this->message . '</p>';
-        $this->html[] = '<label for="projectID">Select Project to View Status of: </label>';
-        $select = '<select name = "' . Project::ID .'" id="' . Project::ID .'"';
-        if (count($this->projects) == 0) {
-            $select .= ' disabled>';
-        } else {
-            $select .= '>';
-        }
-        $this->html[] = $select;
-        foreach ($this->projects as $project) {
-            $this->html[] = '<option value = "'. $project[Project::ID] .'">Title: ' . $project[Project::Title] . ' Project Lead: ' . $project[Project::Lead] . '  Project Lead Email: ' . $project[Project::LeadEmail] .'</option>';
-        }
-        $this->html[] = '</select>';
-        // Disable the submit button if no projects present
-        $this->html[] = '<br><br><input type="submit" name="' . Form::SubmitSelection . '" value="Select Project to View"' . (count($this->projects) > 0 ? '' : 'disabled') . '/>';
+        $this->html[] = '<fieldset>';
 
+        // Title and message
+        $this->html = array_merge($this->html, $this->formComponents->header("Project Status", $this->message));
+
+        // Project selection drop down box
+        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project to review: ', $this->projects));
+
+        // Submit button
+        $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select Project"));
+
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
     }
 }

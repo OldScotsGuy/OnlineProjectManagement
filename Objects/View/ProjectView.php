@@ -49,18 +49,19 @@ class ProjectView extends ProjectController
 
     function displayProjectSelectionForm() {
         $this->html[] = '<form action ="index.php?page='. PageName::Project .'&action=' . $this->action .'" method="post">';
-
+        $this->html[] = '<fieldset>';
         // Project selection drop down box
         $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project to ' . ucfirst($this->action) . ':', $this->projects));
 
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select Project to ".ucfirst($this->action)));
-
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
     }
 
     function displayProjectForm() {
         $this->html[] = '<form action ="index.php?page=project&action=' . $this->action .'" method="post">';
+        $this->html[] = '<fieldset>';
 
         // Display project description
         $value = (isset($this->displayValues[Project::Title]) ? $this->displayValues[Project::Title] : null );
@@ -86,6 +87,7 @@ class ProjectView extends ProjectController
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, ucfirst($this->action) . " Project"));
 
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
     }
 }

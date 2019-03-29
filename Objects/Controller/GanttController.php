@@ -10,6 +10,7 @@ namespace Controller;
 
 use Model\TaskModel;
 use Model\ProjectModel;
+use Utils\FormComponents;
 use Utils\Project;
 use Utils\Task;
 use Utils\User;
@@ -30,6 +31,7 @@ class GanttController
     // Required Model Objects
     private $taskModel = null;
     private $projectModel = null;
+    protected $formComponents = null;
 
     // Project Data
     protected $projects = null;
@@ -56,6 +58,7 @@ class GanttController
         $this->projectModel = new ProjectModel();
         $this->taskModel = new TaskModel();
 
+        $this->formComponents = new FormComponents();
         if (!isset($_GET[Project::ID])) {
             $this->projects = $this->projectModel->retrieveProjects();
             if (count($this->projects) == 0) $this->message = "No projects to view status of";

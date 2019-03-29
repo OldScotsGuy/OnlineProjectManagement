@@ -76,11 +76,13 @@ class Page
         <!-- page header -->
         <header>
             <section>
-                <img src="assets/images/#" alt="Logo Here" id="logo"/>
-                <h1>Project Name Here</h1>
-                <?php if (isset($_SESSION[User::Username])) echo "<p>Username:". $_SESSION[User::Username] ."</p>"?>
-                <?php if (isset($_SESSION[User::Role])) echo "<p>Role:". ucfirst($_SESSION[User::Role]) ."</p>"?>
-                <?php if (isset($_SESSION[User::Email])) echo "<p><a href='index.php?action=". Action::Logout ."'>Logout</a></p>"?>
+                <img src="Assets/Images/Road-Ahead-Small.jpg" alt="Road Ahead" id="logo"/>
+                <div>
+                <h1>Plan Your Next Move - Every Step Adds To The Journey</h1>
+                <?php if (isset($_SESSION[User::Email])) echo "<span><a href='index.php?action=". Action::Logout ."'>Logout</a></span>"?>
+                <?php if (isset($_SESSION[User::Role])) echo "<span>Role:   ". ucfirst($_SESSION[User::Role]) ."</span>"?>
+                <?php if (isset($_SESSION[User::Username])) echo "<span>Logged in As:   ". $_SESSION[User::Username] ."</span>"?>
+                </div>
             </section>
             <nav>
                 <ul>
@@ -98,7 +100,7 @@ class Page
 
     function DisplayMain() {
         echo "<main>";
-        echo $this->content;
+        echo '<section>' . $this->content . '</section>';
         echo "</main>";
     }
 

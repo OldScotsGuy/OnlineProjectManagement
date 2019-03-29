@@ -25,10 +25,12 @@ class LoginView extends LoginController
     }
 
     function displayLoginForm() {
-        // Title and message
-        $this->html = array_merge($this->html, $this->formComponents->header("User Login", $this->message));
 
         $this->html[] = '<form action ="index.php" method="post">';
+        $this->html[] = '<fieldset>';
+
+        // Title and message
+        $this->html = array_merge($this->html, $this->formComponents->header("User Login", $this->message));
 
         // Login: email, password
         $this->html = array_merge($this->html, $this->formComponents->addField("text", User::Email, "Enter Email:", '', 'required'));
@@ -36,6 +38,9 @@ class LoginView extends LoginController
 
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, "Login"));
+
+        $this->html[] = '</fieldset>';
+        $this->html[] = '</form>';
     }
 
 }

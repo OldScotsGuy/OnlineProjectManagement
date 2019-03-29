@@ -1,63 +1,152 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+/* =============================== */
+/* Basic Page Layout and colouring */
+/* =============================== */
+
 body {
-    /* background-color: purple; */
-    margin-left: auto;
-    margin-right: auto;
-    font-family: 'Roboto', sans-serif;
+    background-color: black;
 }
 
-/*
 header {
-    background-color: orange;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 main {
-    background-color: crimson;
+    /*background-color: darkslategrey; */
+    background-image: url("../Images/chess-2.jpg") ;
+
+    /* Set Height and width*/
+    max-width: 80%;
+    height: 60vh;
+
+    /* Centre main in screen */
+    margin-left: auto;
+    margin-right: auto;
+
+    /* Centre horizontally content in main */
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-direction: row;
+    justify-content: center;
 }
-*/
+
+main > section {
+    /* Centre vertically content in main */
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-direction: column;
+    justify-content: center;
+}
+
+label {
+    float: left;
+    padding-right: 10px;
+}
+
+input {
+    float: right;
+}
+
+form {
+    background-color: grey;
+}
+
+.submit {
+    background-color: darkgrey;
+    float: right;
+/*    position: relative;
+    left: -50%; */
+}
+
+footer {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* ==== */
 /* TEXT */
 /* ==== */
 
-h1 {
+header {
     font-family: 'Roboto', sans-serif;
+    color: white;
+}
+
+main {
+    font-family: 'Roboto', sans-serif;
+}
+
+footer {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    text-align: center;
+}
+
+h1 {
     font-weight: 700;
     font-size: 50px;
 }
 
 h2 {
-    font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 20px;
 }
 
 p, ul, #radio {
-    font-family: 'Roboto', sans-serif;
     font-weight: 400;
 }
 
-a {
-    font-family: 'Roboto', sans-serif;
+legend {
     font-weight: 700;
+    font-size: 20px;
 }
 
+.submit{
+    font-weight: 700;
+    font-size: 15px;
+}
+
+a {
+    font-weight: 700;
+}
 
 /* ====== */
 /* HEADER */
 /* ====== */
 
-/* LOGO */
 #logo {
     float:left;
     padding-right: 20px;
 }
 
-/* NAVIGATION BAR CSS */
+header section div {
+    height: 200px;
+    /* border-bottom: 2px solid darkgrey; */
+}
+
+header section div span {
+    float: right;
+    padding: 10px;
+    border-top: 2px solid darkgrey;
+    border-bottom: 2px solid darkgrey;
+}
+
+header section div span:last-child {
+    border-left: 2px solid darkgrey;
+}
+
+header section div span:first-child {
+    margin-right: 2px;
+    border-right: 2px solid darkgrey;
+}
 
 nav div {
-    height: 40px;
-    line-height: 40px;
+    height: 30px;
+    line-height: 30px;
     text-align: center;
 }
 
@@ -73,10 +162,7 @@ nav>ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    border: 2px solid black;
-    border-top: none;
-    border-right: none;
-    border-left: none;
+    border-bottom: 2px solid darkgrey;
 }
 
 /* Float each list item to the left */
@@ -89,13 +175,13 @@ nav>ul>li {
 }
 
 nav>ul>li:last-child {
-    border-right: 2px solid black;
+    border-right: 2px solid darkgrey;
 }
 
 /* Remove underline, centre text, add padding */
 nav>ul>li a {
     display: block;
-    color: black;
+    /*color: black; */
     text-align: center;
     padding: 10px;
     text-decoration: none;
@@ -106,7 +192,7 @@ nav>li>a:hover {
 }
 
 @media screen and (max-width: 800px) {
-    nav ul li {border-right: 2px solid black;}
+    nav ul li {border-right: 2px solid darkgrey;}
     /* nav ul li.right, */
     nav ul li {float: none;}
 }

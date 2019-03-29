@@ -59,11 +59,13 @@ class DocumentView extends DocumentController
 
     function selectProject() {
         $this->html[] = '<form action ="index.php?page='. PageName::Document .'&action=' . $this->action . '" method="post">';
-        // Select Project
+        $this->html[] = '<fieldset>';
+            // Select Project
         $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project:', $this->projects));
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select Project:"));
 
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
     }
 
@@ -76,7 +78,9 @@ class DocumentView extends DocumentController
 
     function displayUploadForm() {
         $this->html[] = '<form action="index.php?page='. PageName::Document .'&action=' . Action::Upload . '" method="post" enctype="multipart/form-data">';
+        $this->html[] = '<fieldset>';
         $this->html = array_merge($this->html, $this->formComponents->uploadDocument($this->projectID));
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
 
     }
