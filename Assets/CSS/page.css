@@ -9,7 +9,9 @@ body {
 }
 
 header {
+    /* Header 80% os screen width */
     max-width: 80%;
+    /* Centre header in screen */
     margin-left: auto;
     margin-right: auto;
 }
@@ -18,7 +20,7 @@ main {
     /*background-color: darkslategrey; */
     background-image: url("../Images/chess-2.jpg") ;
 
-    /* Set Height and width*/
+    /* Main width 80% of screen width and main height 60% */
     max-width: 80%;
     height: 60vh;
 
@@ -41,28 +43,10 @@ main > section {
     justify-content: center;
 }
 
-label {
-    float: left;
-    padding-right: 10px;
-}
-
-input {
-    float: right;
-}
-
-form {
-    background-color: grey;
-}
-
-.submit {
-    background-color: darkgrey;
-    float: right;
-/*    position: relative;
-    left: -50%; */
-}
-
 footer {
+    /* Header 80% os screen width */
     max-width: 80%;
+    /* Centre header in screen */
     margin-left: auto;
     margin-right: auto;
 }
@@ -112,11 +96,23 @@ legend {
 
 a {
     font-weight: 700;
+    color: grey;
+    text-decoration: none;
 }
+
+a:hover { color: white; }
 
 /* ====== */
 /* HEADER */
 /* ====== */
+
+header{
+    /* Place the Section containing logo/test above nav bar*/
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-direction: column;
+    justify-content: space-between;
+}
 
 #logo {
     float:left;
@@ -131,17 +127,7 @@ header section div {
 header section div span {
     float: right;
     padding: 10px;
-    border-top: 2px solid darkgrey;
-    border-bottom: 2px solid darkgrey;
-}
-
-header section div span:last-child {
-    border-left: 2px solid darkgrey;
-}
-
-header section div span:first-child {
-    margin-right: 2px;
-    border-right: 2px solid darkgrey;
+    border: 2px solid darkgrey;
 }
 
 nav div {
@@ -195,4 +181,33 @@ nav>li>a:hover {
     nav ul li {border-right: 2px solid darkgrey;}
     /* nav ul li.right, */
     nav ul li {float: none;}
+}
+
+/* ==== */
+/* MAIN */
+/* ==== */
+
+label {
+    float: left;
+    padding-right: 10px;
+}
+
+input {
+    float: right;
+}
+
+form {
+    background-color: grey;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+fieldset {
+    border: 3px solid;
+    border-radius: 5px;
+}
+
+.submit {
+    background-color: darkgrey;
+    float: right;
 }

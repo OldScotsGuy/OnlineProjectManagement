@@ -80,7 +80,7 @@ class Page
                 <div>
                 <h1>Plan Your Next Move - Every Step Adds To The Journey</h1>
                 <?php if (isset($_SESSION[User::Email])) echo "<span><a href='index.php?action=". Action::Logout ."'>Logout</a></span>"?>
-                <?php if (isset($_SESSION[User::Role])) echo "<span>Role:   ". ucfirst($_SESSION[User::Role]) ."</span>"?>
+                <?php //if (isset($_SESSION[User::Role])) echo "<span>Role:   ". ucfirst($_SESSION[User::Role]) ."</span>"?>
                 <?php if (isset($_SESSION[User::Username])) echo "<span>Logged in As:   ". $_SESSION[User::Username] ."</span>"?>
                 </div>
             </section>
@@ -110,7 +110,7 @@ class Page
         <!-- page footer -->
         <footer>
             <hr>
-            <p><strong>(c)2016 Lex & Associates</strong></p>
+            <p><strong>(c) 2016 Lex & Associates</strong></p>
             <script type="text/javascript" src="Assets/Javascript/chart-task-notes.js"></script>
         </footer>
         <?php
