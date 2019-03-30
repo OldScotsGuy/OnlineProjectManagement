@@ -36,11 +36,11 @@ class FormComponents
 
     function addNavigationLinks($links) {
         $html = array();
-        $html[] = '<ul>';
+        $html[] = '<div class="subNav"><ul>';
         foreach ($links as $name => $url) {
-            $html[] = '<li><a href="'.$url.'">'.$name.'</a></li>';
+            $html[] = '<li><a href="'.$url.'"><div><span>'.$name.'</span></div></a></li>';
         }
-        $html[] = '</ul>';
+        $html[] = '</ul></div>';
         return $html;
     }
     function submitButton($name, $value) {

@@ -190,6 +190,63 @@ nav>li>a:hover {
 /* MAIN */
 /* ==== */
 
+.subNav {
+    /* Centre horizontally content in main */
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-direction: row;
+    justify-content: center;
+}
+
+main section ul {
+    display:block;
+    background-color: darkgrey;
+    padding: 0px;
+    list-style-type: none;
+}
+
+main section ul li {
+    border-style: solid;
+    border-width: 2px;
+    border-right: none;
+    padding: 5px;
+    float:left;
+}
+
+main section ul li:last-child {
+    border-right: 2px solid black;
+}
+
+main section ul li  div {
+    height: 30px;
+    line-height: 30px;
+}
+
+main section ul li span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+main section a {
+    display: block;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: black;
+}
+
+
+form {
+    background-color: darkgrey;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+fieldset {
+    border: 3px solid;
+    border-radius: 5px;
+}
+
 label {
     float: left;
     padding-right: 10px;
@@ -199,15 +256,8 @@ input {
     float: right;
 }
 
-form {
-    background-color: grey;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-fieldset {
-    border: 3px solid;
-    border-radius: 5px;
+select {
+    float: right;
 }
 
 .submit {

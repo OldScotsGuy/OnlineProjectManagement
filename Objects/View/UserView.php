@@ -36,9 +36,6 @@ class UserView extends UserController
     }
 
     function displayHeader() {
-        // Title and message
-        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " User", $this->message));
-
         // Navigation links
         $navigationLinks = array(   'Create User' => 'index.php?page='. PageName::User .'&action=' . Action::Create,
                                     'Update User' => 'index.php?page='. PageName::User .'&action=' . Action::Update,
@@ -49,6 +46,10 @@ class UserView extends UserController
     function displayUserForm() {
         // User Form
         $this->html[] = '<form action ="index.php?page='. PageName::User .'&action=' . $this->action .'" method="post">';
+        $this->html[] = '<fieldset>';
+
+        // Title and message
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " User", $this->message));
 
         // User data: username, password, email, role
         $value = (isset($this->displayValues[User::Username]) ? $this->displayValues[User::Username] : null );
@@ -61,16 +62,24 @@ class UserView extends UserController
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, ucfirst($this->action) . " User"));
 
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
     }
 
     function initialUserSelection() {
         // User Selection Form
         $this->html[] = '<form action ="index.php?page='. PageName::User .'&action=' . $this->action .'" method="post">';
+        $this->html[] = '<fieldset>';
+
+        // Title and message
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " User", $this->message));
+
         // User select
         $this->html = array_merge($this->html, $this->formComponents->selectUser('Select User to ' . ucfirst($this->action) . ':', $this->users));
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select User to ".ucfirst($this->action)));
+
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
     }
 }
