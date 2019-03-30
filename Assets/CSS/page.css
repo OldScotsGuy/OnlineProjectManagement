@@ -280,3 +280,24 @@ select {
     margin-top: 10px;
     float: right;
 }
+
+#documents {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 10px;
+    background-color: darkgrey;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#documents a {
+    display: table-cell;
+    float: left;
+    padding-left: 30px;
+}
+
+#documents span {
+    display: table-cell;
+    float: left;
+    min-width: 200px;
+}

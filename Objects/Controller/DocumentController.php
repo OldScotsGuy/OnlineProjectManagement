@@ -90,7 +90,6 @@ class DocumentController
                 break;
 
             case Action::Delete:
-                // TODO This section incomplete - 3 step process: 1) select project, 2) select document, 3) delete document
                 if (isset($_GET[Document::ID])) {
                     // Delete document from documents directory
                     $temp = $this->documentModel->retrieveDocument($_GET[Document::ID]);
@@ -100,13 +99,8 @@ class DocumentController
                     if ($this->documentModel->deleteDocument($_GET[Document::ID])) {
                         $this->message = "<p>Document deleted</p>";
                     }
-                    header('Location: index.php?page='. PageName::Document .'&action='. Action::View .'&'. Project::ID .'='.$_GET[Project::ID]);
-                } else {
-                    $this->message .= '<p>Select Document to delete</p>';
-                    // Set projects listing
-                    $this->projects = $this->projectModel->retrieveProjects();
-                    if (count($this->projects) == 0) $this->message = "No projects to update";
                 }
+                header('Location: index.php?page='. PageName::Document .'&action='. Action::View .'&'. Project::ID .'='.$_GET[Project::ID]);
                 break;
         }
 

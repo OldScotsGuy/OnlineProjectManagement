@@ -171,7 +171,7 @@ class GanttView extends GanttController
         $this->html = array_merge($this->html, $this->formComponents->header("Project Status", $this->message));
 
         // Project selection drop down box
-        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project to review: ', $this->projects));
+        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project: ', $this->projects));
 
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select Project"));

@@ -34,7 +34,8 @@ class DocumentView extends DocumentController
                     $this->displayUploadForm();
                     break;
                 case Action::Delete:
-                    // TODO implement document delete!!!
+                    // This should not be reached as delete is only called from View page anchor tag
+                    // The controller then redirects as a view after the document deletion
                     break;
             }
         } else {
@@ -49,8 +50,7 @@ class DocumentView extends DocumentController
         // Navigation links
         if ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin) {
             $navigationLinks = array('Upload Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Upload,
-                'View Project Documents' => 'index.php?page='. PageName::Document .'&action=' . Action::View,
-                'Delete Project Document' => 'index.php?page='. PageName::Document .'&action=' . Action::Delete);
+                'View Project Documents' => 'index.php?page='. PageName::Document .'&action=' . Action::View);
             $this->html = array_merge($this->html, $this->formComponents->addNavigationLinks($navigationLinks));
         }
     }
@@ -73,13 +73,25 @@ class DocumentView extends DocumentController
     }
 
     function displayDocuments() {
+        $this->html[] = '<div id="documents">';
+        $this->html[] = '<fieldset>';
+
+        if (count($this->documents) == 0) {
+            $this->message = '<p>No documents associated with this project</p>';
+        }
+
         // Title and Message
         $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
 
         foreach ($this->documents as $document) {
-            $this->html[] = '<p><a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
-            if ($this->canDeleteDocument) $this->html[] = '<p><a href="index.php?page=document&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Document</a></p>';
+            $this->html[] = '<div class="row"><span>Title:<i> ' . $document[Document::Title].'</i></span>';
+            $this->html[] = '<a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">View</a>';
+            if ($this->canDeleteDocument) $this->html[] = '<a href="index.php?page='. PageName::Document .'&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete</a>';
+            $this->html[] = '</div>';
         }
+
+        $this->html[] = '</fieldset>';
+        $this->html[] = '</div>';
     }
 
     function displayUploadForm() {
