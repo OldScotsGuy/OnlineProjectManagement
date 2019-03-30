@@ -29,18 +29,19 @@ class TaskView extends TaskController
     }
 
     function displayTaskForm() {
+        // Task Entry Form
+        $this->html[] = '<form action ="index.php?page='. PageName::Task .'&action=' . $this->action .'" method="post">';
+        $this->html[] = '<fieldset>';
+
         // Title and message
         $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Task", $this->message));
 
-        // Task Entry Form
-        $this->html[] = '<form action ="index.php?page='. PageName::Task .'&action=' . $this->action .'" method="post">';
-
         // Select Project Task belongs to
-        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project Task Belongs to: :', $this->projects));
+        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project:', $this->projects));
 
         // Enter Task name
         $value = (isset($this->displayValues[Task::Name]) ? $this->displayValues[Task::Name] : null );
-        $this->html = array_merge($this->html, $this->formComponents->addField("text", Task::Name, "Task Name:", $value, 'required'));
+        $this->html = array_merge($this->html, $this->formComponents->addField("text", Task::Name, "Task Name:", $value, 'required maxlength="80" size="40"'));
 
         // Enter Task Start Date
         $value = (isset($this->displayValues[Task::StartDate]) ? $this->displayValues[Task::StartDate] : null );
@@ -52,7 +53,7 @@ class TaskView extends TaskController
 
         // Enter Percentage Task Complete
         $value = (isset($this->displayValues[Task::Percent]) ? $this->displayValues[Task::Percent] : null );
-        $this->html = array_merge($this->html, $this->formComponents->addField("number", Task::Percent, "Task Percentage Complete:", $value, 'required min="0" max="100"'));
+        $this->html = array_merge($this->html, $this->formComponents->addField("number", Task::Percent, "Task % Complete:", $value, 'required min="0" max="100"'));
 
         // Enter Task Number - for display purposes only
         $value = (isset($this->displayValues[Task::No]) ? $this->displayValues[Task::No] : null );
@@ -71,6 +72,7 @@ class TaskView extends TaskController
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, ucfirst($this->action) . " Task"));
 
+        $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
     }
 

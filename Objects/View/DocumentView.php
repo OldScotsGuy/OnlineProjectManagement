@@ -34,7 +34,7 @@ class DocumentView extends DocumentController
                     $this->displayUploadForm();
                     break;
                 case Action::Delete:
-
+                    // TODO implement document delete!!!
                     break;
             }
         } else {
@@ -45,8 +45,6 @@ class DocumentView extends DocumentController
     }
 
     function displayHeader() {
-        // Title and Message
-        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
 
         // Navigation links
         if ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin) {
@@ -60,8 +58,13 @@ class DocumentView extends DocumentController
     function selectProject() {
         $this->html[] = '<form action ="index.php?page='. PageName::Document .'&action=' . $this->action . '" method="post">';
         $this->html[] = '<fieldset>';
-            // Select Project
+
+        // Title and Message
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
+
+        // Select Project
         $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project:', $this->projects));
+
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select Project:"));
 
@@ -70,6 +73,9 @@ class DocumentView extends DocumentController
     }
 
     function displayDocuments() {
+        // Title and Message
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
+
         foreach ($this->documents as $document) {
             $this->html[] = '<p><a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">' . $document[Document::Title] .'</a></p>';
             if ($this->canDeleteDocument) $this->html[] = '<p><a href="index.php?page=document&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Document</a></p>';
@@ -79,7 +85,14 @@ class DocumentView extends DocumentController
     function displayUploadForm() {
         $this->html[] = '<form action="index.php?page='. PageName::Document .'&action=' . Action::Upload . '" method="post" enctype="multipart/form-data">';
         $this->html[] = '<fieldset>';
+
+        // Title and Message
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
         $this->html = array_merge($this->html, $this->formComponents->uploadDocument($this->projectID));
+
+        // Submit button
+        $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, "Upload File"));
+
         $this->html[] = '</fieldset>';
         $this->html[] = '</form>';
 

@@ -37,9 +37,6 @@ class ProjectView extends ProjectController
 
     function displayHeader() {
 
-        // Title and Message
-        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project", $this->message));
-
         // Navigation links
         $navigationLinks = array(   'Create Project' => 'index.php?page='. PageName::Project .'&action=' . Action::Create,
                                     'Update Project' => 'index.php?page='. PageName::Project .'&action=' . Action::Update,
@@ -50,8 +47,12 @@ class ProjectView extends ProjectController
     function displayProjectSelectionForm() {
         $this->html[] = '<form action ="index.php?page='. PageName::Project .'&action=' . $this->action .'" method="post">';
         $this->html[] = '<fieldset>';
+
+        // Title and Message
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project", $this->message));
+
         // Project selection drop down box
-        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project to ' . ucfirst($this->action) . ':', $this->projects));
+        $this->html = array_merge($this->html, $this->formComponents->selectProject('Select Project:', $this->projects));
 
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select Project to ".ucfirst($this->action)));
@@ -63,21 +64,24 @@ class ProjectView extends ProjectController
         $this->html[] = '<form action ="index.php?page=project&action=' . $this->action .'" method="post">';
         $this->html[] = '<fieldset>';
 
+        // Title and Message
+        $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project", $this->message));
+
         // Display project description
         $value = (isset($this->displayValues[Project::Title]) ? $this->displayValues[Project::Title] : null );
-        $this->html = array_merge($this->html, $this->formComponents->addField("text", Project::Title, "Title:", $value, 'required'));
+        $this->html = array_merge($this->html, $this->formComponents->addField("text", Project::Title, "Title:", $value, 'required size="40" maxlength="40"'));
 
         // Display project description
         $value = (isset($this->displayValues[Project::Description]) ? $this->displayValues[Project::Description] : null );
         $this->html = array_merge($this->html, $this->formComponents->addTextArea(Project::Description, "Description:", $value));
 
         // Display project lead Options
-        $label = 'Project ' . ucfirst(Project::LeadEmail) . ': ';
+        $label = 'Project Lead: ';
         $value = (isset($this->displayValues[Project::LeadEmail]) ? $this->displayValues[Project::LeadEmail] : null);
         $this->html = array_merge($this->html, $this->formComponents->addUserInput(Project::LeadEmail, $label, $value, $this->usersLead));
 
         // Display project client options
-        $label = 'Project ' . ucfirst(Project::ClientEmail) . ': ';
+        $label = 'Project Client: ';
         $value = (isset($this->displayValues[Project::ClientEmail]) ? $this->displayValues[Project::ClientEmail] : null);
         $this->html = array_merge($this->html, $this->formComponents->addUserInput(Project::ClientEmail, $label, $value, $this->usersClient));
 

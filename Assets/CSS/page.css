@@ -83,7 +83,7 @@ h2 {
     font-size: 20px;
 }
 
-p, ul, #radio {
+p, ul {
     font-weight: 400;
 }
 
@@ -191,7 +191,7 @@ nav>li>a:hover {
 /* ==== */
 
 .subNav {
-    /* Centre horizontally content in main */
+    /* Centre content horizontally */
     display: flex;
     display: -webkit-flex; /* Safari */
     flex-direction: row;
@@ -235,11 +235,17 @@ main section a {
     color: black;
 }
 
-
 form {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 10px;
     background-color: darkgrey;
     padding: 10px;
     border-radius: 5px;
+}
+
+.row {
+    display: table-row;
 }
 
 fieldset {
@@ -248,19 +254,29 @@ fieldset {
 }
 
 label {
+    display: table-cell;
     float: left;
     padding-right: 10px;
+    width: 150px;
 }
 
 input {
-    float: right;
+    display: table-cell;
+    float: left;
+}
+
+textarea {
+    display: table-cell;
+    float: left;
 }
 
 select {
-    float: right;
+    display: table-cell;
+    float: left;
 }
 
 .submit {
     background-color: darkgrey;
+    margin-top: 10px;
     float: right;
 }

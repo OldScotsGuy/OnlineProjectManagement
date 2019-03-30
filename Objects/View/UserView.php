@@ -75,7 +75,7 @@ class UserView extends UserController
         $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " User", $this->message));
 
         // User select
-        $this->html = array_merge($this->html, $this->formComponents->selectUser('Select User to ' . ucfirst($this->action) . ':', $this->users));
+        $this->html = array_merge($this->html, $this->formComponents->selectUser('Select User:', $this->users));
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitSelection, "Select User to ".ucfirst($this->action)));
 
