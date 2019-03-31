@@ -11,7 +11,7 @@ div {
     max-width: 100vw;
     overflow-x: auto;
     overflow-y: auto;
-    position: relative;
+    /* position: relative; */
     margin-top: 100px;
 }
 
