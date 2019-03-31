@@ -80,6 +80,7 @@ class GanttView extends GanttController
     // Create task row data
     private function createTaskRows()
     {
+        $index = 0;
         foreach ($this->taskData as $task) {
 
             // Add task details
@@ -89,7 +90,13 @@ class GanttView extends GanttController
             $row .= $this->addPaddingDays(0, $task[Task::Start]);
 
             // Add task details
-            $row .= '<td colspan ="' . ($task[Task::End] - $task[Task::Start] + 1) . '">';
+            if ($index == 0) {
+                $row .= '<td colspan ="' . ($task[Task::End] - $task[Task::Start] + 1) . '" class="task-start">';
+            } else {
+                $row .= '<td colspan ="' . ($task[Task::End] - $task[Task::Start] + 1) . '">';
+            }
+            $index += 1;
+            //$row .= '<td colspan ="' . ($task[Task::End] - $task[Task::Start] + 1) . '">';
             $row .= '<div class ="chart-task"><div class="chart-fill" style="width: ' . $task[Task::Percent] .'%">';
             $row .= '</div></div></td>';
 
@@ -98,10 +105,10 @@ class GanttView extends GanttController
 
             // Add Task update / delete / notes in row under task detail
             $this->canEditTask = ($this->canDeleteTask || ($_SESSION[User::Role] == User::RoleMember) && $_SESSION[User::Email] == $task[Task::Email]);
-            $row .= '<tr class="task-notes"><td colspan ="'. $this->numDays . '">';
-            if ($this->canEditTask) $row .= '<a href="index.php?page='. PageName::Task .'&action='. Action::Update .'&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Edit Task</a>';
-            if ($this->canDeleteTask) $row .= '<a href="index.php?page='. PageName::Task .'&action='. Action::Delete .'&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete Task</a>';
-            $row .= 'Task Notes: ' . $task[Task::Notes];
+            $row .= '<tr class="task-notes"><td colspan ="'. ($this->numDays+1) . '">';
+            if ($this->canEditTask) $row .= '<a href="index.php?page='. PageName::Task .'&action='. Action::Update .'&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Update</a>';
+            if ($this->canDeleteTask) $row .= '<a href="index.php?page='. PageName::Task .'&action='. Action::Delete .'&'. Task::ID . '=' . $task[Task::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete</a>';
+            $row .= '<span>Task Notes: ' . $task[Task::Notes] . '</span>';
             $row .= '</td></tr>';
 
             $this->taskRows[] = $row;
@@ -109,8 +116,7 @@ class GanttView extends GanttController
     }
 
     // Used to add cells before and after the tasks
-    private function addPaddingDays($start, $end)
-    {
+    private function addPaddingDays($start, $end) {
         $padding = null;
         for ($i = $start; $i < $end; $i++) {
             $padding .= '<td class="' . $this->dayClassifications[$i][0] . '">' . '</td>';
@@ -121,9 +127,12 @@ class GanttView extends GanttController
     // Create year, month and day banner
     private function createGanttTable()
     {
-        $this->html[] = "<figcaption>Project Title: " . $this->project[Project::Title] . "</figcaption>";
-
         $this->html[] = "<figure class='chart'>";
+
+        // Centred Chart Title
+        $this->html[] = "<section>";
+        $this->html[] = "<figcaption>Project Title: " . $this->project[Project::Title] . "</figcaption>";
+        $this->html[] = "</section>";
         // Gantt Task Side Bar
         //$this->html[] = "<aside><table>";
         //foreach ($this->taskSideBarRows as $row) {
@@ -131,8 +140,9 @@ class GanttView extends GanttController
         //}
         //$this->html[] = "</table></aside>";
 
-        // Gantt Bars
-        $this->html[] = '<section><table style ="width: ' . ($this->numDays * 40) . 'px;">';
+        // Centred Gantt Chart
+        $this->html[] = "<section>";
+        $this->html[] = '<table style ="width: ' . (300 + ($this->numDays * 40)) . 'px;">';
         $this->html[] = '<thead>';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->yearStartData, 'chart-year') . '</tr>';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->monthStartData, 'chart-month') . '</tr>';
@@ -143,7 +153,10 @@ class GanttView extends GanttController
         foreach ($this->taskRows as $row) {
             $this->html[] = $row;
         }
-        $this->html[] = "</tbody></table></section>";
+        $this->html[] = "</tbody>";
+        $this->html[] = "</table>";
+        $this->html[] = "</section>";
+
         $this->html[] = "</figure>";
     }
 

@@ -1,19 +1,24 @@
-figcaption {
-    color: white;
-    font-size: 25px;
-}
 
 .chart {
-    background: #002b36;
+    padding: 40px;
+    border-radius: 10px;
+    /* background: #002b36; */
+    background-color: black;
     color: #93a1a1;
+    height: 100%;
+    margin: 0;
 }
 
 .chart section {
     margin: 0;
     padding: 0;
-/*    display: flex;
-    display: -webkit-flex; */
+    width: 80vw;
     overflow-x: auto;
+    /* Centre content horizontally */
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-direction: row;
+    justify-content: center;
 }
 
 .chart table {
@@ -23,9 +28,16 @@ figcaption {
 /*    flex: 1; */
 }
 
+figcaption {
+    color: white;
+    font-size: 25px;
+    padding-bottom: 10px;
+}
+
 /* Ensures the leftmost td elements are sticky on horizontal scroll */
 td:first-child {
-    background: #002b36;
+    /* background-color: black; */
+    /* background: #002b36; */
 /*    border: 3px solid #aaa; */
     position: -webkit-sticky;
     position: sticky;
@@ -35,7 +47,7 @@ td:first-child {
 
 /* Locks horizontal header elements during vertical and horizontal scroll */
 thead th:first-child {
-    background: #002b36;
+    /* background: #002b36; */
 /*    border: 3px solid #aaa; */
     position: -webkit-sticky;
     position: sticky;
@@ -45,8 +57,8 @@ thead th:first-child {
 }
 
 .chart .side-heading {
-    width: 300px;
-    height: 40px;
+    min-width: 300px;
+    /* height: 40px; */
     border-top: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
     border-left: 3px solid #aaa;
@@ -94,6 +106,8 @@ thead th:first-child {
     text-align: center;
     height: 40px;
     width: 40px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .chart .chart-day.today {
@@ -101,10 +115,15 @@ thead th:first-child {
 }
 
 .chart .chart-day.weekend {
-    background-color: #444;
+    /* background-color: #444; */
+    background-color: #2A2A2A;
 }
 
 .chart .chart-day.start {
+    border-left: 3px solid #aaa;
+}
+
+.chart .task-start {
     border-left: 3px solid #aaa;
 }
 
@@ -123,6 +142,21 @@ thead th:first-child {
 
 .chart .task-notes {
 /*    background: white; */
-    color: white;
     display: none;
+}
+
+.chart .task-notes span {
+    color: white;
+    padding-left: 30px;
+}
+
+.chart .task-notes a {
+    float: left;
+    font-size: 15px;
+    color: grey;
+    padding-left: 30px;
+}
+
+.chart .task-notes a:hover {
+    color: white;
 }
