@@ -78,7 +78,7 @@ class Page
             <section>
                 <img src="Assets/Images/Road-Ahead-Small.jpg" alt="Road Ahead" id="logo"/>
                 <div>
-                <h1>Plan Your Next Move - Every Step Adds To The Journey</h1>
+                <h1>Plan the Next Move of Your Journey</h1>
                 <?php if (isset($_SESSION[User::Email])) echo "<span><a href='index.php?action=". Action::Logout ."'>Logout</a></span>"?>
                 <?php //if (isset($_SESSION[User::Role])) echo "<span>Role:   ". ucfirst($_SESSION[User::Role]) ."</span>"?>
                 <?php if (isset($_SESSION[User::Username])) echo "<span>Logged in As:   ". $_SESSION[User::Username] ."</span>"?>

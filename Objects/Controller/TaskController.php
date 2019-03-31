@@ -66,7 +66,7 @@ class TaskController
                     $this->checkFormData();
                     if ($this->message == "") {
                         if ($this->taskModel->insertTask($_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Task::ProjectID], $_POST[Task::Owner])) {
-                            $this->message = "Task information saved";
+                            $this->message = "Information saved for task: " . $_POST[Task::Name];
                         }
                     }
                 }
@@ -79,7 +79,7 @@ class TaskController
                     $this->checkFormData();
                     if ($this->message == "") {
                         if ($this->taskModel->updateTask($this->taskID, $_POST[Task::Name], $_POST[Task::StartDate], $_POST[Task::EndDate], $_POST[Task::Percent], $_POST[Task::No], $_POST[Task::Notes], $_POST[Project::ID], $_POST[Task::Owner])) {
-                            $this->message = "Task information updated";
+                            $this->message = "Information updated for task: " . $_POST[Task::Name];
                             header('Location: index.php?page='. PageName::Status .'&'. Project::ID .'=' . $this->projectID);
                         }
                     }
@@ -102,7 +102,7 @@ class TaskController
                 // Email is the Users primary key, hence if no other data we have the user for deletion
                 if (isset($this->taskID)) {
                     if ($this->taskModel->deleteTask($this->taskID)) {
-                        $this->message = "Task deleted";
+                        $this->message = "Deleted Task";
                     }
                     header('Location: index.php?page='. PageName::Status .'&'. Project::ID .'=' . $this->projectID);
                 } else {

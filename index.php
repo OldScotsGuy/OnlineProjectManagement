@@ -67,7 +67,7 @@ if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($
 
     // Generate Page Content
     $enhancedPrivileges = ($_SESSION[User::Role] == User::RoleLead || $_SESSION[User::Role] == User::RoleAdmin);
-    $authorisationErrorContent = '<p>This page content is unavailable</p>';
+    $authorisationErrorContent = '<div id="error"><h2>This page content is unavailable</h2></div>';
     switch ($page) {
         case PageName::User:
             if ($enhancedPrivileges) {

@@ -301,3 +301,9 @@ select {
     float: left;
     min-width: 200px;
 }
+
+#error {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: darkgrey;
+}

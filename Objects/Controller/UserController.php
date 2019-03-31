@@ -46,7 +46,7 @@ class UserController
                     $this->checkFormData();
                     if ($this->message == "") {
                         if ($this->userModel->insertUser($_POST[User::Username], $_POST[User::Password], $_POST[User::Email], $_POST[User::Role])) {
-                            $this->message = "User information saved";
+                            $this->message = "Information saved for User: " . $_POST[User::Username];
                         }
                     }
                 }
@@ -69,7 +69,7 @@ class UserController
                     $this->checkFormData();
                     if ($this->message == '') {
                         if ($this->userModel->updateUser($_POST[User::Username], $_POST[User::Password], $_POST[User::Email], $_POST[User::Role])) {
-                            $this->message = "User information updated";
+                            $this->message = "Information updated for user: ". $_POST[User::Username];
                             $this->displayValues = array();     // Ensures the user selection form is now presented
                         }
                         // Reset UserView users array to offer a second update
