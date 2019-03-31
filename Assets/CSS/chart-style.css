@@ -15,13 +15,14 @@ figcaption {
     color: white;
     font-size: 25px;
     padding-top: 30px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
 }
 
 .chart #scrollable {
     padding: 0;
     overflow-x: auto;
     width: 80vw;
+    height: 100%;
 }
 
 .chart table {
@@ -48,9 +49,39 @@ td:first-child {
 thead th {
     position: -webkit-sticky;
     position: sticky;
+    /*top: 0; */
+    left: 0;
+}
+
+/*
+thead th.chart-year {
+    position: -webkit-sticky;
+    position: sticky;
     top: 0;
     left: 0;
 }
+
+thead th.chart-month {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 45px;
+    left: 0;
+}
+
+thead th.chart-day {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 90px;
+    left: 0;
+}
+
+thead th.side-heading {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 135px;
+    left: 0;
+}
+*/
 
 /* Ensures the leftmost head element is in front for downward scroll */
 thead th:first-child {
@@ -104,8 +135,9 @@ thead th:first-child {
 } */
 
 .chart .chart-year {
+    background-color: black;
     border-bottom: 3px solid #aaa;
-    border-left: 3px solid #aaa;
+    border-right: 3px solid #aaa;
     text-align: center;
     height: 40px;
     font-size: 20px;
@@ -113,14 +145,16 @@ thead th:first-child {
 }
 
 .chart .chart-month {
+    background-color: black;
     border-bottom: 3px solid #aaa;
-    border-left: 3px solid #aaa;
+    border-right: 3px solid #aaa;
     text-align: center;
     height: 40px;
     font-weight: bold;
 }
 
 .chart .chart-day {
+    background-color: black;
     border: 1px solid #aaa;
     text-align: center;
     height: 40px;
