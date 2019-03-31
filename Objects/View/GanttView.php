@@ -67,7 +67,7 @@ class GanttView extends GanttController
     // Create the Gantt chart day and date headers via the stored parsed data
     private function createDayDateHeaders()
     {
-        $this->dayHeader = '<th class="side-blank"></th>';
+        $this->dayHeader = '<th class="side-heading"></th>';
         $this->dateHeader = '<th class="side-heading">Task : <span class = "emphasis">Owner</span></th>';
         //$startTag = '';
         for ($i = 0; $i < $this->numDays; $i++) {
@@ -127,12 +127,9 @@ class GanttView extends GanttController
     // Create year, month and day banner
     private function createGanttTable()
     {
-        $this->html[] = "<figure class='chart'>";
+        $this->html[] = "<figure>";
 
-        // Centred Chart Title
-        $this->html[] = "<section>";
         $this->html[] = "<figcaption>Project Title: " . $this->project[Project::Title] . "</figcaption>";
-        $this->html[] = "</section>";
         // Gantt Task Side Bar
         //$this->html[] = "<aside><table>";
         //foreach ($this->taskSideBarRows as $row) {
@@ -141,7 +138,8 @@ class GanttView extends GanttController
         //$this->html[] = "</table></aside>";
 
         // Centred Gantt Chart
-        $this->html[] = "<section>";
+        $this->html[] = "<div class='chart'>";
+        $this->html[] = '<div id="scrollable">';
         $this->html[] = '<table style ="width: ' . (300 + ($this->numDays * 40)) . 'px;">';
         $this->html[] = '<thead>';
         $this->html[] = '<tr>' . $this->createHeaderTags($this->yearStartData, 'chart-year') . '</tr>';
@@ -155,8 +153,9 @@ class GanttView extends GanttController
         }
         $this->html[] = "</tbody>";
         $this->html[] = "</table>";
-        $this->html[] = "</section>";
+        $this->html[] = "</div>";
 
+        $this->html[] = "</div>";
         $this->html[] = "</figure>";
     }
 
