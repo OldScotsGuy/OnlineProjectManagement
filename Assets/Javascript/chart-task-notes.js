@@ -10,10 +10,10 @@ for (i = 0; i < tasks.length; i++) {
         var notes = trParent.nextElementSibling;    // <tr> adjacent to task bar
 
         // Toggle that element
-        if (notes.style.display === "table-row") {
+        if (notes.style.display === "inline-block") {
             notes.style.display = "none";
         } else {
-            notes.style.display = "table-row";
+            notes.style.display = "inline-block";
         }
     });
 }

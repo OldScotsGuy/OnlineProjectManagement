@@ -130,19 +130,20 @@ thead th:first-child {
 .chart .chart-task {
     border-radius: 5px;
     width: 100%;
-    height: 20px;
+    height: 15px;
     background: lightblue;
 }
 
 .chart .chart-fill {
     border-radius: 5px;
-    height: 20px;
+    height: 15px;
     background: darkblue;
 }
 
 .chart .task-notes {
 /*    background: white; */
     display: none;
+    height: 35px;
 }
 
 .chart .task-notes span {
@@ -154,9 +155,13 @@ thead th:first-child {
     float: left;
     font-size: 15px;
     color: grey;
-    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .chart .task-notes a:hover {
+    color: white;
+}
+
+.chart .emphasis {
     color: white;
 }

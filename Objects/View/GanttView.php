@@ -68,7 +68,7 @@ class GanttView extends GanttController
     private function createDayDateHeaders()
     {
         $this->dayHeader = '<th></th>';
-        $this->dateHeader = '<th class="side-heading">Task : Owner</th>';
+        $this->dateHeader = '<th class="side-heading">Task : <span class = "emphasis">Owner</span></th>';
         //$startTag = '';
         for ($i = 0; $i < $this->numDays; $i++) {
             $startTag = '<th class="' . $this->dayClassifications[$i][0] . '">';
@@ -84,7 +84,7 @@ class GanttView extends GanttController
         foreach ($this->taskData as $task) {
 
             // Add task details
-            $row = '<tr><td class="side-name">' . $task[Task::Name] . ' : ' . $task[Task::Owner] . '</td>';
+            $row = '<tr><td class="side-name">' . $task[Task::Name] . ' : <span class = "emphasis">' . $task[Task::Owner] . '</span></td>';
 
             // Add before task padding days
             $row .= $this->addPaddingDays(0, $task[Task::Start]);
