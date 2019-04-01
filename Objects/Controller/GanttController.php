@@ -50,6 +50,7 @@ class GanttController
     protected $yearStartData = array();
     protected $monthStartData = array();
     protected $dayClassifications = array();
+    protected $dateClassifications = array();
 
     protected $message = null;
 
@@ -113,17 +114,23 @@ class GanttController
             list($tabYear, $tabMonth, $tabDay, $tabDate) = explode("-", date('Y-F-D-d', $timestamp));
 
             $dayClass = 'chart-day';
-            $dayClass .= (($tabDay == 'Sat') || ($tabDay == 'Sun')) ? ' weekend' : '';                              // Test for a weekend
-            $dayClass .= ($tabYear . "-" . $tabMonth . "-" . $tabDate == date('Y-F-d')) ? ' today' : '';     // Test for today
-            if ($this->isStart($i,$tabMonth, 'F')) {                                                         // Test for month start
-                $dayClass .= ' start';
+            $dateClass = 'chart-date';
+
+            $additionalClasses = (($tabDay == 'Sat') || ($tabDay == 'Sun')) ? ' weekend' : '';                                 // Test for a weekend
+            $additionalClasses .= ($tabYear . "-" . $tabMonth . "-" . $tabDate == date('Y-F-d')) ? ' today' : '';       // Test for today
+            if ($this->isStart($i,$tabMonth, 'F')) {                                                                    // Test for month start
+                $additionalClasses .= ' start';
                 $this->monthStartData[] = array($tabMonth, $i);                         // store month data for constructing month header
             }
+
+            $dayClass .= $additionalClasses;
+            $dateClass .= $additionalClasses;
 
             if ($this->isStart($i,$tabYear, 'Y')) {
                 $this->yearStartData[] = array($tabYear, $i);                           // store year data for constructing year header
             }
-            $this->dayClassifications[] = array($dayClass, $tabDay, $tabDate); // Store classification, day, date for display use
+            $this->dayClassifications[] = array($dayClass, $tabDay);          // Store classification, day for display use
+            $this->dateClassifications[] = array($dateClass, $tabDate);        // Store classification, date for display use
         }
     }
 

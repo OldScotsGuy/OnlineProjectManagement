@@ -69,11 +69,11 @@ class GanttView extends GanttController
     {
         $this->dayHeader = '<th class="side-heading"></th>';
         $this->dateHeader = '<th class="side-heading">Task : <span class = "emphasis">Owner</span></th>';
-        //$startTag = '';
         for ($i = 0; $i < $this->numDays; $i++) {
-            $startTag = '<th class="' . $this->dayClassifications[$i][0] . '">';
-            $this->dayHeader .= $startTag . $this->dayClassifications[$i][1] . '</th>';     // Construct Gantt table day header
-            $this->dateHeader .= $startTag . $this->dayClassifications[$i][2] . '</th>';    // Construct Gantt table date header
+            $startDayTag = '<th class="' . $this->dayClassifications[$i][0] . '">';
+            $startDateTag = '<th class="' . $this->dateClassifications[$i][0] . '">';
+            $this->dayHeader .= $startDayTag . $this->dayClassifications[$i][1] . '</th>';       // Construct Gantt table day header
+            $this->dateHeader .= $startDateTag . $this->dateClassifications[$i][1] . '</th>';    // Construct Gantt table date header
         }
     }
 

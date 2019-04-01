@@ -28,10 +28,17 @@ th {
 }
 
 /* Locks horizontal header elements during vertical scroll */
-thead th {
+.head1, .head1-blank {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+    left: 0;
+}
+
+.head2, .head2-blank {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 38px;
     left: 0;
 }
 
