@@ -67,7 +67,7 @@ class GanttView extends GanttController
     // Create the Gantt chart day and date headers via the stored parsed data
     private function createDayDateHeaders()
     {
-        $this->dayHeader = '<th class="side-heading"></th>';
+        $this->dayHeader = '<th class="side-blank-chart-day"></th>';
         $this->dateHeader = '<th class="side-heading">Task : <span class = "emphasis">Owner</span></th>';
         for ($i = 0; $i < $this->numDays; $i++) {
             $startDayTag = '<th class="' . $this->dayClassifications[$i][0] . '">';
@@ -162,7 +162,7 @@ class GanttView extends GanttController
     // Create the Gantt chart month and year headers via the stored parsed data
     private function createHeaderTags($periodStartData, $class)
     {
-        $periodHeader = '<th class="side-blank"></th>';
+        $periodHeader = '<th class="side-blank-'. $class .'"></th>';
         //$periodHeader = null;
         $numPeriods = sizeof($periodStartData);
         $periodStartData[] = array('End', $this->numDays);
