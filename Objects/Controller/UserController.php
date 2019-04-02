@@ -45,9 +45,12 @@ class UserController
                     // Check to see if we have user data to save in the database
                     $this->checkFormData();
                     if ($this->message == "") {
-                        // TODO add in check to see if the email already exists in the User table
-                        if ($this->userModel->insertUser($_POST[User::Username], $_POST[User::Password], $_POST[User::Email], $_POST[User::Role])) {
-                            $this->message = "Information saved for User: " . $_POST[User::Username];
+                        if (isset($this->userModel->retrieveUser($_POST[User::Email])[User::Email])) {
+                            $this->message = "Email address already in use - User not created";
+                        } else {
+                            if ($this->userModel->insertUser($_POST[User::Username], $_POST[User::Password], $_POST[User::Email], $_POST[User::Role])) {
+                                $this->message = "Information saved for User: " . $_POST[User::Username];
+                            }
                         }
                     }
                 }

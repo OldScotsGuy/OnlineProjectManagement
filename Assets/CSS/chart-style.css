@@ -1,4 +1,8 @@
 
+/* ============================================ */
+/* Basic figure layout - in order of appearance */
+/* ============================================ */
+
 figure {
     background-color: black;
     height: 100%;
@@ -53,44 +57,92 @@ thead th {
     left: 0;
 }
 
-/*
-thead th.chart-year {
+/* These classes are in the table header at differing heights, yet not on the left most edge */
+/* Hence they need to be locked at different heights during vertical scroll, but able to go off-screen in horizontal scroll */
+
+.chart-year {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+/*    left: 0; */
+}
+
+.chart-month {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 45px;
+/*    left: 0; */
+}
+
+.chart-day {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 90px;
+/*    left: 0; */
+}
+
+.chart-date {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 135px;
+    /*    left: 0; */
+}
+
+/* These classes are on the left hand edge in the table header */
+/* They should be locked in both vertical scroll and horizontal scroll */
+/* Further they need to be on top of both header (horizontal scroll) and body (vertical scroll) elements */
+
+.chart .side-blank-chart-year {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
     left: 0;
+    z-index: 3;
 }
 
-thead th.chart-month {
+.chart .side-blank-chart-month {
     position: -webkit-sticky;
     position: sticky;
-    top: 45px;
+    top: 0;
     left: 0;
+    z-index: 3;
 }
 
-thead th.chart-day {
+.chart .side-blank-chart-day {
     position: -webkit-sticky;
     position: sticky;
-    top: 90px;
+    top: 0;
     left: 0;
+    z-index: 3;
 }
 
-thead th.side-heading {
+.side-heading {
     position: -webkit-sticky;
     position: sticky;
     top: 135px;
     left: 0;
-}
-*/
-
-/* Ensures the leftmost head element is in front for downward scroll */
-thead th:first-child {
     z-index: 3;
 }
 
-/* ===================================================*/
+/* This class is in teh table body. It should be locked in horizontal scroll only */
+
+.chart .side-name {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+}
+
+
+/* Ensures the leftmost head element is in front for downward scroll */
+/* thead th:first-child {
+    z-index: 3;
+} */
+
+/* ======================================================== */
+/* This section covers the appearance of teh table elements */
+/* ======================================================== */
+
 /* Leftmost element in table head and body formatting */
-/* ===================================================*/
 
 /* .chart .side-blank and .chart .side-heading located in the table head */
 .chart .side-blank-chart-year {
