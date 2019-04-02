@@ -26,7 +26,7 @@ figcaption {
     padding: 0;
     overflow-x: auto;
     width: 80vw;
-    height: 100%;
+    height: 250px;
 }
 
 .chart table {
@@ -41,50 +41,54 @@ figcaption {
 /* =================================================================================== */
 
 /* Ensures the leftmost td elements are sticky on horizontal scroll */
-td:first-child {
+/* td:first-child {
     width: 500px;
     position: -webkit-sticky;
     position: sticky;
     left: 0;
     z-index: 2;
-}
+} */
 
 /* Locks horizontal header elements during vertical and horizontal scroll */
-thead th {
+/* thead th {
     position: -webkit-sticky;
-    position: sticky;
+    position: sticky; */
     /*top: 0; */
-    left: 0;
-}
+/*    left: 0;
+} */
 
 /* These classes are in the table header at differing heights, yet not on the left most edge */
 /* Hence they need to be locked at different heights during vertical scroll, but able to go off-screen in horizontal scroll */
 
-.chart-year {
+.chart .chart-year {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+    z-index: 2;
 /*    left: 0; */
 }
 
-.chart-month {
+.chart .chart-month {
     position: -webkit-sticky;
     position: sticky;
     top: 45px;
+    z-index: 2;
 /*    left: 0; */
 }
 
-.chart-day {
+.chart .chart-day {
     position: -webkit-sticky;
     position: sticky;
     top: 90px;
+    z-index: 2;
 /*    left: 0; */
 }
 
-.chart-date {
+.chart .chart-date {
     position: -webkit-sticky;
     position: sticky;
     top: 135px;
+    z-index: 2;
     /*    left: 0; */
 }
 
@@ -116,7 +120,7 @@ thead th {
     z-index: 3;
 }
 
-.side-heading {
+.chart .side-heading {
     position: -webkit-sticky;
     position: sticky;
     top: 135px;
@@ -124,12 +128,13 @@ thead th {
     z-index: 3;
 }
 
-/* This class is in teh table body. It should be locked in horizontal scroll only */
+/* This class is in the table body. It should be locked in horizontal scroll only */
 
 .chart .side-name {
     position: -webkit-sticky;
     position: sticky;
     left: 0;
+    z-index: 2;
 }
 
 
