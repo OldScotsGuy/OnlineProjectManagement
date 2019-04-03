@@ -26,7 +26,7 @@ figcaption {
     padding: 0;
     overflow-x: auto;
     width: 80vw;
-    height: 250px;
+    height: 100%;
 }
 
 .chart table {
@@ -60,7 +60,7 @@ figcaption {
 /* These classes are in the table header at differing heights, yet not on the left most edge */
 /* Hence they need to be locked at different heights during vertical scroll, but able to go off-screen in horizontal scroll */
 
-.chart .chart-year {
+thead .chart-year {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
@@ -68,7 +68,7 @@ figcaption {
 /*    left: 0; */
 }
 
-.chart .chart-month {
+thead .chart-month {
     position: -webkit-sticky;
     position: sticky;
     top: 45px;
@@ -76,7 +76,7 @@ figcaption {
 /*    left: 0; */
 }
 
-.chart .chart-day {
+thead .chart-day {
     position: -webkit-sticky;
     position: sticky;
     top: 90px;
@@ -84,7 +84,7 @@ figcaption {
 /*    left: 0; */
 }
 
-.chart .chart-date {
+thead .chart-date {
     position: -webkit-sticky;
     position: sticky;
     top: 135px;
@@ -96,7 +96,7 @@ figcaption {
 /* They should be locked in both vertical scroll and horizontal scroll */
 /* Further they need to be on top of both header (horizontal scroll) and body (vertical scroll) elements */
 
-.chart .side-blank-chart-year {
+thead .side-blank-chart-year {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
@@ -104,23 +104,23 @@ figcaption {
     z-index: 3;
 }
 
-.chart .side-blank-chart-month {
+thead .side-blank-chart-month {
     position: -webkit-sticky;
     position: sticky;
-    top: 0;
+    top: 45px;
     left: 0;
     z-index: 3;
 }
 
-.chart .side-blank-chart-day {
+thead .side-blank-chart-day {
     position: -webkit-sticky;
     position: sticky;
-    top: 0;
+    top: 90px;
     left: 0;
     z-index: 3;
 }
 
-.chart .side-heading {
+thead .side-heading {
     position: -webkit-sticky;
     position: sticky;
     top: 135px;
