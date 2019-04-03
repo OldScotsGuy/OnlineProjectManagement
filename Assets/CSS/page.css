@@ -263,16 +263,22 @@ label {
 input {
     display: table-cell;
     float: left;
+    padding: 4px;
+    border-radius: 3px;
 }
 
 textarea {
     display: table-cell;
     float: left;
+    padding: 4px;
+    border-radius: 3px;
 }
 
 select {
     display: table-cell;
     float: left;
+    padding: 4px;
+    border-radius: 3px;
 }
 
 .submit {
