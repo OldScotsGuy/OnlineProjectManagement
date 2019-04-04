@@ -6,7 +6,7 @@
  *
  * This object is the single entry point from which all pages are generated.
  * The server could be configured to allow internet access to this page ONLY
- *  
+ * An authorisation check is made for pages that have user restricted content
  */
 require("Objects/Page/Page.php");
 

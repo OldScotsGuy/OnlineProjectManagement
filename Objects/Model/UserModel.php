@@ -4,9 +4,11 @@
  * Date: 10/03/2019
  * Time: 11:51
  *
- * This object provides a service for all Users table operations in teh MySQL database
- * It could be used to define an interface which any other data storage service could implement
- * In this way the data storage could be altered without affecting the rest of the application code
+ * This object provides a service for all Users table operations in teh MySQL database.
+ * It could be used to define an interface which any other data storage service could implement.
+ * In this way the data storage could be altered without affecting the rest of the application code.
+ *
+ * A weak SHA1 encryption is used on user passwords, but with the right PHP installation this could be improved
  */
 
 namespace Model;
