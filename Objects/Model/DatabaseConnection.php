@@ -1,9 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 09/03/2019
  * Time: 15:45
+ * This object creates the MySQLI database connection
  */
 
 namespace Model;

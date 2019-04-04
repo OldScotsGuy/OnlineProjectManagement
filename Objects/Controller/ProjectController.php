@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 14/03/2019
  * Time: 19:17
+ * This object:
+ * 1) Handles project creation / update / deletion database operations via the ProjectModel object
+ * 2) Sets arrays and variables data required to display the project information
+ * 3) The ProjectView child object generates html, not this object
  */
 
 namespace Controller;

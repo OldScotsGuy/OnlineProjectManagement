@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 19/03/2019
  * Time: 17:53
+ * This object:
+ * 1) Handles task creation / update / deletion database operations via the TaskModel object
+ * 2) Sets arrays and variables data required to display the task information
+ * 3) The TaskView child object generates html, not this object
  */
 
 namespace Controller;

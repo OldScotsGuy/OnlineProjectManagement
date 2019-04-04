@@ -1,10 +1,14 @@
 <?php
 namespace Controller;
 /**
- * Created by PhpStorm.
+ * Created by Nick Harle
  * User: nickh
  * Date: 10/03/2019
  * Time: 14:55
+ * This object:
+ * 1) Handles user creation / update / deletion database operations via the UserModel object
+ * 2) Sets arrays and variables data required to display the user information
+ * 3) The UserView child object generates html, not this object
  */
 
 require_once("Objects/Model/UserModel.php");

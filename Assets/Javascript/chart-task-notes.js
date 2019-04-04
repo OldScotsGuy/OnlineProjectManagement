@@ -1,3 +1,8 @@
+/* Created by Nick Harle */
+/* Date: 04/04/2019      */
+/* This javascript toggles the display mode of task notes table row */
+/* Display modes are: 1) none, i.e. invisible, and 2) table-row */
+
 
 var tasks = document.getElementsByClassName("chart-task");
 var i;

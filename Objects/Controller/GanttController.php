@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 23/02/2019
  * Time: 21:10
+ * This object:
+ * 1) reads the project / task data via the Project / Task model objects
+ * 2) parses the project data creating the information from which the HTML will be derived
+ * 3) The GanttView child object (not this object) generates the HTML
  */
 
 namespace Controller;
@@ -17,12 +20,6 @@ use Utils\User;
 
 require_once("Objects/Model/TaskModel.php");
 require_once("Objects/Model/ProjectModel.php");
-
-// This object parses the project object extracting the data from which the HTML will be derived
-// The parsed data is stored in the member variables which are inherited
-// The child object (not this object) will construct the HTML
-// Author: Nick Harle
-// Date:   23/02/2019
 
 class GanttController
 {

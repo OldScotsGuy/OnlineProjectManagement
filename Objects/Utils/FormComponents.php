@@ -1,9 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 26/03/2019
  * Time: 19:42
+ *
+ * This object contains all the form input fields used by the View objects
+ * Grouping all the input field html generation here helps to ensure:
+ * 1) uniform look / feel across all pages
+ * 2) only this object needs to be changed if a different application form appearance is required
+ *
  */
 
 namespace Utils;

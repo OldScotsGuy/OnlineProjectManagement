@@ -1,10 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: P1.NickHarle
+ * Created by NIck Harle
  * Date: 28/03/2019
  * Time: 14:47
- */
+ * This object provides Login functions and access to
+ * the database via the UserModel object
+ * The LoginView child object generates the HTML
+  */
 
 namespace Controller;
 

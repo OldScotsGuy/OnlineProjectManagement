@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 10/03/2019
  * Time: 11:51
+ *
+ * This object provides a service for all Users table operations in teh MySQL database
+ * It could be used to define an interface which any other data storage service could implement
+ * In this way the data storage could be altered without affecting the rest of the application code
  */
 
 namespace Model;

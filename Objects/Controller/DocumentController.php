@@ -1,9 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 23/03/2019
  * Time: 15:33
+ * Main functions:
+ * 1) Checks user input (upload document)
+ * 2) Carries out document upload / delete
+ * 3) Via the DocumentModel will create the array of project documents
+ * 4) The DocumentView child object generates the HTML
  */
 
 namespace Controller;

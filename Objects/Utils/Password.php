@@ -1,9 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: P1.NickHarle
+ * Created by Nick Harle
  * Date: 26/03/2019
  * Time: 16:03
+ *
+ * This object IS NOT MY OWN work - see below
+ * It was supposed to provide stronger password encryption, but failed to achieve this on
+ * my home installation where I use the PHPStorm local server.
+ * As a result the much more inferior SHA1 encryption is used in the UserModel
  */
 
 namespace Utils;
