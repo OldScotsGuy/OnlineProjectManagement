@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 10/03/2019
  * Time: 12:33
+ *
+ * This object generates the html required to create / update / delete users.
+ * Which html form / view is generated based on the object variables inherited from the UserController object
+ * The presentation can be changed without any requirement to change the Controller object
  */
 
 namespace View;

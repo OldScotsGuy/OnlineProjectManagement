@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 18/03/2019
  * Time: 19:35
+ *
+ * This object generates the html required to create task projects.
+ * Which html form is generated based on the object variables inherited from the TaskController object
+ * The presentation can be changed without any requirement to change the Controller object
  */
 
 namespace View;

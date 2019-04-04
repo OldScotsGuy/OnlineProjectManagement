@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 23/03/2019
  * Time: 14:08
+ *
+ * This object generates the html required to upload / view / delete documents.
+ * Which html form / view is generated based on the object variables inherited from the DocumentController object
+ * The presentation can be changed without any requirement to change the Controller object
  */
 
 namespace View;

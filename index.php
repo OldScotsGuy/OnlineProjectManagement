@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 10/03/2019
  * Time: 11:42
+ *
+ * This object is the single entry point from which all pages are generated.
+ * The server could be configured to allow internet access to this page ONLY
+ *  
  */
 require("Objects/Page/Page.php");
 

@@ -1,9 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nickh
+ * Created by Nick Harle
  * Date: 12/03/2019
  * Time: 20:30
+ *
+ * This object generates the html required to create / update / delete projects.
+ * Which html form / view is generated based on the object variables inherited from the ProjectController object
+ * The presentation can be changed without any requirement to change the Controller object
  */
 
 namespace View;
