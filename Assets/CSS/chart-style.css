@@ -86,7 +86,7 @@ thead .side-blank-chart-year {
     top: 0;
     left: 0;
     z-index: 3;
-    width: 500px;
+    width: 750px;
 }
 
 thead .side-blank-chart-month {
@@ -264,7 +264,7 @@ thead .side-heading {
 .chart .task-notes a {
     float: left;
     font-size: 15px;
-    color: grey;
+    color: black;
     padding-right: 30px;
 }
 

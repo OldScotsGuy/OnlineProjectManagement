@@ -24,7 +24,6 @@ use Utils\User;
 
 class GanttView extends GanttController
 {
-    private $taskSideBarRows = array();
     private $taskRows = array();
     private $dayHeader = null;
     private $dateHeader = null;
@@ -43,25 +42,10 @@ class GanttView extends GanttController
     // Draw Gantt chart function
     private function createGanttChart()
     {
-        //$this->createTaskSideBarRows();
         $this->createDayDateHeaders();
         $this->createTaskRows();
         $this->createGanttTable();
     }
-
-    /*    private function createTaskSideBarRows() {
-
-            $row = '<tr><td class="side-heading">Task Name</td>';
-            $row .= '<td class="side-heading">Owner</td></tr>';
-            $this->taskSideBarRows[] = $row;
-
-            foreach ($this->taskData as $task) {
-                $row = '<tr><td class="side-name">' . $task['name'] . '</td>';
-                $row .= '<td class="side-owner">' . $task['owner'] . '</td></tr>';
-                $this->taskSideBarRows[] = $row;
-            }
-        } */
-
 
     // Create the Gantt chart day and date headers via the stored parsed data
     private function createDayDateHeaders()
@@ -129,12 +113,6 @@ class GanttView extends GanttController
         $this->html[] = "<figure>";
 
         $this->html[] = "<figcaption>Project Title: " . $this->project[Project::Title] . "</figcaption>";
-        // Gantt Task Side Bar
-        //$this->html[] = "<aside><table>";
-        //foreach ($this->taskSideBarRows as $row) {
-        //    $this->html[] = $row;
-        //}
-        //$this->html[] = "</table></aside>";
 
         // Centred Gantt Chart
         $this->html[] = "<div class='chart'>";
