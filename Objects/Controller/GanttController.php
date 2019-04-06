@@ -33,7 +33,8 @@ class GanttController
     // Project Data
     protected $projects = null;
     protected $projectID = null;
-    protected $project;
+    protected $project = null;
+    protected $projectClient = null;
 
     // Task data
     private $firstDayTimestamp = false;
@@ -62,7 +63,8 @@ class GanttController
             if (count($this->projects) == 0) $this->message = "No projects to view status of";
         } else {
             $this->projectID = $_GET[Project::ID];
-            $this->project = $this->projectModel->retrieveProject($this->projectID);    // Retrieve project data
+            $this->project = $this->projectModel->retrieveProjectWithLead($this->projectID);    // Retrieve project data
+            $this->projectClient = $this->projectModel->retrieveProjectClient($this->projectID);
             $this->parseTaskData();             // Find earliest and latest days
             $this->parseProjectTimeData();      // Create array of day classes
         }

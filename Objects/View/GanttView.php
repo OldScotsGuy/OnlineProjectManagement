@@ -113,8 +113,9 @@ class GanttView extends GanttController
         $this->html[] = "<figure>";
 
         $this->html[] = "<figcaption>Project Title: " . $this->project[Project::Title] . "</figcaption>";
+        $this->html[] = "<h2>Project Lead: " . $this->project[Project::Lead] . '</h2>' . ($this->projectClient[Project::Client] != '' ? '<h2>Project Client: ' .$this->projectClient[Project::Client] : '') . "</h2>";
 
-        // Centred Gantt Chart
+            // Centred Gantt Chart
         $this->html[] = "<div class='chart'>";
         $this->html[] = '<div id="scrollable">';
         $this->html[] = '<table style ="width: ' . (300 + ($this->numDays * 40)) . 'px;">';

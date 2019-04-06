@@ -111,7 +111,7 @@ class Page
         <!-- page footer -->
         <footer>
             <hr>
-            <p><strong>(c) 2016 Lex & Associates</strong></p>
+            <p><strong>(c) 2019 Lex & Associates</strong></p>
             <script type="text/javascript" src="Assets/Javascript/chart-task-notes.js"></script>
         </footer>
         <?php
