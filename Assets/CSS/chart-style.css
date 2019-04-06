@@ -11,10 +11,13 @@ figure {
     height: 100%;
     width: 100%;
     margin: 0;
+    padding: 0;
 }
 
 .chart {
     color: #93a1a1;
+    margin: 0;
+    padding: 0;
 }
 
 figcaption {
@@ -276,4 +279,19 @@ thead .side-heading {
 
 .chart .emphasis {
     color: white;
+}
+
+/* ================== */
+/* Responsive styling */
+/* ================== */
+
+@media screen and (max-width: 800px) {
+    .chart { height: 75vh; width: 100%;
+        display: flex;
+        display: -webkit-flex; /* Safari */
+        flex-direction: column;
+        justify-content: center;
+    }
+    .chart #scrollable {transform: rotate(90deg); height: 80vw; width: 625px; }
+    thead .side-blank-chart-year { width: 400px;}
 }

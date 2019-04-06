@@ -189,12 +189,6 @@ nav>li>a:hover {
     color: #363636;
 }
 
-@media screen and (max-width: 800px) {
-    nav ul li {border-right: 2px solid darkgrey;}
-    /* nav ul li.right, */
-    nav ul li {float: none;}
-}
-
 /* ==== */
 /* MAIN */
 /* ==== */
@@ -321,4 +315,22 @@ select {
     padding: 10px;
     border-radius: 5px;
     background-color: darkgrey;
+}
+
+/* ========================== */
+/* Now the responsive entries */
+/* ========================== */
+
+@media screen and (max-width: 800px) {
+    nav ul li {border-right: 2px solid darkgrey;}
+    /* nav ul li.right, */
+    nav ul li {float: none;}
+
+    #logo {float: none; padding-bottom: 10px; }
+    header h1 {float:left; }
+
+}
+
+@media screen and (max-width: 1020px) {
+    .heading-list {float: left;}
 }

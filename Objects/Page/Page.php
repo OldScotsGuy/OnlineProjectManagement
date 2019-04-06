@@ -81,8 +81,8 @@ class Page
                 <img src="Assets/Images/Road-Ahead-Small.jpg" alt="Road Ahead" id="logo"/>
                 <div>
                 <h1>Plan the Next Move of Your Journey</h1>
-                <?php if (isset($_SESSION[User::Email])) echo "<span><a href='index.php?action=". Action::Logout ."'>Logout</a></span>"?>
-                <?php if (isset($_SESSION[User::Username])) echo "<span>Logged in As:   ". $_SESSION[User::Username] ."</span>"?>
+                <?php if (isset($_SESSION[User::Email])) echo "<span class='heading-list'><a href='index.php?action=". Action::Logout ."'>Logout</a></span>"?>
+                <?php if (isset($_SESSION[User::Username])) echo "<span class='heading-list'>Logged in As:   ". $_SESSION[User::Username] ."</span>"?>
                 </div>
             </section>
             <nav>
