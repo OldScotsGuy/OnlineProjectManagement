@@ -56,7 +56,7 @@ class DocumentController
                 if (!isset($_POST[Project::ID])) {
                     // $this->projectID not set so load projects for project selection
                     $this->projects = $this->projectModel->retrieveProjects();
-                    if (count($this->projects) == 0) $this->message = "No projects to view the documents of.";
+                    if (count($this->projects) == 0) $this->message = "No projects to upload documents to";
                 } else {
                     $this->projectID = $_POST[Project::ID];
                 }

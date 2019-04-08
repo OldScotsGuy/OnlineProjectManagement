@@ -36,7 +36,7 @@ class LoginController
             // Form submitted so read and check form data
             $email = $_POST[User::Email];
             $password = $_POST[User::Password];
-            $this->message = $this->checkLoginData($_POST[User::Email], $password);
+            $this->message = $this->checkLoginData($email, $password);
 
             if ($this->message == '') {
                 // Form filled out so now check login data against the database

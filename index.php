@@ -45,7 +45,6 @@ session_start();
 $HomePage = new Page();
 
 if (isset($_SESSION[User::Username]) && isset($_SESSION[User::Email]) && isset($_SESSION[User::Role])) {
-//if (true) {
     // ==============
     // User logged in
     // ==============
