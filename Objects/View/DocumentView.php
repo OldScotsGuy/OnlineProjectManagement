@@ -87,9 +87,10 @@ class DocumentView extends DocumentController
         $this->html = array_merge($this->html, $this->formComponents->header(ucfirst($this->action) . " Project Documents", $this->message));
 
         foreach ($this->documents as $document) {
-            $this->html[] = '<div class="row"><span>Title:<i> ' . $document[Document::Title].'</i></span>';
+            $this->html[] = '<div class="row">';
             $this->html[] = '<a href="' . Document::Path . $document[Document::FileName] . '" target="_blank">View</a>';
             if ($this->canDeleteDocument) $this->html[] = '<a href="index.php?page='. PageName::Document .'&action='. Action::Delete .'&'. Document::ID .'=' . $document[Document::ID] . '&'. Project::ID .'=' . $this->projectID . '">Delete</a>';
+            $this->html[] = '<span>Title:<i> ' . $document[Document::Title].'</i></span>';
             $this->html[] = '</div>';
         }
 
