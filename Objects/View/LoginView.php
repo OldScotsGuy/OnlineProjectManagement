@@ -35,8 +35,8 @@ class LoginView extends LoginController
         $this->html = array_merge($this->html, $this->formComponents->header("User Login", $this->message));
 
         // Login: email, password
-        $this->html = array_merge($this->html, $this->formComponents->addField("text", User::Email, "Email:", '', 'required'));
-        $this->html =  array_merge($this->html, $this->formComponents->addField("password", User::Password, "Password:", '', 'required'));
+        $this->html = array_merge($this->html, $this->formComponents->addField("text", User::Email, "Email:", '', 'size="25" required'));
+        $this->html =  array_merge($this->html, $this->formComponents->addField("password", User::Password, "Password:", '', 'size="25" required'));
 
         // Submit button
         $this->html = array_merge($this->html, $this->formComponents->submitButton(Form::SubmitData, "Login"));
